@@ -12,6 +12,7 @@ class Main:
     def __init__(self, parent, title, widget):
         self.parent = parent
         self.parent.title(title)
+        """ TODO: Check if widget is actually correct and running inputData """
         self.widget = widget
 
         #Dimensions

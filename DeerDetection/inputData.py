@@ -90,6 +90,7 @@ class tkCamera(tkinter.Frame):
 
         super().__init__(parent)
 
+        """ TODO: Fix correct source """ 
         self.source = source
         print('[LOG] inputData - tkCamera - init source ', self.source)
         
@@ -144,6 +145,7 @@ class tkCamera(tkinter.Frame):
         # After it is called once, the update method will be automatically called every delay milliseconds
         # calculate delay using `FPS`
         #self.delay = int(1000/self.vid.fps)
+        """ TODO: Fix correct FPS read """
         self.delay = int(500)
 
         print('[LOG] source:', self.source)
@@ -220,7 +222,7 @@ class tkCamera(tkinter.Frame):
 
     # Select joblib dialogue
     def select_Joblib_source(self):
-        #TODO Fix joblib source
+        
         # open only one dialog
         if self.dialog:
             print('[LOG] inputData - select_JobLib_source - Dialogue is already open')

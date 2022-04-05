@@ -14,7 +14,7 @@ class VideoProcessing:
 
         self.running = False
 
-        #Open the video source
+        # Open the video source
         self.vid = cv2.VideoCapture(video_source)
 
         # throw error on error
@@ -77,7 +77,7 @@ class VideoProcessing:
                     frame = PIL.Image.fromarray(frame)
             else:
                 print('[LOG] stream end:', self.video_source)
-                # TODO: reopen stream
+                """ TODO: Fix re-run/re-open of inputData """
                 self.running = False
                 break
 
@@ -88,6 +88,7 @@ class VideoProcessing:
 
             # sleep for next frame
             #time.sleep(1/self.fps)
+            """ TODO: Fix fps """
             time.sleep(1/30)
             print('[LOG] VideoProcessing - process thread sleeing for 1/30')
 
