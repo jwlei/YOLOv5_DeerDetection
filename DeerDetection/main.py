@@ -19,13 +19,13 @@ class Main:
         width = 1028
         height = 768
 
-        print('[LOG] cv2 path: ' + cv2.__file__)
+        print('[LOG] main - Main: cv2 path: ' + cv2.__file__)
 
         widget = tkCamera(self.parent, source, width, height)
         
 
         def on_exit(self, event=None):
-            print('[LOG] Stopping threads')
+            print('[LOG] main - Main: Stopping threads')
             widget.vid.running = False
 
         self.parent.destroy()

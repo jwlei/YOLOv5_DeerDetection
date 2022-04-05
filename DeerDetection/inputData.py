@@ -10,7 +10,7 @@ class sourceSelect(tk.Toplevel):
         super().__init__(parent)
 
         self.other_sources = other_sources
-        print('[LOG] inputData - sourceSelect ', self.other_sources)
+        print('[LOG] inputData - sourceSelect - init: ', self.other_sources)
 
         # default values at start
         self.item = None
@@ -40,7 +40,7 @@ class sourceSelect(tk.Toplevel):
                                         filetypes=(("MP4 files","*.mp4"), ("AVI files", "*.avi"), ("all files","*.*"))
                                     )
 
-        print('[LOG] inputData - source_select - on_select_file:', name, source)
+        print('[LOG] inputData - source_select - on_select_file: ', name, source)
 
     # Select training data
     def on_select_trainingData(self):
@@ -55,7 +55,7 @@ class sourceSelect(tk.Toplevel):
             self.name = name
             self.source = source
 
-            print('[LOG] inputData - source_select - on_select_trainingData:', name, source)
+            print('[LOG] inputData - source_select - on_select_trainingData: ', name, source)
             self.destroy()
             self.dialog = None
 
@@ -69,7 +69,7 @@ class sourceSelect(tk.Toplevel):
         self.source = source
       
 
-        print('[LOG] inpudData - source_select - on_select_other:', name, source)
+        print('[LOG] inputData - source_select - on_select_other:', name, source)
         self.destroy()
         self.dialog = None
 
@@ -92,27 +92,27 @@ class tkCamera(tkinter.Frame):
 
         """ TODO: Fix correct source """ 
         self.source = source
-        print('[LOG] inputData - tkCamera - init source ', self.source)
+        print('[LOG] inputData - tkCamera - init: source ', self.source)
         
         self.width  = width
-        print('[LOG] inputData - tkCAmera - init width ', self.width)
+        print('[LOG] inputData - tkCamera - init: width ', self.width)
 
         self.height = height
-        print('[LOG] inputData - tkCamera - init height ', self.height)
+        print('[LOG] inputData - tkCamera - init: height ', self.height)
 
         self.other_sources = sources
-        print('[LOG] inputData - tkCamera - other_sources ', self.other_sources)
+        print('[LOG] inputData - tkCamera - init: other_sources: ', self.other_sources)
 
         #self.window.title(window_title)
         self.vid = VideoProcessing(self.source, self.width, self.height)
-        print('[LOG] inputData - tkCamera - init self.vid = VideoProcessing (source, w, h) ', self.vid)
+        print('[LOG] inputData - tkCamera - init: self.vid = VideoProcessing (source, w, h) ', self.vid)
 
         self.label = tk.Label(self, text=text)
-        print('[LOG] inputData - tkCamera - init self.label ', self.label)
+        print('[LOG] inputData - tkCamera - init: self.label ', self.label)
         self.label.pack()
 
         self.canvas = tk.Canvas(self, width=self.vid.width, height=self.vid.height)
-        print('[LOG] inputData - tkCamera - init self.canvas ', self.canvas)
+        print('[LOG] inputData - tkCamera - init: self.canvas ', self.canvas)
         self.canvas.pack()
 
 
@@ -158,7 +158,7 @@ class tkCamera(tkinter.Frame):
         self.running = True
 
         self.update_frame()
-        print('[LOG] inputData - tkCamera - frame updated') 
+        print('[LOG] inputData - tkCamera: frame updated') 
         
 
 
@@ -180,7 +180,7 @@ class tkCamera(tkinter.Frame):
         #    self.image.save(time.strftime("frame-%d-%m-%Y-%H-%M-%S.jpg"))
 
         self.vid.snapshot()
-        print('[LOG] inputData - tkCamera - snapshot  taken')
+        print('[LOG] inputData - tkCamera: snapshot taken')
 
     # update the frame
     def update_frame(self):
@@ -188,17 +188,17 @@ class tkCamera(tkinter.Frame):
         # Get a frame from the video source
 
         ret, frame = self.vid.get_frame()
-        print('[LOG] inputData - tkCamera - update_frame ', ret, frame)
+        print('[LOG] inputData - tkCamera - update_frame: ', ret, frame)
 
         if ret:
             self.image = frame
             self.photo = PIL.ImageTk.PhotoImage(image=self.image)
             self.canvas.create_image(0, 0, image=self.photo, anchor='nw')
-            print('[LOG] inputData - tkCamera - update_frame - if ret', ret)
+            print('[LOG] inputData - tkCamera - update_frame - if ret: ', ret)
 
         if self.running:
             self.after(self.delay, self.update_frame)
-            print('[LOG] inputData - tkCamera - update_frame - if running', self.after)
+            print('[LOG] inputData - tkCamera - update_frame - if running: ', self.after)
 
 
 
@@ -207,13 +207,13 @@ class tkCamera(tkinter.Frame):
         self.dialog = tkSourceSelect(self, self.other_sources)
 
         self.label['text'] = self.dialog.name
-        print('[LOG] inputData - tkCamera - select_source - label ', self.label)
+        print('[LOG] inputData - tkCamera - select_source - label: ', self.label)
 
         self.source = self.dialog.source
-        print('[LOG] inputData - tkCamera - select_source - source ', self.source)
+        print('[LOG] inputData - tkCamera - select_source - source: ', self.source)
 
         self.vid = VideoCapture(self.source, self.width, self.height)
-        print('[LOG] inputData - tkCamera - select_source - self.vid ', self.vid)
+        print('[LOG] inputData - tkCamera - select_source - self.vid: ', self.vid)
 
 
 
