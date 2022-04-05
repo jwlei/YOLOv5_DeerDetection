@@ -31,7 +31,7 @@ class sourceSelect(tk.Toplevel):
 
 
 
-     # -------------------------------------------------- SOURCE SELECTION --------------------------------------------------
+    # -------------------------------------------------- SOURCE SELECTION --------------------------------------------------
     # Select input data
     def on_select_file(self):
         """ TODO: Name not defined """
@@ -52,7 +52,7 @@ class sourceSelect(tk.Toplevel):
 
         if result:
             self.item = item
-            self.name = name
+            self.name = name # replace name with text?
             self.source = source
 
             print('[LOG] inputData - source_select - on_select_trainingData: ', name, source)
@@ -121,10 +121,6 @@ class tkCamera(tkinter.Frame):
         self.btn_snapshot = tk.Button(self, text="Image Source", command=self.select_source)
         self.btn_snapshot.pack(anchor='center', side='left')
 
-        # Button Joblib source
-        self.btn_snapshot = tk.Button(self, text="Joblib Source", command=self.select_Joblib_source)
-        self.btn_snapshot.pack(anchor='center', side='right')
-
         # Button Alarm ON
         self.btn_snapshot = tk.Button(self, text="Manual: alarm ON", command=self.overrideAlarmOn)
         self.btn_snapshot.pack(anchor='center', side='left')
@@ -137,6 +133,11 @@ class tkCamera(tkinter.Frame):
         # Button that lets the user take a snapshot
         self.btn_snapshot = tk.Button(self, text="Snapshot", command=self.snapshot)
         self.btn_snapshot.pack(anchor='center', side='left')
+
+
+        # Button EXOT
+        self.btn_snapshot = tk.Button(self, text="EXIT", command=self.exitProgram)
+        self.btn_snapshot.pack(anchor='center', side='right')
  
         
 
@@ -238,3 +239,6 @@ class tkCamera(tkinter.Frame):
 
     def overrideAlarmOff(self):
         print('Alarm OFF')
+
+    def exitProgram(self):
+        on_exit() # TODO 
