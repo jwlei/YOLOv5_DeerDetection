@@ -12,7 +12,7 @@ class Main:
     def __init__(self, parent, title, sources):
         self.parent = parent
         self.parent.title(title)
-        """ TODO: Check if widget is actually correct and running inputData """
+        # TODO: Check if widget is actually correct and running inputData
         self.stream_widgets = []
 
         #Dimensions

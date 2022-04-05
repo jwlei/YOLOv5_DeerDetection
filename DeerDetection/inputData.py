@@ -2,6 +2,7 @@ import PIL.ImageTk
 import tkinter as tk
 import tkinter.filedialog
 from videoprocessing import VideoProcessing
+#from main import Main - import exit function from main ? 
 
 class sourceSelect(tk.Toplevel):
 
@@ -34,7 +35,7 @@ class sourceSelect(tk.Toplevel):
     # -------------------------------------------------- SOURCE SELECTION --------------------------------------------------
     # Select input data
     def on_select_file(self):
-        """ TODO: Name not defined """
+        # TODO: Name not defined
         result = tk.filedialog.askopenfilename(
                                         initialdir=".",
                                         title="Select video file",
@@ -70,7 +71,7 @@ class sourceSelect(tk.Toplevel):
       
 
         print('[LOG] inputData - source_select - on_select_other:', name, source)
-        # self.destroy()
+        self.destroy()
         self.dialog = None
 
     def open_file(self):
@@ -90,7 +91,7 @@ class tkCamera(tkinter.Frame):
 
         super().__init__(parent)
 
-        """ TODO: Fix correct source """ 
+        # TODO: Fix correct source
         self.source = source
         print('[LOG] inputData - tkCamera - init: source ', self.source)
         
@@ -134,10 +135,10 @@ class tkCamera(tkinter.Frame):
         self.btn_snapshot = tk.Button(self, text="Snapshot", command=self.snapshot)
         self.btn_snapshot.pack(anchor='center', side='left')
 
-
+        # TODO: Exit button
         # Button EXOT
-        self.btn_snapshot = tk.Button(self, text="EXIT", command=self.exitProgram)
-        self.btn_snapshot.pack(anchor='center', side='right')
+        #self.btn_snapshot = tk.Button(self, text="EXIT", command=self.exitProgram)
+        #self.btn_snapshot.pack(anchor='center', side='right')
  
         
 
@@ -146,18 +147,15 @@ class tkCamera(tkinter.Frame):
         # After it is called once, the update method will be automatically called every delay milliseconds
         # calculate delay using `FPS`
         #self.delay = int(1000/self.vid.fps)
-        """ TODO: Fix correct FPS read """
+        # TODO: Fix correct FPS read
         self.delay = int(500)
 
         print('[LOG] source:', self.source)
         print('[LOG] fps:', self.vid.fps, 'delay:', self.delay)
 
         self.image = None
-
         self.dialog = None
-
         self.running = True
-
         self.update_frame()
         print('[LOG] inputData - tkCamera: frame updated') 
         
@@ -240,5 +238,5 @@ class tkCamera(tkinter.Frame):
     def overrideAlarmOff(self):
         print('Alarm OFF')
 
-    def exitProgram(self):
-        on_exit() # TODO 
+    #def quitApp(self):
+    #    Main.on_exit()

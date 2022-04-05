@@ -16,7 +16,31 @@ class VideoProcessing:
 
         # Open the video source
         #self.vid = cv2.VideoCapture("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
-        self.vid = cv2.VideoCapture(0)
+        #self.vid = cv2.VideoCapture(0)
+        found = False
+
+        for i in range(1):
+            self.vid = cv2.VideoCapture(i)
+            if not self.vid:
+                print('[LOG] [ERROR] videoprocessing - VideoProcessing: UNABLE TO CAPTURE MEDIA')
+            else:
+                found = True
+                print('[LOG] videoprocessing - VideoProcessing: CAPTURED MEDIA')
+                break
+
+        if found == False:
+            print('[LOG] [ERROR ]videoprocessing - VideoProcessing: SYS EXIT')
+            sys.exit()
+
+        #cap = cv2.VideoCapture(0)
+
+        #while True:
+        #    ret, img = cap.read()
+        #    cv2.imshow("Frame", img)
+        #    if cv2.waitKey(1) & 0xFF == ord('q'):
+        #        break
+
+
         print('[LOG] videoprocessing - VideoProcessing - init: cv2.Videocapture ', self.vid)
 
         # throw error on error
@@ -82,7 +106,7 @@ class VideoProcessing:
                     frame = PIL.Image.fromarray(frame)
             else:
                 print('[LOG] videoprocessing - process: stream end:', self.video_source)
-                """ TODO: Fix re-run/re-open of inputData """
+                # TODO: Fix re-run/re-open of inputData
                 self.running = False
                 break
 
@@ -93,7 +117,7 @@ class VideoProcessing:
 
             # sleep for next frame
             #time.sleep(1/self.fps)
-            """ TODO: Fix fps """
+            # TODO: Fix fps read
             time.sleep(1/30)
             # REDUCE SPAM print('[LOG] videoprocessing - process: thread sleeping for 1/30')
 
@@ -101,3 +125,16 @@ class VideoProcessing:
     def get_frame(self):
         return self.ret, self.frame
         print('[LOG] videoprocessing - get_frame: ', self.ret, self.frame)
+
+
+    def __del__(self):
+        """TODO: add docstring"""
+
+        # stop thread
+        if self.running:
+            self.running = False
+            self.thread.join()
+
+        # relase stream
+        if self.vid.isOpened():
+            self.vid.release()
