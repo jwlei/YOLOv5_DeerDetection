@@ -86,7 +86,7 @@ class sourceSelect(tk.Toplevel):
 class tkCamera(tkinter.Frame):
 
     # Create the main gui frame with buttons and video feed
-    def __init__(self, parent, text="", source=0, width=768, height=1028, sources=None):
+    def __init__(self, parent, text="",  width=None, height=None, source=0, sources=None):
 
         super().__init__(parent)
 

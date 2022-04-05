@@ -8,14 +8,15 @@ class VideoProcessing:
     def __init__(self, video_source=0, width=None, height=None, fps=None):
 
         self.video_source = video_source
-        self.width = width
         self.height = height
+        self.width = width
         self.fps = fps
 
         self.running = False
 
         # Open the video source
-        self.vid = cv2.VideoCapture(video_source)
+        self.vid = cv2.VideoCapture(0)
+        print('[LOG] videoprocessing - VideoProcessing - init: cv2.Videocapture ', self.vid)
 
         # throw error on error
         if not self.vid.isOpened():
@@ -24,11 +25,13 @@ class VideoProcessing:
         # Get data from video source
         if not self.width:
             self.width = int(self.vid.get(cv2.CAP_PROP_FRAME_WIDTH))    # convert float to int
-            print('[LOG] videoprocessing - VideoProcessing - init: WIDTH SET TO ', self.width)
+            print('[LOG] videoprocessing - VideoProcessing - init: IF NOT WIDTH SET TO ', self.width)
+        print('[LOG] videoprocessing - VideoProcessing - init: WIDTH SET TO ', self.width)
 
         if not self.height:
             self.height = int(self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT))  # convert float to int
-            print('[LOG] videoprocessing - VideoProcessing - init: HEIGHT SET TO ', self.height)
+            print('[LOG] videoprocessing - VideoProcessing - init: IF NOT HEIGHT SET TO ', self.height)
+        print('[LOG] videoprocessing - VideoProcessing - init: HEIGHT SET TO ', self.height)
 
         if not self.fps:
             self.fps = int(self.vid.get(cv2.CAP_PROP_FPS))              # convert float to int
