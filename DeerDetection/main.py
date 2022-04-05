@@ -9,31 +9,44 @@ class Main:
     # -------------------------------------------------- INIT --------------------------------------------------
     # Initialize the main window
 
-    def __init__(self, parent, title, widget):
+    def __init__(self, parent, title, sources):
         self.parent = parent
         self.parent.title(title)
         """ TODO: Check if widget is actually correct and running inputData """
-        self.widget = widget
+        self.stream_widgets = []
 
         #Dimensions
         width = 1028
         height = 768
 
-        print('[LOG] main - Main: cv2 path: ' + cv2.__file__)
+        columns = 2
+        for number, (text, source) in enumerate(sources):
+            widget = tkCamera(self.parent, text, source, width, height, sources)
+            row = number // columns
+            col = number % columns
+            widget.grid(row=row, column=col)
+            self.stream_widgets.append(widget)
 
-        widget = tkCamera(self.parent, source, width, height)
-        
+            # OLD print('[LOG] main - Main: cv2 path: ' + cv2.__file__)
 
-        def on_exit(self, event=None):
+        #widget = tkCamera(self.parent, source, width, height)
+            self.parent.protocol("WM_DELETE_WINDOW", self.on_exit)
+
+
+    def on_exit(self, event=None):
+        for widget in self.stream_widgets:
             print('[LOG] main - Main: Stopping threads')
             widget.vid.running = False
 
+        print('[LOG] main - main EXIT')
         self.parent.destroy()
 
 if __name__ == "__main__":
-
-    source = "Hytte View", "https://cameraftpapi.drivehq.com/api/camera/DF.aspx?sesID=rlkgs2z4ktmcdqshnogzgtld&isGallery=&share=true&shareID=17150495&fileID=8999618763&outputErrorInHeader=true&a.mp4"
+    #          ("text", "source")
+    sources = [("Big Buck Bunny", "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
+               ("For Bigger Blazes", "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4")
+               ]
 
 root = tk.Tk()
-Main(root, "Deer detection v2", source)
+Main(root, "Deer detection v2", sources)
 root.mainloop()

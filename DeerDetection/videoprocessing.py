@@ -15,6 +15,7 @@ class VideoProcessing:
         self.running = False
 
         # Open the video source
+        #self.vid = cv2.VideoCapture("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
         self.vid = cv2.VideoCapture(0)
         print('[LOG] videoprocessing - VideoProcessing - init: cv2.Videocapture ', self.vid)
 
@@ -94,7 +95,7 @@ class VideoProcessing:
             #time.sleep(1/self.fps)
             """ TODO: Fix fps """
             time.sleep(1/30)
-            print('[LOG] videoprocessing - process: thread sleeping for 1/30')
+            # REDUCE SPAM print('[LOG] videoprocessing - process: thread sleeping for 1/30')
 
     # -------------------------------------------------- GET FRAME --------------------------------------------------
     def get_frame(self):

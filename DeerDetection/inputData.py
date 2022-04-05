@@ -17,7 +17,7 @@ class sourceSelect(tk.Toplevel):
         self.name = None
         self.source = None
 
-         # GUI for selecting other file
+        # GUI for selecting other file
         button = tk.Button(self, text="Open file...", command=self.on_select_file())
         button.pack(fill='both', expand=True)
 
@@ -34,12 +34,12 @@ class sourceSelect(tk.Toplevel):
      # -------------------------------------------------- SOURCE SELECTION --------------------------------------------------
     # Select input data
     def on_select_file(self):
+        """ TODO: Name not defined """
         result = tk.filedialog.askopenfilename(
                                         initialdir=".",
                                         title="Select video file",
                                         filetypes=(("MP4 files","*.mp4"), ("AVI files", "*.avi"), ("all files","*.*"))
                                     )
-
         print('[LOG] inputData - source_select - on_select_file: ', name, source)
 
     # Select training data
@@ -70,7 +70,7 @@ class sourceSelect(tk.Toplevel):
       
 
         print('[LOG] inputData - source_select - on_select_other:', name, source)
-        self.destroy()
+        # self.destroy()
         self.dialog = None
 
     def open_file(self):
@@ -86,7 +86,7 @@ class sourceSelect(tk.Toplevel):
 class tkCamera(tkinter.Frame):
 
     # Create the main gui frame with buttons and video feed
-    def __init__(self, parent, text="",  width=None, height=None, source=0, sources=None):
+    def __init__(self, parent, text="", source=0, width=None, height=None, sources=None):
 
         super().__init__(parent)
 
@@ -194,17 +194,17 @@ class tkCamera(tkinter.Frame):
             self.image = frame
             self.photo = PIL.ImageTk.PhotoImage(image=self.image)
             self.canvas.create_image(0, 0, image=self.photo, anchor='nw')
-            print('[LOG] inputData - tkCamera - update_frame - if ret: ', ret)
+            # REDUCE SPAM print('[LOG] inputData - tkCamera - update_frame - if ret: ', ret)
 
         if self.running:
             self.after(self.delay, self.update_frame)
-            print('[LOG] inputData - tkCamera - update_frame - if running: ', self.after)
+            # REDUCE SPAM print('[LOG] inputData - tkCamera - update_frame - if running: ', self.after)
 
 
 
     # Select source
     def select_source(self):
-        self.dialog = tkSourceSelect(self, self.other_sources)
+        self.dialog = sourceSelect(self, self.other_sources)
 
         self.label['text'] = self.dialog.name
         print('[LOG] inputData - tkCamera - select_source - label: ', self.label)
@@ -212,7 +212,7 @@ class tkCamera(tkinter.Frame):
         self.source = self.dialog.source
         print('[LOG] inputData - tkCamera - select_source - source: ', self.source)
 
-        self.vid = VideoCapture(self.source, self.width, self.height)
+        self.vid = VideoProcessing(self.source, self.width, self.height)
         print('[LOG] inputData - tkCamera - select_source - self.vid: ', self.vid)
 
 
