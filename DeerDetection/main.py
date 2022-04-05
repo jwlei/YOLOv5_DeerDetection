@@ -1,60 +1,38 @@
 import os
 import tkinter as tk
-from tkCamera import tkCamera
+import cv2
+from inputData import tkCamera
 
 HOME = os.path.dirname(os.path.abspath(__file__))
 
-
-class App:
+class Main: 
     # -------------------------------------------------- INIT --------------------------------------------------
-    def __init__(self, parent, title, sources):
+    # Initialize the main window
 
+    def __init__(self, parent, title, widget):
         self.parent = parent
-
         self.parent.title(title)
+        self.widget = widget
 
-        self.stream_widgets = []
-
+        #Dimensions
         width = 1028
         height = 768
 
-        #Multi cam view
-        columns = 1
-        for number, (text, source) in enumerate(sources):
-            widget = tkCamera(self.parent, text, source, width, height, sources)
-            row = number // columns
-            col = number % columns
-            widget.grid(row=row, column=col)
-            self.stream_widgets.append(widget)
+        print('[LOG] cv2 path: ' + cv2.__file__)
 
-        self.parent.protocol("WM_DELETE_WINDOW", self.on_closing)
+        widget = tkCamera(self.parent, source, width, height)
+        
 
-
-    # -------------------------------------------------- ON-EXIT --------------------------------------------------
-    def on_closing(self, event=None):
-
-        print("[LOG] stoping threads")
-        for widget in self.stream_widgets:
+        def on_exit(self, event=None):
+            print('[LOG] Stopping threads')
             widget.vid.running = False
 
-        print("[LOG] exit")
         self.parent.destroy()
-
 
 if __name__ == "__main__":
 
-    sources = [  
-        # (text, source)
-        (
-            "Hytte view",
-            "https://cameraftpapi.drivehq.com/api/camera/DF.aspx?sesID=rlkgs2z4ktmcdqshnogzgtld&isGallery=&share=true&shareID=17150495&fileID=8999618763&outputErrorInHeader=true&a.mp4"
-        ),
-         (
-            "Zakopane, Poland",
-            "https://imageserver.webcamera.pl/rec/krupowki-srodek/latest.mp4"
-        )
-    ]
+    source = "Hytte View", "https://cameraftpapi.drivehq.com/api/camera/DF.aspx?sesID=rlkgs2z4ktmcdqshnogzgtld&isGallery=&share=true&shareID=17150495&fileID=8999618763&outputErrorInHeader=true&a.mp4"
 
-    root = tk.Tk()
-    App(root, "Deer detection v 0.1", sources)
-    root.mainloop()
+root = tk.Tk()
+Main(root, "Deer detection v2", source)
+root.mainloop()

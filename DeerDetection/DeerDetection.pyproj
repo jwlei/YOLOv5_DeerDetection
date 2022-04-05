@@ -22,10 +22,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="main.py" />
-    <Compile Include="videocapture.py">
+    <Compile Include="inputData.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="tkCamera.py">
+    <Compile Include="videoprocessing.py">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>

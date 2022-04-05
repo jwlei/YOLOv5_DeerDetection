@@ -1,52 +1,50 @@
 import PIL.ImageTk
 import tkinter as tk
 import tkinter.filedialog
-from videocapture import VideoCapture
+from videoprocessing import VideoProcessing
 
-
-class tkSourceSelect(tkinter.Toplevel):
+class sourceSelect(tk.Toplevel):
 
     # -------------------------------------------------- INIT --------------------------------------------------
-    def __init__(self, parent, other_sources=None):
-
+    def __init__(self,parent, other_sources=None):
         super().__init__(parent)
 
         self.other_sources = other_sources
+        print('[LOG] inputData - sourceSelect ', self.other_sources)
 
         # default values at start
         self.item = None
         self.name = None
         self.source = None
 
-        # GUI
-        button = tkinter.Button(self, text="Open file...", command=self.on_select_file)
+         # GUI for selecting other file
+        button = tk.Button(self, text="Open file...", command=self.on_select_file())
         button.pack(fill='both', expand=True)
 
         if self.other_sources:
-            tkinter.Label(self, text="Other Sources:").pack(fill='both', expand=True)
+            tk.Label(self, text="Other Sources:").pack(fill='both', expand=True)
 
             for item in self.other_sources:
                 text, source = item
-                button = tkinter.Button(self, text=text, command=lambda data=item:self.on_select_other(data))
+                button = tk.Button(self, text=text, command=lambda data=item:self.on_select_other(data))
                 button.pack(fill='both', expand=True)
 
 
 
-    # -------------------------------------------------- SOURCE SELECTION --------------------------------------------------
+     # -------------------------------------------------- SOURCE SELECTION --------------------------------------------------
     # Select input data
     def on_select_file(self):
-        result = tkinter.filedialog.askopenfilename(
+        result = tk.filedialog.askopenfilename(
                                         initialdir=".",
                                         title="Select video file",
                                         filetypes=(("MP4 files","*.mp4"), ("AVI files", "*.avi"), ("all files","*.*"))
                                     )
 
-       
-    
+        print('[LOG] inputData - source_select - on_select_file:', name, source)
 
     # Select training data
     def on_select_trainingData(self):
-        result = tkinter.filedialog.askopenfilename(
+        result = tk.filedialog.askopenfilename(
                                         initialdir=".",
                                         title="Select training data",
                                         filetypes=(("all files","*.*"))
@@ -57,8 +55,9 @@ class tkSourceSelect(tkinter.Toplevel):
             self.name = name
             self.source = source
 
-            print('[LOG] selected joblib source:', name, source)
+            print('[LOG] inputData - source_select - on_select_trainingData:', name, source)
             self.destroy()
+            self.dialog = None
 
     # Select other sources than those in the root directory
     def on_select_other(self, item):
@@ -68,14 +67,21 @@ class tkSourceSelect(tkinter.Toplevel):
         self.item = item
         self.name = name
         self.source = source
+      
 
-        print('[LOG] selected other source:', name, source)
-
+        print('[LOG] inpudData - source_select - on_select_other:', name, source)
         self.destroy()
+        self.dialog = None
+
+    def open_file(self):
+        file = askopenfile (mode = 'r', filetypes = [(("MP4 files","*.mp4"), ("AVI files", "*.avi"), ("all files","*.*"))])
+        if file is not None:
+            content = file.read()
+            self.source = file
 
 
 
-# -------------------------------------------------- GUI --------------------------------------------------
+            # -------------------------------------------------- GUI --------------------------------------------------
 # The main GUI frame
 class tkCamera(tkinter.Frame):
 
@@ -85,19 +91,31 @@ class tkCamera(tkinter.Frame):
         super().__init__(parent)
 
         self.source = source
+        print('[LOG] inputData - tkCamera - init source ', self.source)
+        
         self.width  = width
+        print('[LOG] inputData - tkCAmera - init width ', self.width)
+
         self.height = height
+        print('[LOG] inputData - tkCamera - init height ', self.height)
+
         self.other_sources = sources
+        print('[LOG] inputData - tkCamera - other_sources ', self.other_sources)
 
         #self.window.title(window_title)
-        self.vid = VideoCapture(self.source, self.width, self.height)
+        self.vid = VideoProcessing(self.source, self.width, self.height)
+        print('[LOG] inputData - tkCamera - init self.vid = VideoProcessing (source, w, h) ', self.vid)
 
         self.label = tk.Label(self, text=text)
+        print('[LOG] inputData - tkCamera - init self.label ', self.label)
         self.label.pack()
 
         self.canvas = tk.Canvas(self, width=self.vid.width, height=self.vid.height)
+        print('[LOG] inputData - tkCamera - init self.canvas ', self.canvas)
         self.canvas.pack()
 
+
+        # -------------------------------------------------- BUTTONS  --------------------------------------------------
         # Button Video source
         self.btn_snapshot = tk.Button(self, text="Image Source", command=self.select_source)
         self.btn_snapshot.pack(anchor='center', side='left')
@@ -126,7 +144,7 @@ class tkCamera(tkinter.Frame):
         # After it is called once, the update method will be automatically called every delay milliseconds
         # calculate delay using `FPS`
         #self.delay = int(1000/self.vid.fps)
-        self.delay = int(1000/30)
+        self.delay = int(500)
 
         print('[LOG] source:', self.source)
         print('[LOG] fps:', self.vid.fps, 'delay:', self.delay)
@@ -136,7 +154,10 @@ class tkCamera(tkinter.Frame):
         self.dialog = None
 
         self.running = True
+
         self.update_frame()
+        print('[LOG] inputData - tkCamera - frame updated') 
+        
 
 
 
@@ -157,6 +178,7 @@ class tkCamera(tkinter.Frame):
         #    self.image.save(time.strftime("frame-%d-%m-%Y-%H-%M-%S.jpg"))
 
         self.vid.snapshot()
+        print('[LOG] inputData - tkCamera - snapshot  taken')
 
     # update the frame
     def update_frame(self):
@@ -164,23 +186,35 @@ class tkCamera(tkinter.Frame):
         # Get a frame from the video source
 
         ret, frame = self.vid.get_frame()
+        print('[LOG] inputData - tkCamera - update_frame ', ret, frame)
 
         if ret:
             self.image = frame
             self.photo = PIL.ImageTk.PhotoImage(image=self.image)
             self.canvas.create_image(0, 0, image=self.photo, anchor='nw')
+            print('[LOG] inputData - tkCamera - update_frame - if ret', ret)
 
         if self.running:
             self.after(self.delay, self.update_frame)
+            print('[LOG] inputData - tkCamera - update_frame - if running', self.after)
 
+
+
+    # Select source
     def select_source(self):
         self.dialog = tkSourceSelect(self, self.other_sources)
 
         self.label['text'] = self.dialog.name
-        self.source = self.dialog.source
-        self.update_frame()
+        print('[LOG] inputData - tkCamera - select_source - label ', self.label)
 
-            #self.vid = MyVideoCapture(self.source, self.width, self.height)
+        self.source = self.dialog.source
+        print('[LOG] inputData - tkCamera - select_source - source ', self.source)
+
+        self.vid = VideoCapture(self.source, self.width, self.height)
+        print('[LOG] inputData - tkCamera - select_source - self.vid ', self.vid)
+
+
+
     
 
 
@@ -189,7 +223,8 @@ class tkCamera(tkinter.Frame):
         #TODO Fix joblib source
         # open only one dialog
         if self.dialog:
-            print('[LOG] Dialogue is already open')
+            print('[LOG] inputData - select_JobLib_source - Dialogue is already open')
+            self.dialog.destroy()
         else:
             self.dialog = tkSourceSelect(self, self.other_sources)
 

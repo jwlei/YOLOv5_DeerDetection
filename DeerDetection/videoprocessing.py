@@ -3,9 +3,7 @@ import threading
 import cv2
 import PIL.Image
 
-class VideoCapture:
-
-
+class VideoProcessing:
     # -------------------------------------------------- INIT --------------------------------------------------
     def __init__(self, video_source=0, width=None, height=None, fps=None):
 
@@ -16,33 +14,32 @@ class VideoCapture:
 
         self.running = False
 
-        # Open the video source
+        #Open the video source
         self.vid = cv2.VideoCapture(video_source)
-        if not self.vid.isOpened():
-            raise ValueError("[ERROR] Unable to open video source", video_source)
 
-        # Get video source width and height
+        # throw error on error
+        if not self.vid.isOpened():
+            print('[LOG][ERROR] unable to open file', video_source)
+
+        # Get data from video source
         if not self.width:
+            
             self.width = int(self.vid.get(cv2.CAP_PROP_FRAME_WIDTH))    # convert float to int
+            print('[LOG] WIDTH SET TO ', self.width)
         if not self.height:
             self.height = int(self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT))  # convert float to int
+            print('[LOG] HEIGHT SET TO ', self.height)
         if not self.fps:
             self.fps = int(self.vid.get(cv2.CAP_PROP_FPS))              # convert float to int
+            print('[LOG] FPS SET TO ', self.fps)
 
-        # default value at start
+        # Set default values
         self.ret = False
         self.frame = None
-
         self.convert_color = cv2.COLOR_BGR2RGB
-        #self.convert_color = cv2.COLOR_BGR2GRAY
         self.convert_pillow = True
 
-        # default values for recording
-        self.recording = False
-        self.recording_filename = 'output.mp4'
-        self.recording_writer = None
-
-        # start thread
+        # Start a thread
         self.running = True
         self.thread = threading.Thread(target=self.process)
         self.thread.start()
@@ -52,17 +49,18 @@ class VideoCapture:
     def snapshot(self, filename=None):
 
         if not self.ret:
-            print('[ERROR] no frame for snapshot')
+            print('[LOG][ERROR] no frame for snapshot')
         else:
             if not filename:
                 filename = time.strftime("Snapshot %d-%m-%Y_%H-%M-%S.jpg")
 
             if not self.convert_pillow:
                 cv2.imwrite(filename, self.frame)
-                print('[LOG] snapshot (using cv2):', filename)
+                print('[LOG] snapshot saved (using cv2):', filename)
             else:
                 self.frame.save(filename)
-                print('[LOG] snapshot (using pillow):', filename)
+                print('[LOG] snapshot saved (using pillow):', filename)
+
 
     # -------------------------------------------------- PROCESS --------------------------------------------------
     def process(self):
@@ -74,10 +72,6 @@ class VideoCapture:
                 # process image
                 frame = cv2.resize(frame, (self.width, self.height))
 
-                # it has to record before converting colors
-                if self.recording:
-                    self.record(frame)
-
                 if self.convert_pillow:
                     frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
                     frame = PIL.Image.fromarray(frame)
@@ -85,29 +79,18 @@ class VideoCapture:
                 print('[LOG] stream end:', self.video_source)
                 # TODO: reopen stream
                 self.running = False
-                if self.recording:
-                    self.stop_recording()
                 break
 
             # assign new frame
             self.ret = ret
             self.frame = frame
+            print('[LOG] VideoProcessing - process - new frame ', self.ret, self.frame)
 
             # sleep for next frame
             #time.sleep(1/self.fps)
             time.sleep(1/30)
+            print('[LOG] VideoProcessing - process thread sleeing for 1/30')
 
+    # -------------------------------------------------- GET FRAME --------------------------------------------------
     def get_frame(self):
         return self.ret, self.frame
-
-    # Release the video source when the object is destroyed
-    def __del__(self):
-
-        # stop thread
-        if self.running:
-            self.running = False
-            self.thread.join()
-
-        # relase stream
-        if self.vid.isOpened():
-            self.vid.release()
