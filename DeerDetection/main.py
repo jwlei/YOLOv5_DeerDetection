@@ -1,7 +1,6 @@
 import os
 import tkinter as tk
 import cv2
-import pafy # Allows reading of videos from youtube
 from inputData import tkCamera
 
 HOME = os.path.dirname(os.path.abspath(__file__))

@@ -33,6 +33,7 @@ class VideoProcessing:
         URL = "https://www.youtube.com/watch?v=PIN6GaaiNLY" # Video med hjort
         playYt = pafy.new(URL).streams[-1] # -1 = lowest quality
 
+        #self.vid = cv2.VideoCapture(playYt.url)
         self.vid = cv2.VideoCapture(playYt.url)
         
 
@@ -99,8 +100,9 @@ class VideoProcessing:
 
         # Start a thread
         self.running = True
-        self.thread = threading.Thread(target=self.process)
         #self.thread = threading.Thread(target=self.pyTorch)
+        self.thread = threading.Thread(target=self.process)
+        #
         self.thread.start()
 
 
@@ -143,6 +145,8 @@ class VideoProcessing:
                 # TODO: Fix re-run/re-open of inputData
                 self.running = False
                 break
+
+
 
             # assign new frame
             # returns true if the frame is available
@@ -232,6 +236,7 @@ class VideoProcessing:
         #player = self.vid #Get your video stream.
         assert self.vid.isOpened() # Make sure that their is a stream. 
         #Below code creates a new video writer object to write our
+
         #output stream.
         x_shape = int(self.vid.get(cv2.CAP_PROP_FRAME_WIDTH))
         y_shape = int(self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT))
