@@ -41,7 +41,7 @@ class sourceSelect(tk.Toplevel):
                                         title="Select video file",
                                         filetypes=(("MP4 files","*.mp4"), ("AVI files", "*.avi"), ("all files","*.*"))
                                     )
-        print('[LOG] inputData - source_select - on_select_file: ', name, source)
+        print('[LOG] inputData - source_select - on_select_file: ', result)
 
     # Select training data
     def on_select_trainingData(self):
@@ -50,6 +50,8 @@ class sourceSelect(tk.Toplevel):
                                         title="Select training data",
                                         filetypes=(("all files","*.*"))
                                     )
+        print('[LOG] inputData - source_select - on_select_trainingData: ', result)
+
 
         if result:
             self.item = item

@@ -1,6 +1,7 @@
 import os
 import tkinter as tk
 import cv2
+import pafy # Allows reading of videos from youtube
 from inputData import tkCamera
 
 HOME = os.path.dirname(os.path.abspath(__file__))
@@ -21,11 +22,13 @@ class Main:
 
         columns = 2
         for number, (text, source) in enumerate(sources):
-            widget = tkCamera(self.parent, text, source, width, height, sources)
-            row = number // columns
-            col = number % columns
-            widget.grid(row=row, column=col)
-            self.stream_widgets.append(widget)
+            if number is not None:
+                widget = tkCamera(self.parent, text, source, width, height, sources)
+                row = number // columns
+                col = number % columns
+                widget.grid(row=row, column=col)
+                self.stream_widgets.append(widget)
+                break
 
             # OLD print('[LOG] main - Main: cv2 path: ' + cv2.__file__)
 

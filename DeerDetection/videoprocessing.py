@@ -2,6 +2,7 @@ import time
 import threading
 import cv2
 import PIL.Image
+import pafy # pip install youtube-dl==2020.12.2
 
 class VideoProcessing:
     # -------------------------------------------------- INIT --------------------------------------------------
@@ -16,7 +17,15 @@ class VideoProcessing:
 
         # Open the video source
         #self.vid = cv2.VideoCapture("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
-        self.vid = cv2.VideoCapture(video_source)
+        # For testing, videocapture(0) = local camera
+        # camera_ip = "rtsp://username:password@IP/port"
+
+        URL = "https://www.youtube.com/watch?v=PIN6GaaiNLY" # Video med hjort
+        playYt = pafy.new(URL).streams[-1] # -1 = lowest quality
+
+        self.vid = cv2.VideoCapture(playYt.url)
+
+        #self.vid = cv2.VideoCapture(video_source) # This pulls from local sources listed in main
        
        
        #found = False
@@ -115,7 +124,9 @@ class VideoProcessing:
                 break
 
             # assign new frame
+            # returns true if the frame is available
             self.ret = ret
+            # the array vector captured based on the default frames per second defined
             self.frame = frame
             print('[LOG] videoprocessing - process: new frame ', self.ret, self.frame)
 
