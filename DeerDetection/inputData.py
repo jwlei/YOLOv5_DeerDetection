@@ -58,7 +58,7 @@ class sourceSelect(tk.Toplevel):
 
             print('[LOG] inputData - source_select - on_select_trainingData: ', name, source)
             self.destroy()
-            self.dialog = None
+            #self.dialog = None
 
     # Select other sources than those in the root directory
     def on_select_other(self, item):
@@ -72,7 +72,7 @@ class sourceSelect(tk.Toplevel):
 
         print('[LOG] inputData - source_select - on_select_other:', name, source)
         self.destroy()
-        self.dialog = None
+        #self.dialog = None
 
     def open_file(self):
         file = askopenfile (mode = 'r', filetypes = [(("MP4 files","*.mp4"), ("AVI files", "*.avi"), ("all files","*.*"))])
@@ -214,6 +214,8 @@ class tkCamera(tkinter.Frame):
         self.vid = VideoProcessing(self.source, self.width, self.height)
         print('[LOG] inputData - tkCamera - select_source - self.vid: ', self.vid)
 
+        self.update_frame()
+
 
 
     
@@ -233,9 +235,11 @@ class tkCamera(tkinter.Frame):
             self.source = self.dialog.source
 
     def overrideAlarmOn(self):
+        # TODO: Alarm button ON
         print('Alarm ON')
 
     def overrideAlarmOff(self):
+        # TODO: Alarm button OFF
         print('Alarm OFF')
 
     #def quitApp(self):

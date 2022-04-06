@@ -16,21 +16,25 @@ class VideoProcessing:
 
         # Open the video source
         #self.vid = cv2.VideoCapture("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4")
-        #self.vid = cv2.VideoCapture(0)
-        found = False
+        self.vid = cv2.VideoCapture(video_source)
+       
+       
+       #found = False
+       
+       #for i in range(1):
+       #    self.vid = cv2.VideoCapture(i)
+       #    if not self.vid:
+       #        print('[LOG] [ERROR] videoprocessing - VideoProcessing: UNABLE TO CAPTURE MEDIA')
+       #    else:
+       #        found = True
+       #        print('[LOG] videoprocessing - VideoProcessing: CAPTURED MEDIA')
+       #        break
+       #
+       #if found == False:
+       #    print('[LOG] [ERROR ]videoprocessing - VideoProcessing: SYS EXIT')
+       #    sys.exit()
 
-        for i in range(1):
-            self.vid = cv2.VideoCapture(i)
-            if not self.vid:
-                print('[LOG] [ERROR] videoprocessing - VideoProcessing: UNABLE TO CAPTURE MEDIA')
-            else:
-                found = True
-                print('[LOG] videoprocessing - VideoProcessing: CAPTURED MEDIA')
-                break
-
-        if found == False:
-            print('[LOG] [ERROR ]videoprocessing - VideoProcessing: SYS EXIT')
-            sys.exit()
+        
 
         #cap = cv2.VideoCapture(0)
 
