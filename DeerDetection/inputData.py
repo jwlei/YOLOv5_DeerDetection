@@ -1,7 +1,11 @@
-import PIL.ImageTk
+import PIL.ImageTk as pimgtk
 import tkinter as tk
 import tkinter.filedialog
 from videoprocessing import VideoProcessing
+from objectDetection import ObjectDetection
+import cv2
+import PIL.Image as pimg
+
 #from main import Main - import exit function from main ? 
 
 class sourceSelect(tk.Toplevel):
@@ -9,6 +13,9 @@ class sourceSelect(tk.Toplevel):
     # -------------------------------------------------- INIT --------------------------------------------------
     def __init__(self,parent, other_sources=None):
         super().__init__(parent)
+        global tkimg
+        
+       
 
         self.other_sources = other_sources
         print('[LOG] inputData - sourceSelect - init: ', self.other_sources)
@@ -87,11 +94,13 @@ class sourceSelect(tk.Toplevel):
             # -------------------------------------------------- GUI --------------------------------------------------
 # The main GUI frame
 class tkCamera(tkinter.Frame):
-
+    
     # Create the main gui frame with buttons and video feed
     def __init__(self, parent, text="", source=0, width=None, height=None, sources=None):
 
         super().__init__(parent)
+        url = "https://www.youtube.com/watch?v=3c4AOr40nQo"
+        od = ObjectDetection()
 
         # TODO: Fix correct source
         self.source = source
@@ -150,7 +159,7 @@ class tkCamera(tkinter.Frame):
         # calculate delay using `FPS`
         #self.delay = int(1000/self.vid.fps)
         # TODO: Fix correct FPS read
-        self.delay = int(500)
+        self.delay = int(33)
 
         print('[LOG] source:', self.source)
         print('[LOG] fps:', self.vid.fps, 'delay:', self.delay)
@@ -187,15 +196,32 @@ class tkCamera(tkinter.Frame):
     def update_frame(self):
         # widgets in tkinter already have method `update()` so I have to use different name -
         # Get a frame from the video source
-
-        ret, frame = self.vid.get_frame()
-        print('[LOG] inputData - tkCamera - update_frame: ', ret, frame)
+        
+        ''' Faar bilde med disse '''
+        od = ObjectDetection()
+        #ret, frame = od.predict()
+        
+        ret, frame = od.predict()
+        
+        #print('[LOG] inputData - tkCamera - update_frame: ', ret, frame)
 
         if ret:
-            self.image = frame
-            self.photo = PIL.ImageTk.PhotoImage(image=self.image)
-            self.canvas.create_image(0, 0, image=self.photo, anchor='nw')
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+            print('[BUG HANDLING LOG] CVT COLOR', frame)
+
+            frame = pimg.fromarray(frame)
+            print('[BUG HANDLING LOG] FROM ARRAY', frame)
+
+            self.tkimg = tkimg = pimgtk.PhotoImage(frame)
+            print('[BUG HANDLING LOG] PHOTOIMAGE', tkimg)
+            
+            self.canvas.create_image(0, 0, image=tkimg, anchor='nw')
+       
+      
+        
+     
             # REDUCE SPAM print('[LOG] inputData - tkCamera - update_frame - if ret: ', ret)
+        #self.canvas.create_image(150, 150, image=self.image, anchor='nw')
 
         if self.running:
             self.after(self.delay, self.update_frame)

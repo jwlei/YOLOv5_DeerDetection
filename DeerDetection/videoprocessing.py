@@ -3,9 +3,11 @@ import threading
 import cv2
 import PIL.Image
 import pafy # pip install youtube-dl==2020.12.2
+import numpy as np
 
 import torch
 from torch import hub # Hub contains other models like FasterRCNN
+from objectDetection import ObjectDetection
 
 class VideoProcessing:
     # -------------------------------------------------- INIT --------------------------------------------------
@@ -15,7 +17,9 @@ class VideoProcessing:
         self.height = height
         self.width = width
         self.fps = fps
-
+    
+        self.dim = (width, height)
+        
         self.running = False
 
 
@@ -28,7 +32,10 @@ class VideoProcessing:
         playYt = pafy.new(URL).streams[-1] # -1 = lowest quality
 
         #self.vid = cv2.VideoCapture(playYt.url)
-        self.vid = cv2.VideoCapture(playYt.url)
+
+        od = ObjectDetection()
+       
+        self.vid = od.predict()
         
 
         #self.vid = cv2.VideoCapture(video_source) # This pulls from local sources listed in main
@@ -60,26 +67,26 @@ class VideoProcessing:
         #        break
 
 
-        print('[LOG] videoprocessing - VideoProcessing - init: cv2.Videocapture ', self.vid)
+        #print('[LOG] videoprocessing - VideoProcessing - init: cv2.Videocapture ', self.vid)
 
         # throw error on error
-        if not self.vid.isOpened():
-            print('[LOG] [ERROR] videoprocessing - VideoProcessing - init: unable to open file', video_source)
+        #if not self.vid.isOpened():
+        #    print('[LOG] [ERROR] videoprocessing - VideoProcessing - init: unable to open file', video_source)
 
         # Get data from video source
-        if not self.width:
-            self.width = int(self.vid.get(cv2.CAP_PROP_FRAME_WIDTH))    # convert float to int
-            print('[LOG] videoprocessing - VideoProcessing - init: IF NOT WIDTH SET TO ', self.width)
-        print('[LOG] videoprocessing - VideoProcessing - init: WIDTH SET TO ', self.width)
+        #if not self.width:
+        #    self.width = int(self.vid.get(cv2.CAP_PROP_FRAME_WIDTH))    # convert float to int
+        #    print('[LOG] videoprocessing - VideoProcessing - init: IF NOT WIDTH SET TO ', self.width)
+        #print('[LOG] videoprocessing - VideoProcessing - init: WIDTH SET TO ', self.width)
 
-        if not self.height:
-            self.height = int(self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT))  # convert float to int
-            print('[LOG] videoprocessing - VideoProcessing - init: IF NOT HEIGHT SET TO ', self.height)
-        print('[LOG] videoprocessing - VideoProcessing - init: HEIGHT SET TO ', self.height)
+        #if not self.height:
+        #    self.height = int(self.vid.get(cv2.CAP_PROP_FRAME_HEIGHT))  # convert float to int
+        #    print('[LOG] videoprocessing - VideoProcessing - init: IF NOT HEIGHT SET TO ', self.height)
+        #print('[LOG] videoprocessing - VideoProcessing - init: HEIGHT SET TO ', self.height)
 
-        if not self.fps:
-            self.fps = int(self.vid.get(cv2.CAP_PROP_FPS))              # convert float to int
-            print('[LOG] videoprocessing - VideoProcessing - init: FPS SET TO ', self.fps)
+        #if not self.fps:
+        #    self.fps = int(self.vid.get(cv2.CAP_PROP_FPS))              # convert float to int
+        #    print('[LOG] videoprocessing - VideoProcessing - init: FPS SET TO ', self.fps)
 
         # Set default values
         self.ret = False
@@ -87,10 +94,6 @@ class VideoProcessing:
         self.convert_color = cv2.COLOR_BGR2RGB
         self.convert_pillow = True
 
-        # default values for recording
-        self.recording = False
-        self.recording_filename = 'output.avi'
-        self.recording_writer = None
 
         # Start a thread
         self.running = True
@@ -121,24 +124,26 @@ class VideoProcessing:
     def process(self):
 
         while self.running:
-            ret, frame = self.vid.read()
+            if self.vid is not None:
+                ret, frame = self.vid
             # TODO: Call pytorch on the videostream, fix output from pytorch so that we see boxes
             # self.pyTorch()
 
-            if ret:
-                # process image
-                frame = cv2.resize(frame, (self.width, self.height))
+                if ret:
+                   # process image
+                    frame = cv2.resize(frame, (self.width, self.height))
+                   
 
-                if self.convert_pillow:
-                    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-                    frame = PIL.Image.fromarray(frame)
+                    if self.convert_pillow:
+                        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+                        frame = PIL.Image.fromarray(frame)
                     
             
-            else:
-                print('[LOG] videoprocessing - process: stream end:', self.video_source)
-                # TODO: Fix re-run/re-open of inputData
-                self.running = False
-                break
+                else:
+                    print('[LOG] videoprocessing - process: stream end:', self.video_source)
+                    # TODO: Fix re-run/re-open of inputData
+                    self.running = False
+                    break
 
 
 

@@ -14,6 +14,8 @@ class Main:
         self.parent.title(title)
         # TODO: Check if widget is actually correct and running inputData
         self.stream_widgets = []
+        
+       
 
         #Dimensions
         width = 1028
@@ -34,6 +36,12 @@ class Main:
         #widget = tkCamera(self.parent, source, width, height)
             self.parent.protocol("WM_DELETE_WINDOW", self.on_exit)
 
+    def report_callback_exception(self, exc_type, exc_value, exc_traceback):
+        message = ''.join(traceback.format_exception(exc_type,
+                                                     exc_value,
+                                                     exc_traceback))
+        tkMessageBox.showerror('Error', message)
+
 
     def on_exit(self, event=None):
         for widget in self.stream_widgets:
@@ -51,4 +59,5 @@ if __name__ == "__main__":
 
 root = tk.Tk()
 Main(root, "Deer detection v2", sources)
+
 root.mainloop()

@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import pafy
 from time import time
+import threading
 
 
 class ObjectDetection:
@@ -11,19 +12,23 @@ class ObjectDetection:
     Class implements Yolo5 model to make inferences on a youtube video using OpenCV.
     """
     
-    def __init__(self, url, out_file):
+    def __init__(self): # - url
         """
         Initializes the class with youtube url and output file.
         :param url: Has to be as youtube URL,on which prediction is made.
         :param out_file: A valid output file name.
         """
-        self._URL = url
+        self._URL = "https://www.youtube.com/watch?v=3c4AOr40nQo"
         self.model = self.load_model()
         self.classes = self.model.names
-        self.out_file = out_file
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print("\n\nDevice Used:",self.device)
 
+        self.ret = False
+        self.frame = None
+
+        self.thread = threading.Thread(target=self.predict)
+        self.thread.start()
 
     def get_video_from_url(self):
         """
@@ -40,7 +45,7 @@ class ObjectDetection:
         Loads Yolo5 model from pytorch hub.
         :return: Trained Pytorch model.
         """
-        model = torch.hub.load('ultralytics/yolov5', 'custom', path='trainedModel_v1.pt', force_reload=True)
+        model = torch.hub.load('ultralytics/yolov5', 'custom', path='trainedModel_v1.pt', force_reload=False)
         return model
 
 
@@ -88,18 +93,18 @@ class ObjectDetection:
         return frame
 
 
-    def __call__(self):
+    def predict(self):
         """
         This function is called when class is executed, it runs the loop to read the video frame by frame,
         and write the output into a new file.
         :return: void
         """
         player = self.get_video_from_url()
-        assert player.isOpened()
+        #assert player.isOpened()
         x_shape = int(player.get(cv2.CAP_PROP_FRAME_WIDTH))
         y_shape = int(player.get(cv2.CAP_PROP_FRAME_HEIGHT))
         four_cc = cv2.VideoWriter_fourcc(*"MJPG")
-        out = cv2.VideoWriter(self.out_file, four_cc, 20, (x_shape, y_shape))
+        #out = cv2.VideoWriter(self.out_file, four_cc, 20, (x_shape, y_shape))
         while True:
             start_time = time()
             ret, frame = player.read()
@@ -110,13 +115,20 @@ class ObjectDetection:
             end_time = time()
             fps = 1/np.round(end_time - start_time, 3)
             print(f"Frames Per Second : {fps}")
-            cv2.imshow('frame', frame)
+            #cv2.imshow('frame', frame)
+
+            return ret, frame
+
             if cv2.waitKey(1) & 0xFF == ord('q'):
                 break
-            out.write(frame)
+
+    def get_od_frame(self):
+        return self.ret, self.frame
+            
+            
 
 
 
 # Create a new object and execute.
-detection = ObjectDetection("https://www.youtube.com/watch?v=3c4AOr40nQo", "test1.avi")
-detection()
+#detection = ObjectDetection("https://www.youtube.com/watch?v=3c4AOr40nQo")
+#detection()
