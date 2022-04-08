@@ -26,9 +26,7 @@
     <Compile Include="inputData.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="detect.py">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="objectDetection.py" />
     <Compile Include="videoprocessing.py">
       <SubType>Code</SubType>
     </Compile>
