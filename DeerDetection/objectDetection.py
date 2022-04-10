@@ -23,12 +23,17 @@ class ObjectDetection:
         self.classes = self.model.names
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print("\n\nDevice Used:",self.device)
+        
 
-        self.ret = False
-        self.frame = None
+        VIDEO = cv2.VideoCapture('test.mp4')
+        self.VIDEO = VIDEO
+        ret = False
+        frame = None
+        od_frame = None
+        
 
-        self.thread = threading.Thread(target=self.predict)
-        self.thread.start()
+        #self.thread = threading.Thread(target=self.predict)
+        #self.thread.start()
 
     def get_video_from_url(self):
         """
@@ -56,6 +61,7 @@ class ObjectDetection:
         :return: Labels and Coordinates of objects detected by model in the frame.
         """
         self.model.to(self.device)
+        #print('[LOG] objectDetection - ObjectDetection - score_frame: Exported model to device')
         frame = [frame]
         results = self.model(frame)
      
@@ -99,36 +105,52 @@ class ObjectDetection:
         and write the output into a new file.
         :return: void
         """
-        player = self.get_video_from_url()
-        #assert player.isOpened()
-        x_shape = int(player.get(cv2.CAP_PROP_FRAME_WIDTH))
-        y_shape = int(player.get(cv2.CAP_PROP_FRAME_HEIGHT))
-        four_cc = cv2.VideoWriter_fourcc(*"MJPG")
-        #out = cv2.VideoWriter(self.out_file, four_cc, 20, (x_shape, y_shape))
-        while True:
-            start_time = time()
-            ret, frame = player.read()
-            if not ret:
-                break
-            results = self.score_frame(frame)
-            frame = self.plot_boxes(results, frame)
-            end_time = time()
-            fps = 1/np.round(end_time - start_time, 3)
-            print(f"Frames Per Second : {fps}")
-            #cv2.imshow('frame', frame)
+        #player = self.get_video_from_url()
+        player = self.VIDEO
+        assert player.isOpened()
+      
+        
+          
+        ret, frame = player.read()
+        assert ret # TODO: If not ret, exit program
+            
+        frame = cv2.resize(frame, (416,416))
+            
+        start_time = time()
+        results = self.score_frame(frame)
+        garbage = frame = self.plot_boxes(results, frame)
+            
+        end_time = time()
+        fps = 1/np.round(end_time - start_time, 2)
+        #print(f"Frames Per Second : {fps}")
+             
+        cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
+            
+        #cv2.imshow('YOLOv5 Detection', frame)
+        garbageCollect = od_frame = frame
+        print('[LOG] ObjectDetection - predict: NEW FRAME PREDICTED', od_frame)
+        return od_frame
+        cv2.waitKey(1)
+               
 
-            return ret, frame
+        
+        if True:
+            self.after(1000, self.predict)
+         
+        player.release()
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+    
+        
 
-    def get_od_frame(self):
-        return self.ret, self.frame
+    #def get_od_frame(self):
+        #return od_frame
+
+
             
             
 
 
 
 # Create a new object and execute.
-#detection = ObjectDetection("https://www.youtube.com/watch?v=3c4AOr40nQo")
+#detection = ObjectDetection()
 #detection()
