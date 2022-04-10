@@ -4,9 +4,10 @@ import argparse
 import datetime
 import cv2
 import os
+import threading
+import queue
 
-
-from ObjectDetection import ObjectDetection
+from objectDetection import ObjectDetection
 
 class Application:
    # -------------------------------------------------- INIT --------------------------------------------------
@@ -15,9 +16,12 @@ class Application:
         """ Initialize application which uses OpenCV + Tkinter. It displays
             a video stream in a Tkinter window and stores current snapshot on disk """
         self.od_instance = ObjectDetection()
-        _URL = "https://www.youtube.com/watch?v=3c4AOr40nQo"
-        self.od_instance.get_video_from_url()
-        self.vs = self.od_instance.predict()
+        #_URL = "https://www.youtube.com/watch?v=3c4AOr40nQo"
+        #self.od_instance.get_video_from_url()
+        self.od_instance.predict()
+        
+        self.frameForUpdate = self.od_instance.od_frame
+        print('[LOG] main - Application - init: self.od_instance.od_frame: ', self.od_instance.od_frame)
          # capture video frames, 0 is your default video camera
         self.output_path = output_path  # store output path
         self.current_image = None  # current image from the camera
@@ -44,7 +48,7 @@ class Application:
     def video_loop(self):
         """ Get frame from the video stream and show it in Tkinter """
         ok = True # TEMP
-        frame = self.vs
+        frame = self.frameForUpdate
 
         #ok, frame = self.vs.read()  # read frame from video stream
         if ok:  # frame captured without any errors
@@ -53,8 +57,10 @@ class Application:
             garbagetwo = imgtk = ImageTk.PhotoImage(image=self.current_image)  # convert image for tkinter
             garbagethree = self.panel.imgtk = imgtk  # anchor imgtk so it does not be deleted by garbage-collector
             self.panel.config(image=imgtk)  # show the image
-        self.root.after(30, self.od_instance.predict)  # call the same function after 30 milliseconds
+       
         self.root.after(30, self.video_loop)
+
+        #self.root.after(30, self.od_instance.predict)  # call the same function after 30 milliseconds
 
 
     # -------------------------------------------------- SNAPSHOT --------------------------------------------------
@@ -81,6 +87,9 @@ ap = argparse.ArgumentParser()
 ap.add_argument("-o", "--output", default="./",
     help="path to output directory to store snapshots (default: current folder")
 args = vars(ap.parse_args())
+
+
+
 
 # start the app
 print("[INFO] starting...")

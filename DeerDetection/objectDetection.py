@@ -11,25 +11,28 @@ class ObjectDetection:
     """
     Class implements Yolo5 model to make inferences on a youtube video using OpenCV.
     """
-    
+    od_frame = None
     def __init__(self): # - url
         """
         Initializes the class with youtube url and output file.
         :param url: Has to be as youtube URL,on which prediction is made.
         :param out_file: A valid output file name.
         """
+        
         self._URL = "https://www.youtube.com/watch?v=3c4AOr40nQo"
+        self._VIDEO = 'test.mp4'
+
         self.model = self.load_model()
         self.classes = self.model.names
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
         print("\n\nDevice Used:",self.device)
         
 
-        VIDEO = cv2.VideoCapture('test.mp4')
-        self.VIDEO = VIDEO
+        
+       
         ret = False
         frame = None
-        od_frame = None
+        
         
 
         #self.thread = threading.Thread(target=self.predict)
@@ -40,9 +43,14 @@ class ObjectDetection:
         Creates a new video streaming object to extract video frame by frame to make prediction on.
         :return: opencv2 video capture object, with lowest quality frame available for video.
         """
-        play = pafy.new(self._URL).streams[-1]
+        
+        #play = pafy.new(self._URL).streams[-1]
+        #assert play is not None
+        #return cv2.VideoCapture(play.url)
+
+        play = self._VIDEO
         assert play is not None
-        return cv2.VideoCapture(play.url)
+        return cv2.VideoCapture(play)
 
 
     def load_model(self):
@@ -100,47 +108,46 @@ class ObjectDetection:
 
 
     def predict(self):
+        global od_frame
         """
         This function is called when class is executed, it runs the loop to read the video frame by frame,
         and write the output into a new file.
         :return: void
         """
-        #player = self.get_video_from_url()
-        player = self.VIDEO
-        assert player.isOpened()
+        player = self.get_video_from_url()
       
+        assert player.isOpened()
+        while True:  
+            ret, frame = player.read()
+            assert ret # TODO: If not ret, exit program
         
-          
-        ret, frame = player.read()
-        assert ret # TODO: If not ret, exit program
+            frame = cv2.resize(frame, (416,416))
+        
+            start_time = time()
+            results = self.score_frame(frame)
+            garbage = frame = self.plot_boxes(results, frame)
             
-        frame = cv2.resize(frame, (416,416))
-            
-        start_time = time()
-        results = self.score_frame(frame)
-        garbage = frame = self.plot_boxes(results, frame)
-            
-        end_time = time()
-        fps = 1/np.round(end_time - start_time, 2)
-        #print(f"Frames Per Second : {fps}")
+            end_time = time()
+            fps = 1/np.round(end_time - start_time, 2)
+            #print(f"Frames Per Second : {fps}")
              
-        cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
+            cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
             
-        #cv2.imshow('YOLOv5 Detection', frame)
-        garbageCollect = od_frame = frame
-        print('[LOG] ObjectDetection - predict: NEW FRAME PREDICTED', od_frame)
-        return od_frame
-        cv2.waitKey(1)
+            cv2.imshow('YOLOv5 Detection', frame)
+            garbagex = self.od_frame = frame
+            print('[LOG] ObjectDetection - predict: od_frame', self.od_frame)
+            return self.od_frame
+            cv2.waitKey(333)
                
 
         
-        if True:
-            self.after(1000, self.predict)
+        #if True:
+        #    self.after(1000, self.predict)
          
         player.release()
-
+      
     
-        
+
 
     #def get_od_frame(self):
         #return od_frame
