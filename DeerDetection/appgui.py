@@ -6,9 +6,9 @@ from input import Input
 import time
 
 class AppGui:
-    def __init__(self):
+    def __init__(self, url): 
         #initialize the gui toolkit
-        self.pred_instance = Input()
+        self.pred_instance = Input(url)
         self.root = tk.Tk()
         #set the geometry of the window
         #self.root.geometry("550x300+300+150")
@@ -26,8 +26,8 @@ class AppGui:
         #define image width/height that we will use
         #while showing an image in webcam/neural network
         #output window
-        self.image_width=200
-        self.image_height=200
+        self.image_width=640
+        self.image_height=640
       
         self.is_ready = True
         
@@ -38,7 +38,7 @@ class AppGui:
     def process_image(self, image):
         #resize image to desired width and height
         #image = image.resize((self.image_width, self.image_height),Image.ANTIALIAS)
-        image = cv2.resize(image, (360,360))
+        image = cv2.resize(image, (self.image_width, self.image_height))
         
         #if image is RGB (3 channels, which means webcam image) then draw a circle on it
         #for user to focus on that circle to align face

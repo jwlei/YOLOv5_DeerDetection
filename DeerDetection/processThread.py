@@ -5,11 +5,12 @@ from appgui import AppGui
 from input import Input
 
 class ProcessThread(threading.Thread):
-    def __init__(self, app_gui, callback_queue):
+    def __init__(self, app_gui, callback_queue, url):
         #call super class (Thread) constructor
         threading.Thread.__init__(self)
         #save reference to callback_queue
         self.callback_queue = callback_queue
+        self.url = url
         
         #save left_view reference so that we can update it
         self.app_gui = app_gui
@@ -21,7 +22,7 @@ class ProcessThread(threading.Thread):
         self.is_stopped = False
         
         #create a Video camera instance
-        self.camera = Input()
+        self.camera = Input(url)
         
     #define thread's run method
     def run(self):
@@ -42,7 +43,7 @@ class ProcessThread(threading.Thread):
                 
             #opencv reads image in BGR color space, let's convert it 
             #to RGB space
-            self.current_frame = cv2.cvtColor(self.current_frame, cv2.COLOR_BGR2RGB)
+            #self.current_frame = cv2.cvtColor(self.current_frame, cv2.COLOR_BGR2RGB)
             #key = cv2.waitKey(10)
             
             if self.callback_queue.full() == False:

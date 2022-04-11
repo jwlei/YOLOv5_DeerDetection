@@ -3,10 +3,11 @@ import pafy
 import torch
 
 class Input:
-    def __init__(self):
+    def __init__(self, url):
         #passing 0 to VideoCapture means fetch video from webcam
-        self.video_capture = cv2.VideoCapture('test.mp4')
-        self._URL = "https://www.youtube.com/watch?v=3c4AOr40nQo"
+        #self.video_capture = cv2.VideoCapture('test.mp4') #To use mp4 source, remove url stuff
+       
+        self.url = url
         self.model = self.load_model()
         self.classes = self.model.names
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
@@ -15,14 +16,15 @@ class Input:
         self.ret = False
         self.frame = None
 
-
+        ytlink = self.get_video_from_url()
+        self.video_capture = ytlink
     
     def get_video_from_url(self):
         """
         Creates a new video streaming object to extract video frame by frame to make prediction on.
         :return: opencv2 video capture object, with lowest quality frame available for video.
         """
-        play = pafy.new(self._URL).streams[-1]
+        play = pafy.new(self.url).streams[-1]
         assert play is not None
         return cv2.VideoCapture(play.url)
 

@@ -4,14 +4,13 @@ import cv2
 
 from appgui import AppGui
 from processThread import ProcessThread
+import pafy
 
 
-class Wrapper:
-    def __init__(self):
-        self.app_gui = AppGui()
-        
-        #create a Video camera instance
-        #self.camera = VideoCamera()
+class Main:
+    def __init__(self, title, url):
+        self.app_gui = AppGui(url)
+       
         
         #intialize variable to hold current webcam video frame
         self.current_frame = None
@@ -21,7 +20,7 @@ class Wrapper:
         self.callback_queue = queue.Queue()
         
         #create a thread to fetch webcam feed video
-        self.process_thread = ProcessThread(self.app_gui, self.callback_queue)
+        self.process_thread = ProcessThread(self.app_gui, self.callback_queue, url)
         
         #save attempts made to fetch webcam video in case of failure 
         self.get_input_attempts = 0
@@ -29,7 +28,7 @@ class Wrapper:
         #register callback for being called when GUI window is closed
         self.app_gui.root.protocol("WM_DELETE_WINDOW", self.on_gui_closing)
         
-        #start webcam
+        #start video source
         self.start_video()
         
         #start fetching video
@@ -76,6 +75,8 @@ class Wrapper:
 
 # In[10]:
 
-# if __name__ == "__main__":
-wrapper = Wrapper()
-wrapper.launch()
+if __name__ == "__main__":
+        url = "https://www.youtube.com/watch?v=8SDm48ieYP8"
+
+main = Main("Title", url)
+main.launch()
