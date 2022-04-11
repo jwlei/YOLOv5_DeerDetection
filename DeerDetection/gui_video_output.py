@@ -30,4 +30,9 @@ class Gui_video_output:
 
     def update_output(self, image):
         #pass the image to output_view_image to update itself
+
         self.output_view.update_image(image)
+
+    def update_alarm_status(self, detection):
+        # pass the alarm to the output_view detection check for it to update the alarm
+        self.output_view.detectedCheck(detection)

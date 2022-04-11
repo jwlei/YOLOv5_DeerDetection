@@ -55,6 +55,8 @@ class Input:
         results = self.model(frame)
      
         labels, cord = results.xyxyn[0][:, -1], results.xyxyn[0][:, :-1]
+        
+        print(labels)
         return labels, cord
 
 
@@ -74,6 +76,7 @@ class Input:
         :param frame: Frame which has been scored.
         :return: Frame with bounding boxes and labels ploted on it.
         """
+
         labels, cord = results
         n = len(labels)
         x_shape, y_shape = frame.shape[1], frame.shape[0]

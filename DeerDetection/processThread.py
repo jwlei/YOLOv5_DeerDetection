@@ -2,9 +2,10 @@ import threading
 import input
 import cv2
 import numpy
+import torch
+import time
 
 from PIL import Image, ImageTk
-from time import time
 
 from gui_video_output import Gui_video_output
 from input import Input
@@ -28,6 +29,7 @@ class ProcessThread(threading.Thread):
         
         #create a Video camera instance
         self.input_instance = Input(url)
+        #self.localtime = time.localtime()
         
     #define thread's run method
     def run(self):
@@ -53,21 +55,43 @@ class ProcessThread(threading.Thread):
             if self.callback_queue.full() == False:
                 #put the update UI callback to queue so that main thread can execute it
                 self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.gui)))
+
         
             
     #this method will be used as callback and executed by main thread
     def score_label_send_to_output(self, current_frame, gui):
-            
-        start_time = time()
-        score = self.input_instance.score_frame(current_frame)
-        frame = self.input_instance.plot_boxes(score, current_frame)
-        end_time = time()
+        detection = None
+        
 
-        fps = 1/numpy.round(end_time - start_time, 2)
-        cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
+        #start_time = time() # FPS
+        labels, cord = self.input_instance.score_frame(current_frame)
+        scored_frame = labels, cord
+        #detection = self.checkLabel(labels)
+
+        if detection:
+            detection = True
+        else:
+            detection = False
+
+        
+
+
+
+        
+      
+
+
+        frame = self.input_instance.plot_boxes(scored_frame, current_frame)
+        #end_time = time() # FPS
+
+        
+        #fps = 1/numpy.round(end_time - start_time, 2) # FPS
+        #cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2) # FPS
 
         #convert to RGB
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+        frame = cv2.resize(frame, (640, 480))
 
         #convert image to PIL library format which is required for Tk toolkit
         image = Image.fromarray(frame)
@@ -76,7 +100,14 @@ class ProcessThread(threading.Thread):
         image = ImageTk.PhotoImage(image)
 
         gui.update_output(image)
+        gui.update_alarm_status(detection)
+    
+    def checkLabel(self, labels):
+        empty = torch.Tensor()
 
+        #if labels == torch.Tensor[]
+
+        return detection
         
     def __del__(self):
         self.input_instance.release()
