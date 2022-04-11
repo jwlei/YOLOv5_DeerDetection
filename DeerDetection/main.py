@@ -2,7 +2,7 @@ import queue
 import cv2
 
 
-from gui_controller import Gui_Controller
+from gui_video_output import Gui_video_output
 from processThread import ProcessThread
 import pafy
 
@@ -10,7 +10,7 @@ import pafy
 class Main:
     def __init__(self, title, url):
         # Send the URL through the pipeline 
-        self.gui = Gui_Controller(url)
+        self.gui = Gui_video_output(url)
         
         #intialize variable to hold current webcam video frame
         self.current_frame = None

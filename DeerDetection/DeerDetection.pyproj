@@ -24,7 +24,7 @@
   <ItemGroup>
     <Compile Include="gui_setup.py" />
     <Compile Include="input.py" />
-    <Compile Include="gui_controller.py" />
+    <Compile Include="gui_video_output.py" />
     <Compile Include="main.py" />
     <Compile Include="processThread.py">
       <SubType>Code</SubType>

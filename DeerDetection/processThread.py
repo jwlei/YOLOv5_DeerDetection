@@ -1,8 +1,9 @@
 import threading
 import input
 import cv2
+import time
 
-from gui_controller import Gui_Controller
+from gui_video_output import Gui_video_output
 from input import Input
 
 class ProcessThread(threading.Thread):
@@ -27,7 +28,7 @@ class ProcessThread(threading.Thread):
         
     #define thread's run method
     def run(self):
-        #start the webcam video feed
+        #start the video feed
         while (True):
             #check if this thread should stop
             #if yes then break this loop
@@ -37,19 +38,19 @@ class ProcessThread(threading.Thread):
             
             #read a video frame
             ret, self.current_frame = self.camera.read_image()
-
+            
+           # print('[LOG] processThread - run : Sleeping for ', self.FPS_MS)
             if(ret == False):
                 print('Video capture failed')
                 exit(-1)
-                
-            #opencv reads image in BGR color space, let's convert it 
-            #to RGB space
-            #self.current_frame = cv2.cvtColor(self.current_frame, cv2.COLOR_BGR2RGB)
-            #key = cv2.waitKey(10)
+
+            #cv2.waitKey(10)
             
             if self.callback_queue.full() == False:
                 #put the update UI callback to queue so that main thread can execute it
                 self.callback_queue.put((lambda: self.update_on_main_thread(self.current_frame, self.gui)))
+
+           
         
         #fetching complete, let's release camera
         #self.camera.release()
@@ -60,6 +61,7 @@ class ProcessThread(threading.Thread):
         gui.update_output(current_frame)
         prediction = Input.predict(current_frame)
         gui.update_output(prediction)
+
         
     def __del__(self):
         self.camera.release()

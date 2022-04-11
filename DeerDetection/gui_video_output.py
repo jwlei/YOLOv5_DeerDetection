@@ -1,6 +1,8 @@
 import tkinter as tk
 import cv2
-import time
+from time import time
+import numpy as np
+
 
 
 from PIL import Image, ImageTk
@@ -8,7 +10,7 @@ from gui_setup import Gui_Setup
 from input import Input
 
 
-class Gui_Controller:
+class Gui_video_output:
     def __init__(self, url): 
         #initialize the gui toolkit
         self.pred_instance = Input(url)
@@ -40,9 +42,16 @@ class Gui_Controller:
         #image = image.resize((self.image_width, self.image_height),Image.ANTIALIAS)
         image = cv2.resize(image, (self.image_width, self.image_height))
 
+        start_time = time()
+
         results = self.pred_instance.score_frame(image)
         garbage = image = self.pred_instance.plot_boxes(results, image)
+
+        end_time = time()
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+
+        fps = 1/np.round(end_time - start_time, 3)
+        cv2.putText(image, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
         
         #convert image to PIL library format which is required for Tk toolkit
         image = Image.fromarray(image)

@@ -18,6 +18,7 @@ class Input:
 
         ytlink = self.get_video_from_url()
         self.video_capture = ytlink
+
     
     def get_video_from_url(self):
         """
