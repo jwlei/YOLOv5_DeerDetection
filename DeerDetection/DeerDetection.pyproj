@@ -22,9 +22,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="output.py" />
+    <Compile Include="gui_setup.py" />
     <Compile Include="input.py" />
-    <Compile Include="appgui.py" />
+    <Compile Include="gui_controller.py" />
     <Compile Include="main.py" />
     <Compile Include="processThread.py">
       <SubType>Code</SubType>

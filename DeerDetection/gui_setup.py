@@ -1,6 +1,6 @@
 import tkinter as tk
 
-class Output(tk.Frame):
+class Gui_Setup(tk.Frame):
     def __init__(self, root):
         #call super class (Frame) constructor
         tk.Frame.__init__(self, root)
@@ -19,10 +19,7 @@ class Output(tk.Frame):
         #create output label
         self.output_label = tk.Label(self, text="Prediction output", bg="black", fg="white")
         self.output_label.pack(side="bottom", fill="both", expand="yes", padx=10)
-        
-       
-        
-        
+         
         
     def update_image(self, image):
         #configure image_label with new image 

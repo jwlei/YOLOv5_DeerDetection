@@ -1,31 +1,31 @@
 import tkinter as tk
-from output import Output
 import cv2
-from PIL import Image, ImageTk
-from input import Input
 import time
 
-class AppGui:
+
+from PIL import Image, ImageTk
+from gui_setup import Gui_Setup
+from input import Input
+
+
+class Gui_Controller:
     def __init__(self, url): 
         #initialize the gui toolkit
         self.pred_instance = Input(url)
         self.root = tk.Tk()
-        #set the geometry of the window
-        #self.root.geometry("550x300+300+150")
+   
         
         #set title of window
         self.root.title("Deer Detection")
         
-        #create left screen view
         
-        
-        #create right screen view
-        self.output_view = Output(self.root)
+        #create output UI
+        self.output_view = Gui_Setup(self.root)
         self.output_view.pack(side='bottom')
         
         #define image width/height that we will use
-        #while showing an image in webcam/neural network
-        #output window
+        #while showing output image 
+ 
         self.image_width=640
         self.image_height=640
       
@@ -39,13 +39,7 @@ class AppGui:
         #resize image to desired width and height
         #image = image.resize((self.image_width, self.image_height),Image.ANTIALIAS)
         image = cv2.resize(image, (self.image_width, self.image_height))
-        
-        #if image is RGB (3 channels, which means webcam image) then draw a circle on it
-        #for user to focus on that circle to align face
-        #if(len(image.shape) == 3):
-        #    cv2.circle(image, self.circle_center, self.circle_radius, self.circle_color, 2)
-        
-        
+
         results = self.pred_instance.score_frame(image)
         garbage = image = self.pred_instance.plot_boxes(results, image)
         image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
