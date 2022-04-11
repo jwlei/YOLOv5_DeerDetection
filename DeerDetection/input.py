@@ -1,6 +1,7 @@
 import cv2
 import pafy
 import torch
+from time import time
 
 class Input:
     def __init__(self, url):
@@ -25,9 +26,14 @@ class Input:
         Creates a new video streaming object to extract video frame by frame to make prediction on.
         :return: opencv2 video capture object, with lowest quality frame available for video.
         """
-        play = pafy.new(self.url).streams[-1]
-        assert play is not None
-        return cv2.VideoCapture(play.url)
+        ytLink = pafy.new(self.url).streams[-1]
+        assert ytLink is not None
+        ytVideo = cv2.VideoCapture(ytLink.url)
+        ytVideo.set(cv2.CAP_PROP_BUFFERSIZE, 2)
+        ytVideo.set(cv2.CAP_PROP_FRAME_WIDTH, 240)
+        ytVideo.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
+        ytVideo.set(cv2.CAP_PROP_FPS, 30)
+        return ytVideo
 
     def load_model(self):
         """
@@ -82,13 +88,6 @@ class Input:
         return frame
 
 
-    
-
-
-
-
-
-                
     #release resources like webcam
     def __del__(self):
         self.video_capture.release()
@@ -103,8 +102,3 @@ class Input:
     def release(self):
         self.video_capture.release()
         
-#function to detect deer using trained model
-    def predict(img):
-    
-        #return  image
-        return img
