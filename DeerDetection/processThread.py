@@ -26,6 +26,7 @@ class ProcessThread(threading.Thread):
         
         #set a flag to return current running/stop status of thread
         self.is_stopped = False
+        self.detection = False
         
         #create a Video camera instance
         self.input_instance = Input(url)
@@ -60,13 +61,14 @@ class ProcessThread(threading.Thread):
             
     #this method will be used as callback and executed by main thread
     def score_label_send_to_output(self, current_frame, gui):
+        global detection
         detection = None
         
 
         #start_time = time() # FPS
         labels, cord = self.input_instance.score_frame(current_frame)
         scored_frame = labels, cord
-        #detection = self.checkLabel(labels)
+        detection = self.checkLabel(labels)
 
         if detection:
             detection = True
@@ -103,7 +105,12 @@ class ProcessThread(threading.Thread):
         gui.update_alarm_status(detection)
     
     def checkLabel(self, labels):
-        empty = torch.Tensor()
+        global detection
+        if str(labels) == "tensor([], device='cuda:0')":
+            detection = False
+        else:
+            detection = True
+      
 
         #if labels == torch.Tensor[]
 
