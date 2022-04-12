@@ -6,7 +6,7 @@ from time import time
 class Input:
     def __init__(self, url):
         #passing 0 to VideoCapture means fetch video from webcam
-        #self.video_capture = cv2.VideoCapture('test.mp4') #To use mp4 source, remove url stuff
+        
        
         self.url = url
         self.model = self.load_model()
@@ -17,9 +17,10 @@ class Input:
         self.ret = False
         self.frame = None
 
-        ytlink = self.get_video_from_url()
-        self.video_capture = ytlink
-
+        #ytlink = self.get_video_from_url()
+        #self.video_capture = ytlink
+        self.video_capture = cv2.VideoCapture('test.mp4') #To use mp4 source, remove url stuff
+       
     
     def get_video_from_url(self):
         """
@@ -56,7 +57,6 @@ class Input:
      
         labels, cord = results.xyxyn[0][:, -1], results.xyxyn[0][:, :-1]
         
-        print(labels)
         return labels, cord
 
 

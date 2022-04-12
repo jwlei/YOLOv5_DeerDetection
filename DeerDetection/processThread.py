@@ -56,6 +56,12 @@ class ProcessThread(threading.Thread):
             if self.callback_queue.full() == False:
                 #put the update UI callback to queue so that main thread can execute it
                 self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.gui)))
+            elif self.callback_queue.full() == True:
+            #put the update UI callback to queue so that main thread can execute it
+                self.callback_queue.get() #remove the first item and replace it with the freshest one
+                self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.gui)))
+            
+            cv2.waitKey(33)
 
         
             
