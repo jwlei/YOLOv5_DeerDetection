@@ -42,6 +42,7 @@ class Input:
         :return: Trained Pytorch model.
         """
         model = torch.hub.load('ultralytics/yolov5', 'custom', path='trainedModel_v1.pt', force_reload=False)
+        #model.conf = 0.75
         return model
 
 
@@ -82,11 +83,18 @@ class Input:
         x_shape, y_shape = frame.shape[1], frame.shape[0]
         for i in range(n):
             row = cord[i]
-            if row[4] >= 0.2:
-                x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
-                bgr = (0, 255, 0)
-                cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2)
-                cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
+            conf_ = row[4]
+            #conf = conf_.item()
+            if row[4] >= 0.5: # confidence greater than
+                x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape) # Get box coordinates
+                bgr = (0, 0, 255) # Color of the box B G R 
+                text_color = (0, 255, 0)
+                cv2.rectangle(frame, (x1, y1), (x2, y2), bgr, 2) # Plot the bounding box
+
+                cv2.putText(frame, self.class_to_label(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1.1, text_color, 4) # Plot the label
+                cv2.putText(frame, str("%.2f" % conf_.item()), (x2, y1), cv2.FONT_HERSHEY_SIMPLEX, 1.1, text_color, 4)
+                
+                #cv2.putText(frame, self.class_to_labels(row[4]), (x2, y2), cv2.FONT_HERSHEY_SIMPLEX, 0.9, bgr, 2)
 
         return frame
 

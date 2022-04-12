@@ -3,7 +3,7 @@ import input
 import cv2
 import numpy
 import torch
-import time
+from time import time
 
 from PIL import Image, ImageTk
 
@@ -71,7 +71,7 @@ class ProcessThread(threading.Thread):
         detection = None
         
 
-        #start_time = time() # FPS
+        start_time = time() # FPS
         labels, cord = self.input_instance.score_frame(current_frame)
         scored_frame = labels, cord
         detection = self.checkLabel(labels)
@@ -90,11 +90,13 @@ class ProcessThread(threading.Thread):
 
 
         frame = self.input_instance.plot_boxes(scored_frame, current_frame)
-        #end_time = time() # FPS
+        end_time = time() # FPS
 
         
-        #fps = 1/numpy.round(end_time - start_time, 2) # FPS
-        #cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2) # FPS
+        fps = 1/numpy.round(end_time - start_time, 10) # FPS
+        cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2) # FPS
+
+       
 
         #convert to RGB
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
