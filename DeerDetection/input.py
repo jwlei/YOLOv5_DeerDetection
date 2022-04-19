@@ -29,6 +29,8 @@ class Input:
         self.ret = False
         # Actual frame to be processed and output on the tkinter canvas
         self.frame = None
+        # Set initial value for detection
+        self.detection = False
 
         # Set the video source
         self.video_capture = cv2.VideoCapture('test.mp4')
@@ -74,6 +76,10 @@ class Input:
 
     def plot_frame(self, prediction, frame):
         """ Function to plot boxes, labels and confidence values around detections on the frame """ 
+
+        global detection
+        detection = False
+
         # Color of the box
         background_color = (0, 0, 255)
         # Color of the text
@@ -103,7 +109,7 @@ class Input:
 
             # If confidence interval is greater than confidenceThreshold do:
             if row[4] >= confidenceThreshold:
-
+                detection = True
                 # Get the coordinates of the box to be plot
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
                 
@@ -115,8 +121,10 @@ class Input:
 
                 # Plot confidence value
                 cv2.putText(frame, str("%.2f" % confidenceValue.item()), (x2, y1), cv2.FONT_HERSHEY_SIMPLEX, 1.1, text_color, 4)
- 
-        return frame
+            else:
+                detection = False
+
+        return frame, detection
 
         
     def read_current_frame(self):
