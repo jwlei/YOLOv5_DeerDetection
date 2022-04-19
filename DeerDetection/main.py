@@ -5,6 +5,7 @@ from gui_video_output import Gui_video_output
 from processThread import ProcessThread
 
 
+
 class Main:
     """ The main application class which is ran """ 
 
@@ -13,6 +14,7 @@ class Main:
         
         # Initialize the GUI by calling the Gui_video_output
         self.gui = Gui_video_output()
+       
         
         # Initialize variable to hold the current frame from the video output
         self.current_frame = None
@@ -34,8 +36,7 @@ class Main:
         self.start_input_source()
         
         # Start the callback loop
-        self.callback_get_input()
-    
+        self.callback_get_input()    
 
     def launch(self):
         """ Function to launch the GUI """
@@ -85,7 +86,6 @@ class Main:
     def __del__(self):
         """ Finalizer to stop the thread """ 
         self.process_thread.stop()
-
 
 
 # Launch the program with the following parameters

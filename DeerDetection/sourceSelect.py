@@ -45,7 +45,7 @@ class sourceSelect(tkinter.Toplevel):
     def on_select_trainingData(self):
         result = tkinter.filedialog.askopenfilename(
                                         initialdir=".",
-                                        title="Select training data",
+                                        title="Select .pt",
                                         filetypes=(("all files","*.*"))
                                     )
 

@@ -29,9 +29,6 @@
     <Compile Include="placeholder.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="mqtt.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="sourceSelect.py">
       <SubType>Code</SubType>
     </Compile>

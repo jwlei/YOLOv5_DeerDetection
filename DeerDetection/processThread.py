@@ -4,11 +4,13 @@ import cv2
 import numpy
 import torch
 from time import time
+import paho.mqtt.client as mqtt
 
 from PIL import Image, ImageTk
 
 from gui_video_output import Gui_video_output
 from input import Input
+
 
 class ProcessThread(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
@@ -17,6 +19,11 @@ class ProcessThread(threading.Thread):
 
         # Call the super class constructor
         threading.Thread.__init__(self)
+
+        self.mqttBroker = "mqtt.eclipseprojects.io"
+        self.client = mqtt.Client("DEER_DETECTOR")
+        self.client.connect(self.mqttBroker)
+        
 
         # Initialize a reference for the callback queue
         self.callback_queue = callback_queue
@@ -28,7 +35,7 @@ class ProcessThread(threading.Thread):
         self.gui = gui
 
         # Setup default values
-        self.detection = False
+        self.detection = None
         self.waitingToStop = False # Flag for if the process should stop
         self.runningStatus = False # Flag for current status of thread
     
@@ -63,10 +70,14 @@ class ProcessThread(threading.Thread):
             elif self.callback_queue.full() == True:
                 self.callback_queue.get()
                 self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.gui)))
+
+            self.client.publish("DEER_DETECTION_LOG", self.detection)
+            
             
             # TODO: Match source video fps
             # Wait for delay until next iteration
             # Decides playback speed
+  
             cv2.waitKey(33) 
 
     
@@ -117,6 +128,9 @@ class ProcessThread(threading.Thread):
         # Update the current alarm status
         gui.update_alarm_status(detection)
 
+        # Set detection status for MQTT
+        self.set_detection(detection)
+
         
     def __del__(self):
         """ Finalizer to stop the process """
@@ -131,3 +145,9 @@ class ProcessThread(threading.Thread):
     def stop(self):
         """ Function to set the stop Flag """
         self.waitingToStop = True
+
+    def set_detection(self, detection):
+        self.detection = detection
+
+    def get_detection(self):
+        return self.detection
