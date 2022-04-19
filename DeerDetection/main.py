@@ -1,83 +1,94 @@
 import queue
 import numpy as np
 
-
 from gui_video_output import Gui_video_output
 from processThread import ProcessThread
 
 
 class Main:
+    """ The main application class which is ran """ 
+
     def __init__(self, title, url):
-        # Send the URL through the pipeline 
+        """ Initialization of the main class """ 
+        
+        # Initialize the GUI by calling the Gui_video_output
         self.gui = Gui_video_output()
         
-        
-        #intialize variable to hold current webcam video frame
+        # Initialize variable to hold the current frame from the video output
         self.current_frame = None
         
-        #create a queue to fetch and execute callbacks passed 
-        #from background thread
-        self.callback_queue = queue.LifoQueue(maxsize = 1) # OR QUEUE
+        # Initialize a LastInn-FirstOut queue which will fetch and execute callbacks
+        # Maxsize = 1 to ensure that the freshest frame is always the one processed and shown by the GUI
+        self.callback_queue = queue.LifoQueue(maxsize = 1)
         
-        #create a thread to fetch webcam feed video
+        # Initialize a thread which fetches the Video input
         self.process_thread = ProcessThread(self.gui, self.callback_queue, url)
            
-        #register callback for being called when GUI window is closed
-        self.gui.root.protocol("WM_DELETE_WINDOW", self.on_gui_closing)
+        # Callback for when GUI window get's closed.
+        self.gui.root.protocol("WM_DELETE_WINDOW", self.on_exit)
         
-        self.fps = 33
-        
+        # Initialize the delay in which the callback waits for re-execution
+        self.callbackUpdateDelay = 33
 
-        #start video source
-        self.start_video()
+        # Start the input source by calling the process thread
+        self.start_input_source()
         
-        #start fetching video
-        self.fetch_source_video()
+        # Start the callback loop
+        self.callback_get_input()
     
-    def on_gui_closing(self):
-        self.process_thread.stop()
-        self.process_thread.join()
-        self.process_thread.release_resources()
-        
-        self.gui.root.destroy()
 
-    def start_video(self):
+    def launch(self):
+        """ Function to launch the GUI """
+        self.gui.launch()
+
+
+    def start_input_source(self):
+        """ Function to start the thread """ 
         self.process_thread.start()
-        
-    def fetch_source_video(self):
+
+
+    def callback_get_input(self):
+            """ Callback function which listens for a new frame and executes """
+
+            # Try to get a callback from the process thread
             try:
-                self.fetch_source_video
-                #while True:
-                #try to get a callback put by the process thread
-                #if there is no callback and call_queue is empty
-                #then this function will throw a Queue.Empty exception 
+                self.callback_get_input
+                
+                # Empty the que
                 callback = self.callback_queue.get_nowait()
                 callback()
-                #self.app_gui.root.update_idletasks()
-                
                     
             except queue.Empty:
-                self.gui.root.after(self.fps, self.fetch_source_video)
+                # If the que is empty, run the callback to get a frame
+                self.gui.root.after(self.callbackUpdateDelay, self.callback_get_input)
 
-            else:
-                self.gui.root.after(self.fps, self.fetch_source_video)
+            else: 
+                self.gui.root.after(self.callbackUpdateDelay, self.callback_get_input)
 
 
-           
+    def on_exit(self):
+        """ Function for closing the process when closing the GUI """
 
-    
-    
-    def launch(self):
-        self.gui.launch()
+        # Stop the thread
+        self.process_thread.stop()
+
+        # Merge the threads
+        self.process_thread.join()
+
+        # Release the video resource
+        self.process_thread.release_resources()
+        
+        # Destroy the GUI window
+        self.gui.root.destroy()
+
         
     def __del__(self):
+        """ Finalizer to stop the thread """ 
         self.process_thread.stop()
 
 
-# ## The Launcher Code For GUI
 
-# In[10]:
-
+# Launch the program with the following parameters
 if __name__ == "__main__":
         url = "https://www.youtube.com/watch?v=8SDm48ieYP8"
 

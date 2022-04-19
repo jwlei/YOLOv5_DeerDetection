@@ -1,38 +1,38 @@
 import tkinter as tk
-import cv2
-from PIL import Image, ImageTk
 
 from gui_setup import Gui_Setup
 from input import Input
 
 
 class Gui_video_output:
+    """ Class for handling the updating of the GUI frame """ 
+
     def __init__(self): 
+        """ Initialization of the video output """ 
+
         #initialize the gui toolkit
         self.root = tk.Tk()
    
-        #set title of window
+        # Window Title
         self.root.title("Deer Detection")
         
-        #create output UI
+        # Initialize the Gui by calling the Gui_setup class
         self.output_view = Gui_Setup(self.root)
         self.output_view.pack(side='bottom')
         
         #define image width/height that we will use
         #while showing output image 
-
-      
-        self.is_ready = True
+        # TODO: Set static size for GUI Window
         
-    def launch(self):
-        #start the gui loop to listen for events
-        self.root.mainloop()
 
-    def update_output(self, image):
-        #pass the image to output_view_image to update itself
-
-        self.output_view.update_image(image)
+    def update_output_image(self, image):
+        # Use the output_view image to update the image in the frame
+        self.output_view.update_gui_image(image)
 
     def update_alarm_status(self, detection):
-        # pass the alarm to the output_view detection check for it to update the alarm
+        # Use the output_view detection check value to update the alarm status of the GUI
         self.output_view.detectedCheck(detection)
+
+    def launch(self):
+        # Launch the GUI and listen for callback events
+        self.root.mainloop()

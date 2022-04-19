@@ -2,23 +2,36 @@ from tkinter import*
 import tkinter as tk
 
 class Gui_Setup(tk.Frame):
-    def __init__(self, root):
-        #call super class (Frame) constructor
-        tk.Frame.__init__(self, root)
-        #save root layour for later references
-        self.root = root
-        #load all UI
-        self.setup_ui()
-        
-    def setup_ui(self):
+    """ Class to set up the initial GUI """ 
 
+    def __init__(self, root):
+        """
+        Initialization of the GUI_Setup class, which calls the setup_gui function to create
+        the GUI
+        """
+
+        # Frame constructor from the super class
+        tk.Frame.__init__(self, root)
+
+        # layout reference
+        self.root = root
+
+        # init UI
+        self.setup_gui()
+        
+    def setup_gui(self):
+        """
+        Function for creating the GUI, defines buttons to create
+        """
+
+        # TODO: comment btns
         #create label to hold image
         self.image_label = tk.Label(self)
+
         #put the image label inside top side screen
         self.image_label.pack(side="top", fill="both", expand="yes", padx=10, pady=10)
 
         self.alert = tk.Label(self.root, text="Alert Status") 
-        #self.alert.config(bg="black") 
         self.alert.config(fg="black")
         self.alert.pack(padx=10, pady=10, fill="both", side="bottom")
 
@@ -32,21 +45,23 @@ class Gui_Setup(tk.Frame):
         self.output_label = tk.Label(self, text="Prediction output", bg="black", fg="white")
         self.output_label.pack(side="bottom", fill="both", expand="yes", padx=10)
 
+        # TODO: Implement snapshot saving on detection?
         # create a button, that when pressed, will take the current frame and save it to file
         #btn = tk.Button(self.root, text="Snapshot!") #, command=self.take_snapshot
         #btn.pack(fill="both", expand=True, padx=10, pady=10)
 
         
+    def update_gui_image(self, image):
+        """ Function to update the GUI with a new image """ 
 
-
-         
-        
-    def update_image(self, image):
-        #configure image_label with new image 
+        # Update the image label with a new image
         self.image_label.configure(image=image)
-        #this is to avoid garbage collection, so we hold an explicit reference
+
+        # Self reference to avoid garbage collection
         self.image = image
 
+
+    # -------------------------------------------------- Button Functions --------------------------------------------------
 
     def alertOn(self):
         #self.alert = tk.Label(self.root, text="Alert Status: ACTIVE") 
@@ -54,19 +69,17 @@ class Gui_Setup(tk.Frame):
         #self.detected = 1
         #self.detectedCheck()
 
-
-     
-    # -------------------------------------------------- x --------------------------------------------------
-
     def alertOff(self):
        #self.alert = tk.Label(self.root, text="Alert Status: NOT ACTIVE") 
         self.alert.config(bg="green")
         #self.detected = 0
         #self.detectedCheck()
 
-    # -------------------------------------------------- x --------------------------------------------------
+    # -------------------------------------------------- Logic for deciding detection warning --------------------------------------------------
 
     def detectedCheck(self, detection):
+        """ Function for deciding the detection warning status """ 
+
         if detection:
             self.alertOn()
         else:
