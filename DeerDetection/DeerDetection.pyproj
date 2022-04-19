@@ -26,6 +26,15 @@
     <Compile Include="input.py" />
     <Compile Include="gui_video_output.py" />
     <Compile Include="main.py" />
+    <Compile Include="placeholder.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="mqtt.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="sourceSelect.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="processThread.py">
       <SubType>Code</SubType>
     </Compile>
