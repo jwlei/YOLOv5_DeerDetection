@@ -1,5 +1,9 @@
 import queue
 import numpy as np
+from sys import executable
+from subprocess import Popen, CREATE_NEW_CONSOLE
+import subprocess
+import os
 
 from gui_video_output import Gui_video_output
 from processThread import ProcessThread
@@ -91,6 +95,7 @@ class Main:
 # Launch the program with the following parameters
 if __name__ == "__main__":
         url = "https://www.youtube.com/watch?v=8SDm48ieYP8"
+        Popen([executable, 'MQTT_subscriberClient/DeerDetection_MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
 
 main = Main("Title", url)
 main.launch()

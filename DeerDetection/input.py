@@ -2,6 +2,7 @@ import cv2
 import pafy
 import torch
 from time import time
+import os
 
 class Input:
     """ Class for supplying and manipulating input data """ 
@@ -42,8 +43,8 @@ class Input:
     
     def load_model(self):
         """ Function to load the YOLOv5 model from the pyTorch GitHub when not implemented locally """ 
-
-        model = torch.hub.load('ultralytics/yolov5', 'custom', path='trainedModel_v1.pt', force_reload=False)
+        modelpath = os.getcwd()
+        model = torch.hub.load('ultralytics/yolov5', 'custom', path='trainedModel_v1.pt', force_reload=True)
         
         # Set custom parameters for the model
         # Set confidence limit to 0.75

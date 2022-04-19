@@ -23,6 +23,7 @@ class ProcessThread(threading.Thread):
         self.mqttBroker = "mqtt.eclipseprojects.io"
         self.client = mqtt.Client("DEER_DETECTOR")
         self.client.connect(self.mqttBroker)
+        print('[MQTT Publisher] Client started')
         
 
         # Initialize a reference for the callback queue
