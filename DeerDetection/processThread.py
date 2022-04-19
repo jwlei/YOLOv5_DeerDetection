@@ -87,17 +87,8 @@ class ProcessThread(threading.Thread):
         labels, cord = self.input_instance.predict_with_model(current_frame)
         prediction = labels, cord
 
-        # Perform a detection check on the current labels
-        detection = self.check_if_detection(labels)
-
-        # Based on the result, set the current detection status
-        if detection:
-            detection = True
-        else:
-            detection = False
-
         # Plot graphics for the current frame
-        frame = self.input_instance.plot_frame(prediction, current_frame)
+        frame, detection = self.input_instance.plot_frame(prediction, current_frame)
 
         # Assign end time to calculate and output FPS(frames per second) on the screen
         end_time = time()
@@ -125,18 +116,6 @@ class ProcessThread(threading.Thread):
 
         # Update the current alarm status
         gui.update_alarm_status(detection)
-    
-    
-    def check_if_detection(self, labels):
-        """ Function to check if there is a detection in the frame """
-        # Checks if label matches .. FIX to check tuple
-        global detection
-        if str(labels) == "tensor([], device='cuda:0')":
-            detection = False
-        else:
-            detection = True
-
-        return detection
 
         
     def __del__(self):
