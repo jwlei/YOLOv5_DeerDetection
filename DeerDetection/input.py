@@ -39,7 +39,11 @@ class Input:
         self.detection = False
 
         # Set the video source
-        self.video_capture = self.input_settings(cv2.VideoCapture(videoSource))
+        self.video_capture = cv2.VideoCapture(videoSource)
+        # Apply settings for video
+        self.input_settings()
+
+        
         """
         # For testing purposes, uncomment to use a YouTube video link
         ytlink = self.get_video_from_url()
@@ -155,14 +159,10 @@ class Input:
 
         return ytVideo
     
-    def input_settings(self, video_capture):
-        video_capture.set(cv2.CAP_PROP_BUFFERSIZE, 2)
-        video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, 100)
-        video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 100)
-        video_capture.set(cv2.CAP_PROP_FPS, 30)
-      
-
-        return video_capture
+    def input_settings(self):
+        self.video_capture.set(cv2.CAP_PROP_BUFFERSIZE, 2)
+        self.video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, 100)
+        self.video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 100)
 
     def release(self):
         """ Function to manually release the resource """

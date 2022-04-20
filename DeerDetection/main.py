@@ -4,8 +4,8 @@ from sys import executable
 from subprocess import Popen, CREATE_NEW_CONSOLE
 import subprocess
 import os
-import ctypes
-import pymsgbox
+import cv2
+
 
 from tkinter import filedialog
 from gui_video_output import Gui_video_output
@@ -19,28 +19,28 @@ class Main:
 
     def __init__(self, title, videoSource, modelSource, forceReload):
         """ Initialization of the main class """ 
-        
-        
 
         # Initialize the GUI by calling the Gui_video_output
         self.gui = Gui_video_output()
-       
         
         # Initialize variable to hold the current frame from the video output
         self.current_frame = None
+
+        # Get and set FPS for the video_source
+        self.fps = self.getFps()
         
         # Initialize a LastInn-FirstOut queue which will fetch and execute callbacks
         # Maxsize = 1 to ensure that the freshest frame is always the one processed and shown by the GUI
         self.callback_queue = queue.LifoQueue(maxsize = 1)
         
         # Initialize a thread which fetches the Video input
-        self.process_thread = ProcessThread(self.gui, self.callback_queue, videoSource, modelSource, forceReload)
+        self.process_thread = ProcessThread(self.gui, self.callback_queue, videoSource, modelSource, forceReload, self.fps)
            
         # Callback for when GUI window get's closed.
         self.gui.root.protocol("WM_DELETE_WINDOW", self.on_exit)
         
         # Initialize the delay in which the callback waits for re-execution
-        self.callbackUpdateDelay = 33
+        self.callbackUpdateDelay = 1
 
         # Start the input source by calling the process thread
         self.start_input_source()
@@ -98,6 +98,14 @@ class Main:
     def __del__(self):
         """ Finalizer to stop the thread """ 
         self.process_thread.stop()
+
+    def getFps(self):
+        vid = cv2.VideoCapture(videoSource)
+        fps = vid.get(cv2.CAP_PROP_FPS)
+
+        return fps
+        
+        
 
 
 

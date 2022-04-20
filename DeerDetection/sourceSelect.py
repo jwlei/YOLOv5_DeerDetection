@@ -2,9 +2,6 @@ import pymsgbox
 from tkinter import filedialog
 
 class SourceSelect:
-    def __init__(self):
-        self.response = None
-
 
     def manualOrAutomatic():
         ans = pymsgbox.confirm('Please choose Automatic or Manual setup', 'DeerDetection Setup', buttons = ['Automatic', 'Manual'])

@@ -2,6 +2,7 @@ import threading
 import input
 import cv2
 import numpy
+import math
 import torch
 
 import time
@@ -18,7 +19,7 @@ from input import Input
 
 class ProcessThread(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
-    def __init__(self, gui, callback_queue, videoSource, modelSource, forceReload):
+    def __init__(self, gui, callback_queue, videoSource, modelSource, forceReload, fps):
         """ Initialize the thread """
 
         # Call the super class constructor
@@ -30,6 +31,14 @@ class ProcessThread(threading.Thread):
         self.client.connect(self.mqttBroker)
         print('[MQTT Publisher] Client started')
         
+        # Create an instance of the input data
+        self.input_instance = Input(videoSource, modelSource, forceReload)
+
+        # Convert float FPS number to INT for cv2 waitkey
+        # Floor vs roof, decided to use floor so we dont process more frames than we have
+        self.fps = math.floor(fps)
+        print('[THREAD] FPS set to: ', self.fps)
+       
 
         # Initialize a reference for the callback queue
         self.callback_queue = callback_queue
@@ -52,8 +61,7 @@ class ProcessThread(threading.Thread):
 
         self.jsonMessage = None
     
-        # Create an instance of the input data
-        self.input_instance = Input(videoSource, modelSource, forceReload)
+        
        
     
     def run(self):
@@ -94,7 +102,7 @@ class ProcessThread(threading.Thread):
             # Wait for delay until next iteration
             # Decides playback speed
   
-            cv2.waitKey(33) 
+            cv2.waitKey(self.fps) 
 
     
     def score_label_send_to_output(self, current_frame, gui):
@@ -126,10 +134,10 @@ class ProcessThread(threading.Thread):
         end_time = tm()
 
         # Calculate the frames per second
-        fps = 1/numpy.round(end_time - start_time, 10)
+        onScreenFps = 1/numpy.round(end_time - start_time, 3)
 
         # Plot the frames per second unto the image
-        cv2.putText(frame, f'FPS: {int(fps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
+        cv2.putText(frame, f'FPS: {int(onScreenFps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
 
         # Convert the frame to RGB
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -173,23 +181,24 @@ class ProcessThread(threading.Thread):
     def __del__(self):
         """ Finalizer to stop the process """
         self.input_instance.release()
-
             
     def release_resources(self):
         """ Function to release the resources """
         self.input_instance.release()
-
         
     def stop(self):
         """ Function to set the stop Flag """
         self.waitingToStop = True
 
     def set_detected(self, detection):
+        """ Function to set detected """
         self.detected = detection
 
     def set_detectedCount(self, detectedCount):
+        """ Function to set detectedCount """ 
         self.detectedCount = detectedCount
 
     def get_detection(self):
+        """ Function to get detected """ 
         return self.detected
 
