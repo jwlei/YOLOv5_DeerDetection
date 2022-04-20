@@ -3,11 +3,15 @@ import input
 import cv2
 import numpy
 import torch
-from time import time
+
+import time
 import paho.mqtt.client as mqtt
+import geocoder
+import json
+
 
 from PIL import Image, ImageTk
-
+from time import time as tm
 from gui_video_output import Gui_video_output
 from input import Input
 
@@ -20,6 +24,7 @@ class ProcessThread(threading.Thread):
         # Call the super class constructor
         threading.Thread.__init__(self)
 
+        # Initialize an MQTT publisher client
         self.mqttBroker = "mqtt.eclipseprojects.io"
         self.client = mqtt.Client("DEER_DETECTOR")
         self.client.connect(self.mqttBroker)
@@ -36,9 +41,16 @@ class ProcessThread(threading.Thread):
         self.gui = gui
 
         # Setup default values
-        self.detection = None
         self.waitingToStop = False # Flag for if the process should stop
         self.runningStatus = False # Flag for current status of thread
+   
+        ipLocation = geocoder.ip('me')
+        self.currentLocation = str(ipLocation.latlng)
+        self.currentTime = None
+        self.detected = None
+        self.detectedCount = 0
+
+        self.jsonMessage = None
     
         # Create an instance of the input data
         self.input_instance = Input(url)
@@ -72,7 +84,10 @@ class ProcessThread(threading.Thread):
                 self.callback_queue.get()
                 self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.gui)))
 
-            self.client.publish("DEER_DETECTION_LOG", self.detection)
+            # Send json list through MQTT
+            self.client.publish("DEER_DETECTION", self.jsonMessage)
+
+            
             
             
             # TODO: Match source video fps
@@ -88,22 +103,27 @@ class ProcessThread(threading.Thread):
         This function is used as callback and executed by thread 
         """
 
-        global detection
+        global detected
+        global detectedCount
+        global currentTime
+
         # For each iteration, set detection to False
-        detection = None
+        detected = None
+        detectedCount = 0
+        currentTime = None
 
         # Assign a start time to calculate and output FPS(frames per second) on the screen
-        start_time = time()
+        start_time = tm()
 
         # Score the frame and get the labels and coordinates from the current frame
         labels, cord = self.input_instance.predict_with_model(current_frame)
         prediction = labels, cord
 
         # Plot graphics for the current frame
-        frame, detection = self.input_instance.plot_frame(prediction, current_frame)
+        frame, detected, detectedCount = self.input_instance.plot_frame(prediction, current_frame)
 
         # Assign end time to calculate and output FPS(frames per second) on the screen
-        end_time = time()
+        end_time = tm()
 
         # Calculate the frames per second
         fps = 1/numpy.round(end_time - start_time, 10)
@@ -123,14 +143,31 @@ class ProcessThread(threading.Thread):
         # Convert the image to a Tkinter compatible Image 
         image = ImageTk.PhotoImage(image)
 
+
+
         # Update the output image with the current image
         gui.update_output_image(image)
 
         # Update the current alarm status
-        gui.update_alarm_status(detection)
+        gui.update_alarm_status(detected)
+
+        
+
+        # Location is gotten in the initialization
+     
+        # Current Time
+        currTimePreFormat = time.localtime()
+        self.currentTime = time.strftime('%Y-%m-%d %H:%M:%S', currTimePreFormat)
 
         # Set detection status for MQTT
-        self.set_detection(detection)
+        self.set_detected(detected)
+
+        # Set counter for how many animals detected
+        self.set_detectedCount(detectedCount)
+
+        # Creating a json message to send with MQTT
+        self.jsonMessage = json.dumps({'time' : self.currentTime, 'location' : self.currentLocation,  'detected' : self.detected, 'detectedCount' : self.detectedCount}, indent = 4)
+
 
         
     def __del__(self):
@@ -147,8 +184,12 @@ class ProcessThread(threading.Thread):
         """ Function to set the stop Flag """
         self.waitingToStop = True
 
-    def set_detection(self, detection):
-        self.detection = detection
+    def set_detected(self, detection):
+        self.detected = detection
+
+    def set_detectedCount(self, detectedCount):
+        self.detectedCount = detectedCount
 
     def get_detection(self):
-        return self.detection
+        return self.detected
+

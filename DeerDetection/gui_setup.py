@@ -25,25 +25,23 @@ class Gui_Setup(tk.Frame):
         """
 
         # TODO: comment btns
-        #create label to hold image
+        # Label for image
         self.image_label = tk.Label(self)
-
-        #put the image label inside top side screen
-        self.image_label.pack(side="top", fill="both", expand="yes", padx=10, pady=10)
+        self.image_label.pack(side="top", fill="both", expand="yes", padx=10, pady=10) # Position
 
         self.alert = tk.Label(self.root, text="Alert Status") 
         self.alert.config(fg="black")
-        self.alert.pack(padx=10, pady=10, fill="both", side="bottom")
+        self.alert.pack(padx=10, pady=10, fill="both", side="bottom") # Position
 
-        btn = tk.Button(self.root, text="Alert On!", command=self.alertOn)
-        btn.pack(fill="both",side="bottom", expand=True, padx=10, pady=10)
+        alarmBtn = tk.Button(self.root, text="Manual: Alert On!", command=self.alertOn)
+        alarmBtn.pack(fill="both",side="bottom", expand=True, padx=10, pady=10) # Position
 
-        btn = tk.Button(self.root, text="Alert Off!", command=self.alertOff)
-        btn.pack(fill="both", expand=True,side="bottom", padx=10, pady=10)
+        alarmBtn = tk.Button(self.root, text="Manual: Alert Off!", command=self.alertOff)
+        alarmBtn.pack(fill="both", expand=True,side="bottom", padx=10, pady=10) # Position
 
-        #create output label
+        # Banner 
         self.output_label = tk.Label(self, text="Prediction output", bg="black", fg="white")
-        self.output_label.pack(side="bottom", fill="both", expand="yes", padx=10)
+        self.output_label.pack(side="bottom", fill="both", expand="yes", padx=10) # Position
 
         # TODO: Implement snapshot saving on detection?
         # create a button, that when pressed, will take the current frame and save it to file

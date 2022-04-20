@@ -34,7 +34,7 @@ class Input:
         self.detection = False
 
         # Set the video source
-        self.video_capture = cv2.VideoCapture('test.mp4')
+        self.video_capture = cv2.VideoCapture('test2.mp4')
         """
         # For testing purposes, uncomment to use a YouTube video link
         ytlink = self.get_video_from_url()
@@ -44,7 +44,7 @@ class Input:
     def load_model(self):
         """ Function to load the YOLOv5 model from the pyTorch GitHub when not implemented locally """ 
         modelpath = os.getcwd()
-        model = torch.hub.load('ultralytics/yolov5', 'custom', path='trainedModel_v1.pt', force_reload=True)
+        model = torch.hub.load('ultralytics/yolov5', 'custom', path='trainedModel_v1.pt', force_reload=False)
         
         # Set custom parameters for the model
         # Set confidence limit to 0.75
@@ -79,7 +79,9 @@ class Input:
         """ Function to plot boxes, labels and confidence values around detections on the frame """ 
 
         global detection
+        global detectionCount
         detection = False
+        detectionCount = 0
 
         # Color of the box
         background_color = (0, 0, 255)
@@ -111,6 +113,7 @@ class Input:
             # If confidence interval is greater than confidenceThreshold do:
             if row[4] >= confidenceThreshold:
                 detection = True
+                detectionCount = labelLength
                 # Get the coordinates of the box to be plot
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
                 
@@ -125,7 +128,7 @@ class Input:
             else:
                 detection = False
 
-        return frame, detection
+        return frame, detection, detectionCount
 
         
     def read_current_frame(self):
