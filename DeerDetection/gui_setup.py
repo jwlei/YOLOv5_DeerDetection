@@ -15,7 +15,7 @@ class Gui_Setup(tk.Frame):
 
         # layout reference
         self.root = root
-
+        
         # init UI
         self.setup_gui()
         

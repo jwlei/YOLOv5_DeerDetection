@@ -94,5 +94,5 @@ client.loop_start()
 print('[MQTT Subscriber] Client running and subscribed to "DEER_DETECTION"')
 client.subscribe("DEER_DETECTION")
 client.on_message = on_message 
-time.sleep(1000)
+time.sleep(100000)
 client.loop_end()  

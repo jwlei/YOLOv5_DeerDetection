@@ -1,71 +1,37 @@
-import tkinter as tk
-import tkinter.filedialog
+import pymsgbox
+from tkinter import filedialog
 
-class sourceSelect(tkinter.Toplevel):
-
-    # -------------------------------------------------- INIT --------------------------------------------------
-    def __init__(self, parent, other_sources=None):
-
-        super().__init__(parent)
-
-        self.other_sources = other_sources
-
-        # default values at start
-        self.item = None
-        self.name = None
-        self.source = None
-
-        # GUI
-        button = tkinter.Button(self, text="Open file...", command=self.on_select_file)
-        button.pack(fill='both', expand=True)
-
-        if self.other_sources:
-            tkinter.Label(self, text="Other Sources:").pack(fill='both', expand=True)
-
-            for item in self.other_sources:
-                text, source = item
-                button = tkinter.Button(self, text=text, command=lambda data=item:self.on_select_other(data))
-                button.pack(fill='both', expand=True)
+class SourceSelect:
+    def __init__(self):
+        self.response = None
 
 
+    def manualOrAutomatic():
+        ans = pymsgbox.confirm('Please choose Automatic or Manual setup', 'DeerDetection Setup', buttons = ['Automatic', 'Manual'])
+        return ans
 
-    # -------------------------------------------------- SOURCE SELECTION --------------------------------------------------
-    # Select input data
-    def on_select_file(self):
-        result = tkinter.filedialog.askopenfilename(
-                                        initialdir=".",
-                                        title="Select video file",
-                                        filetypes=(("MP4 files","*.mp4"), ("AVI files", "*.avi"), ("all files","*.*"))
-                                    )
+    def chooseVideoSource():
+        ans = pymsgbox.confirm('Please choose your source for video', 'Pick video source', buttons = ['URL', 'Local Media'])
 
-       
-    
+        if ans == 'URL':
+            input = pymsgbox.prompt('Input URL of video input')
+        elif ans == 'Local Media':
+            input = filedialog.askopenfilename(initialdir="/",title="Select video", filetypes=(("MP4 Files", ".mp4"), ("All files",".*")))
 
-    # Select training data
-    def on_select_trainingData(self):
-        result = tkinter.filedialog.askopenfilename(
-                                        initialdir=".",
-                                        title="Select .pt",
-                                        filetypes=(("all files","*.*"))
-                                    )
+        return input
 
-        if result:
-            self.item = item
-            self.name = name
-            self.source = source
+    def chooseModelSource():
+        pymsgbox.alert('Choose model data (.pt)', 'Pick model source')
+        model = filedialog.askopenfilename(initialdir="/",title="Select model", filetypes=(("PT Files", ".pt"), ("All files",".*")))
 
-            print('[LOG] selected joblib source:', name, source)
-            self.destroy()
+        return model
 
-    # Select other sources than those in the root directory
-    def on_select_other(self, item):
+    def chooseForceReload():
+        ans = pymsgbox.confirm('Reload the pyTorch cache', 'DeerDetection Setup', buttons = ['Yes', 'No'])
 
-        name, source = item
+        if ans == 'Yes':
+            reloadBoolean = True
+        else:
+            reloadBoolean = False
 
-        self.item = item
-        self.name = name
-        self.source = source
-
-        print('[LOG] selected other source:', name, source)
-
-        self.destroy()
+        return reloadBoolean

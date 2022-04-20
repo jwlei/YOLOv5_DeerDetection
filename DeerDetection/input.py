@@ -7,11 +7,16 @@ import os
 class Input:
     """ Class for supplying and manipulating input data """ 
 
-    def __init__(self, url):
+    def __init__(self, videoSource, modelSource, forceReload):
         """ Initializing the input data stream """ 
 
         # Load the URL passed from the Main class
-        self.url = url
+        self.videoSource = videoSource
+
+        # Load the file passed from Main
+        self.modelSource = modelSource
+
+        self.forceReload = forceReload
 
         # Load the model defined in the load_model function
         self.model = self.load_model()
@@ -34,7 +39,7 @@ class Input:
         self.detection = False
 
         # Set the video source
-        self.video_capture = cv2.VideoCapture('test2.mp4')
+        self.video_capture = self.input_settings(cv2.VideoCapture(videoSource))
         """
         # For testing purposes, uncomment to use a YouTube video link
         ytlink = self.get_video_from_url()
@@ -43,8 +48,7 @@ class Input:
     
     def load_model(self):
         """ Function to load the YOLOv5 model from the pyTorch GitHub when not implemented locally """ 
-        modelpath = os.getcwd()
-        model = torch.hub.load('ultralytics/yolov5', 'custom', path='trainedModel_v1.pt', force_reload=False)
+        model = torch.hub.load('ultralytics/yolov5', 'custom', path=self.modelSource, force_reload=self.forceReload)
         
         # Set custom parameters for the model
         # Set confidence limit to 0.75
@@ -143,20 +147,23 @@ class Input:
     def get_ytVideo_from_url(self):
         """ Function to process a youtube URL """
 
-        ytLink = pafy.new(self.url).streams[-1]
+        ytLink = pafy.new(self.videoSource).streams[-1]
         assert ytLink is not None
         ytVideo = cv2.VideoCapture(ytLink.url)
         
         # Define constraints to the video
-        # TODO: Can be moved to separate function
-        ytVideo.set(cv2.CAP_PROP_BUFFERSIZE, 2)
-        ytVideo.set(cv2.CAP_PROP_FRAME_WIDTH, 240)
-        ytVideo.set(cv2.CAP_PROP_FRAME_HEIGHT, 240)
-        ytVideo.set(cv2.CAP_PROP_FPS, 30)
 
         return ytVideo
     
-     
+    def input_settings(self, video_capture):
+        video_capture.set(cv2.CAP_PROP_BUFFERSIZE, 2)
+        video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, 100)
+        video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 100)
+        video_capture.set(cv2.CAP_PROP_FPS, 30)
+      
+
+        return video_capture
+
     def release(self):
         """ Function to manually release the resource """
         self.video_capture.release()

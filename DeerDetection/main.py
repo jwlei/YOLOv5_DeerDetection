@@ -4,18 +4,24 @@ from sys import executable
 from subprocess import Popen, CREATE_NEW_CONSOLE
 import subprocess
 import os
+import ctypes
+import pymsgbox
 
+from tkinter import filedialog
 from gui_video_output import Gui_video_output
 from processThread import ProcessThread
+from sourceSelect import SourceSelect
 
 
 
 class Main:
     """ The main application class which is ran """ 
 
-    def __init__(self, title, url):
+    def __init__(self, title, videoSource, modelSource, forceReload):
         """ Initialization of the main class """ 
         
+        
+
         # Initialize the GUI by calling the Gui_video_output
         self.gui = Gui_video_output()
        
@@ -28,7 +34,7 @@ class Main:
         self.callback_queue = queue.LifoQueue(maxsize = 1)
         
         # Initialize a thread which fetches the Video input
-        self.process_thread = ProcessThread(self.gui, self.callback_queue, url)
+        self.process_thread = ProcessThread(self.gui, self.callback_queue, videoSource, modelSource, forceReload)
            
         # Callback for when GUI window get's closed.
         self.gui.root.protocol("WM_DELETE_WINDOW", self.on_exit)
@@ -94,10 +100,53 @@ class Main:
         self.process_thread.stop()
 
 
+
+
 # Launch the program with the following parameters
 if __name__ == "__main__":
-        url = "https://www.youtube.com/watch?v=8SDm48ieYP8"
-        Popen([executable, 'MQTT_subscriberClient/DeerDetection_MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
+        #videoSource = "https://www.youtube.com/watch?v=8SDm48ieYP8"
+        videoSource = 'test.mp4'
+        modelSource = 'trainedModel_v1.pt'
+        forceReload = True
+        
 
-main = Main("Title", url)
-main.launch()
+
+# Create subprocess for MQTT subscriber client
+Popen([executable, 'MQTT_subscriberClient/DeerDetection_MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
+
+# Start setup for launching the program
+pick = SourceSelect.manualOrAutomatic() 
+
+# If automatic, use defined values
+if pick == 'Automatic':
+    print('[SETUP] Automatic setup initiated')
+
+    main = Main("Deer Detection [Automatic setup]", videoSource, modelSource, forceReload)
+
+    print('[SETUP] Launching with:')
+    print('[SETUP] SOURCE VIDEO: ', videoSource )
+    print('[SETUP] SOURCE MODEL: ', modelSource )
+    
+    main.launch()
+
+# If manual, use values defined by the user
+elif pick == 'Manual':
+    print('[SETUP] Manual setup initiated')
+
+    
+    # TODO: Write video source adress / model to source.txt file and use it in automatic or let them be available for picking when starting up next time
+    videoSource = SourceSelect.chooseVideoSource()
+    modelSource = SourceSelect.chooseModelSource()
+    forceReload = SourceSelect.chooseForceReload()
+
+    main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload )
+
+    print('[SETUP] Launching with:')
+    print('[SETUP] SOURCE VIDEO: ', videoSource )
+    print('[SETUP] SOURCE MODEL: ', modelSource )
+    print('[SETUP] FORCE RELOAD: ', forceReload )
+
+    main.launch()
+    
+
+

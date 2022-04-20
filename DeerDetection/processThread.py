@@ -18,7 +18,7 @@ from input import Input
 
 class ProcessThread(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
-    def __init__(self, gui, callback_queue, url):
+    def __init__(self, gui, callback_queue, videoSource, modelSource, forceReload):
         """ Initialize the thread """
 
         # Call the super class constructor
@@ -35,7 +35,7 @@ class ProcessThread(threading.Thread):
         self.callback_queue = callback_queue
 
         # Initialize a reference for the url
-        self.url = url
+        self.url = videoSource
         
         # Initialize a reference for the GUI
         self.gui = gui
@@ -53,7 +53,7 @@ class ProcessThread(threading.Thread):
         self.jsonMessage = None
     
         # Create an instance of the input data
-        self.input_instance = Input(url)
+        self.input_instance = Input(videoSource, modelSource, forceReload)
        
     
     def run(self):
