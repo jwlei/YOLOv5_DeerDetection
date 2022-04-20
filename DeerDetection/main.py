@@ -100,10 +100,17 @@ class Main:
         self.process_thread.stop()
 
     def getFps(self):
+        """ Function to get FPS from video source to send down the pipeline """ 
         vid = cv2.VideoCapture(videoSource)
         fps = vid.get(cv2.CAP_PROP_FPS)
 
-        return fps
+        if fps >= 1:
+            return fps
+        else:
+            # Default to 30 fps if no data is available
+            fps = 30
+            return fps
+            
         
         
 
