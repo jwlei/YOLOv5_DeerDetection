@@ -86,6 +86,8 @@ class Main:
         # Destroy the GUI window
         self.gui.root.destroy()
 
+        # TODO: Close subprocess
+
         
     def __del__(self):
         """ Finalizer to stop the thread """ 

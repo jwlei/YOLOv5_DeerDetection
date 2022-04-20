@@ -39,6 +39,10 @@ class Gui_Setup(tk.Frame):
         alarmBtn = tk.Button(self.root, text="Manual: Alert Off!", command=self.alertOff)
         alarmBtn.pack(fill="both", expand=True,side="bottom", padx=10, pady=10) # Position
 
+        # TODO: Exit button
+        #exitBtn = tk.Button(self.root, text="Exit program", command=self.exit)
+        #exitBtn.pack(fill="both", expand=True,side="bottom", padx=10, pady=10) # Position
+
         # Banner 
         self.output_label = tk.Label(self, text="Prediction output", bg="black", fg="white")
         self.output_label.pack(side="bottom", fill="both", expand="yes", padx=10) # Position
@@ -72,6 +76,10 @@ class Gui_Setup(tk.Frame):
         self.alert.config(bg="green")
         #self.detected = 0
         #self.detectedCheck()
+
+    # TODO: Exit button
+    #def exit(self):
+
 
     # -------------------------------------------------- Logic for deciding detection warning --------------------------------------------------
 

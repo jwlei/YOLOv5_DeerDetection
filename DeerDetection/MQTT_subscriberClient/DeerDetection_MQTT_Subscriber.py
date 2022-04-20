@@ -5,6 +5,8 @@ import jsonschema
 
 from jsonschema import validate
 
+
+
 # Init the subscriber
 mqttBroker = "mqtt.eclipseprojects.io"
 client = mqtt.Client("Subscriber")
@@ -12,6 +14,11 @@ client.connect(mqttBroker)
 
 currentTimeStamp = None
 currentDetectionCount = None
+
+# Just getting a fresh file to write
+deerLog = open("log.txt", "w")
+deerLog.write('')
+deerLog.close()
 
 # Validation schema
 detectionSchema = {
@@ -39,6 +46,8 @@ def on_message(client, userdata, message):
     global currentDetectionCount
     jsonToDecode = None
     isValid = False
+
+    deerLog = open("log.txt", "a") # "a" add to file, "w" overwrite
     
 
     # Decode the message from an MQTT object to a string
@@ -69,9 +78,14 @@ def on_message(client, userdata, message):
 
                 #print(decodedMessage) # Prints JSON-syntax representation of the message
                 print(msg) # Prints single line representation of the JSON
+                deerLog.write(str(msg)) # Write to log file
+                deerLog.write('\n')
+                deerLog.close()
+                
 
             else:
                 break
+                
 
 
 
@@ -81,4 +95,4 @@ print('[MQTT Subscriber] Client running and subscribed to "DEER_DETECTION"')
 client.subscribe("DEER_DETECTION")
 client.on_message = on_message 
 time.sleep(1000)
-client.loop_end()               
+client.loop_end()  
