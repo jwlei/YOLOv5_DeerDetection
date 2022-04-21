@@ -43,8 +43,8 @@ class ProcessThread(threading.Thread):
         # Initialize a reference for the callback queue
         self.callback_queue = callback_queue
 
-        # Initialize a reference for the url
-        self.url = videoSource
+        # Reference for RAW frame
+        self.rawFrame = None
         
         # Initialize a reference for the GUI
         self.gui = gui
@@ -77,7 +77,8 @@ class ProcessThread(threading.Thread):
                 break
             
             # Get a frame and return value from the input_instance
-            ret, self.current_frame = self.input_instance.read_current_frame()
+            ret, self.current_frame, self.rawFrame = self.input_instance.read_current_frame()
+            
             
             # If the return value of the input_instance is false, print an error and exit the program
             if(ret == False):
@@ -86,12 +87,12 @@ class ProcessThread(threading.Thread):
             
             # If the callback_queue is not full, put the current frame into the queue for execution of the thread
             if self.callback_queue.full() == False:
-                self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.gui)))
+                self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.rawFrame, self.gui)))
 
             # If the callback_queue is full, remove the item in the queue and put the current frame into the queue for execution of the thread
             elif self.callback_queue.full() == True:
                 self.callback_queue.get()
-                self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.gui)))
+                self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.rawFrame, self.gui)))
 
             # Send json list through MQTT
             self.client.publish("DEER_DETECTION", self.jsonMessage)
@@ -105,7 +106,7 @@ class ProcessThread(threading.Thread):
             cv2.waitKey(self.fps) 
 
     
-    def score_label_send_to_output(self, current_frame, gui):
+    def score_label_send_to_output(self, current_frame, rawFrame, gui):
         """ 
         Function where the current frame is processed
         This function is used as callback and executed by the thread 
@@ -121,23 +122,23 @@ class ProcessThread(threading.Thread):
         currentTime = None
 
         # Assign a start time to calculate and output FPS(frames per second) on the screen
-        start_time = tm()
-
+        #start_time = tm()
+        
         # Score the frame and get the labels and coordinates from the current frame
         labels, cord = self.input_instance.predict_with_model(current_frame)
         prediction = labels, cord
 
         # Plot graphics for the current frame
-        frame, detected, detectedCount = self.input_instance.plot_frame(prediction, current_frame)
+        frame, detected, detectedCount = self.input_instance.plot_frame(prediction, current_frame, rawFrame)
 
         # Assign end time to calculate and output FPS(frames per second) on the screen
-        end_time = tm()
+        #end_time = tm()
 
         # Calculate the frames per second
-        onScreenFps = 1/numpy.round(end_time - start_time, 3)
+        #onScreenFps = 1/numpy.round(end_time - start_time, 3)
 
         # Plot the frames per second unto the image
-        cv2.putText(frame, f'FPS: {int(onScreenFps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
+        #cv2.putText(frame, f'FPS: {int(onScreenFps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
 
         # Convert the frame to RGB
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
@@ -168,6 +169,8 @@ class ProcessThread(threading.Thread):
 
         # Set detection status for MQTT
         self.set_detected(detected)
+        
+            
 
         # Set counter for how many animals detected
         self.set_detectedCount(detectedCount)

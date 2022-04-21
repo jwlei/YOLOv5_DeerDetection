@@ -171,6 +171,28 @@ elif pick == 'Manual':
     print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
 
     main.launch()
+
+elif pick == 'Gather images':
+    print('[SETUP] Image collection setup initiated')
+
+    videoSource = StartupSetup.setVideoSource()
+    # Default model
+    # Force reload false
+    captureDetection = True
+    detectionThreshold = '0.3'
+    #detectionThreshold = StartupSetup.setDetectionThreshold()
+
+    print('[SETUP] Launching with:')
+    print('[SETUP] SOURCE VIDEO: ', videoSource)
+    print('[SETUP] SOURCE MODEL: ', modelSource)
+    print('[SETUP] FORCE RELOAD: ', forceReload)
+    print('[SETUP] SAVING DETECTIONS: ', captureDetection)
+    print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
+
+    main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
+
+    main.launch()
+    
     
 
 

@@ -5,7 +5,7 @@ class StartupSetup:
 
     def setManualOrAutomatic():
         """ Decide automatic or manual setup """ 
-        ans = pymsgbox.confirm('Please choose Automatic or Manual setup', 'DeerDetection Setup', buttons = ['Automatic', 'Manual'])
+        ans = pymsgbox.confirm('Please choose Automatic or Manual setup', 'DeerDetection Setup', buttons = ['Automatic', 'Manual', 'Gather images'])
         return ans
 
 
@@ -34,7 +34,7 @@ class StartupSetup:
 
     def setForceReload():
         """ Choose force reload of pyTorch cache on or off """
-        ans = pymsgbox.confirm('Reload the pyTorch cache', 'DeerDetection Setup', buttons = ['Yes', 'No'])
+        ans = pymsgbox.confirm('Reload the pyTorch cache', 'DeerDetection Setup', buttons = ['No', 'Yes'])
 
         if ans == 'Yes':
             reloadBoolean = True

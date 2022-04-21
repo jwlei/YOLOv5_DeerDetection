@@ -4,6 +4,7 @@ import torch
 import time
 from pathlib import Path
 import os
+import threading
 
 class Input:
     """ Class for supplying and manipulating input data """ 
@@ -37,10 +38,12 @@ class Input:
         # Set initial value for detection
         self.detection = False
         # Set initial value imageSaving
+        self.startTime = time.time()
         self.imgCounter = 0
         self.savedImageCounter = 0
         self.path = Path.cwd() / 'SavedDetections'
         print('[SETUP] Saved RAW images will be saved to: ', self.path)
+        
 
         # Process and set the videoSource
         self.video_capture = self.processInputURL(videoSource)
@@ -79,7 +82,7 @@ class Input:
         return self.classes[int(x)]
 
 
-    def plot_frame(self, prediction, frame):
+    def plot_frame(self, prediction, frame, rawFrame):
         """ Function to plot boxes, labels and confidence values around detections on the frame """ 
 
         global detection
@@ -91,7 +94,6 @@ class Input:
         background_color = (0, 0, 255)
         # Color of the text
         text_color = (0, 255, 0)
-
 
         # Grab the labels and coordinates from the results 
         labels, coordinates = prediction
@@ -115,9 +117,8 @@ class Input:
             if row[4] >= float(self.detectionThreshold):
                 detection = True
                 detectionCount = labelLength
-
-                if self.captureDetection:
-                    self.saveScreen(frame)
+                
+                self.saveScreen(rawFrame)
 
                 # Get the coordinates of the box to be plot
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
@@ -140,8 +141,12 @@ class Input:
         """ Function to get a single frame and it's return boolean value """
         # Get boolean return and frame from the video feed
         ret, frame = self.video_capture.read()
+        try:
+            rawFrame = frame.copy()
+        except Exception:
+            rawFrame = frame
 
-        return ret, frame
+        return ret, frame, rawFrame
 
 
     def processInputURL(self, videoSource):
@@ -157,20 +162,28 @@ class Input:
             return processedSource
 
 
-    def saveScreen(self, frame, imgLabel=None):
+    def saveScreen(self, rawFrame, imgLabel=None):
         """ Function to save image from the frame """
-        global imgCounter
+      
         global savedImageCounter
+        global startTime
 
         if not imgLabel:
            
             current_time = time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime())
             imgLabel = f'detection-{current_time}_{self.savedImageCounter}.jpg'
             self.imgCounter += 1
+            secondIterator = (60.0 - (time.time() - self.startTime) % 60.0)
+            
 
-            if self.imgCounter % 60 == 0:
-                cv2.imwrite(os.path.join(self.path, imgLabel), frame)
+            # Print image if detection ever 60-59 seconds
+            if secondIterator <= 54: # Current every 4 seconds
+                cv2.imwrite(os.path.join(self.path, imgLabel), rawFrame)
                 self.savedImageCounter += 1
+                self.startTime = time.time()
+                
+                
+                
             
 
     def release(self):
