@@ -84,6 +84,7 @@ class ProcessThread(threading.Thread):
             if(ret == False):
                 print('No input data')
                 exit(-1)
+                #pass
             
             # If the callback_queue is not full, put the current frame into the queue for execution of the thread
             if self.callback_queue.full() == False:
