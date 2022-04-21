@@ -29,7 +29,7 @@
     <Compile Include="placeholder.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="sourceSelect.py">
+    <Compile Include="startupsetup.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="processThread.py">

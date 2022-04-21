@@ -19,7 +19,7 @@ from input import Input
 
 class ProcessThread(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
-    def __init__(self, gui, callback_queue, videoSource, modelSource, forceReload, fps, captureDetection):
+    def __init__(self, gui, callback_queue, videoSource, modelSource, forceReload, fps, captureDetection, detectionThreshold):
         """ Initialize the thread """
 
         # Call the super class constructor
@@ -32,7 +32,7 @@ class ProcessThread(threading.Thread):
         print('[MQTT Publisher] Client started')
         
         # Create an instance of the input data
-        self.input_instance = Input(videoSource, modelSource, forceReload, captureDetection)
+        self.input_instance = Input(videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
 
         # Convert float FPS number to INT for cv2 waitkey
         # Floor vs roof, decided to use floor so we dont process more frames than we have

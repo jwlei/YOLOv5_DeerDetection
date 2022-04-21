@@ -1,15 +1,15 @@
 import pymsgbox
 from tkinter import filedialog
 
-class SourceSelect:
+class StartupSetup:
 
-    def manualOrAutomatic():
+    def setManualOrAutomatic():
         """ Decide automatic or manual setup """ 
         ans = pymsgbox.confirm('Please choose Automatic or Manual setup', 'DeerDetection Setup', buttons = ['Automatic', 'Manual'])
         return ans
 
 
-    def chooseVideoSource():
+    def setVideoSource():
         """ Choose local or remote video source """
         ans = pymsgbox.confirm('Please choose your source for video', 'Pick video source', buttons = ['URL', 'Local Media'])
 
@@ -20,11 +20,11 @@ class SourceSelect:
 
         return input
 
-    def localOrUserModel():
+    def setLocalOrUserModel():
         ans = pymsgbox.confirm('Use default or user-defined model?', 'Selecting model', buttons = ['Default', 'User-defined'])
         return ans
 
-    def chooseModelSource():
+    def setModelSource():
         """ Choose local model source """ 
         pymsgbox.alert('Choose model data (.pt)', 'Pick model source')
         model = filedialog.askopenfilename(initialdir="/",title="Select model", filetypes=(("PT Files", ".pt"), ("All files",".*")))
@@ -32,7 +32,7 @@ class SourceSelect:
         return model
 
 
-    def chooseForceReload():
+    def setForceReload():
         """ Choose force reload of pyTorch cache on or off """
         ans = pymsgbox.confirm('Reload the pyTorch cache', 'DeerDetection Setup', buttons = ['Yes', 'No'])
 
@@ -44,7 +44,7 @@ class SourceSelect:
         return reloadBoolean
 
 
-    def captureDetection():
+    def setCaptureDetection():
         """ Choose if detections should be captured """ 
         ans = pymsgbox.confirm('Save detection images?', 'DeerDetection Setup', buttons = ['Yes', 'No'])
 
@@ -54,3 +54,9 @@ class SourceSelect:
             captureBoolean = False
 
         return captureBoolean
+
+    def setDetectionThreshold():
+        threshold = pymsgbox.prompt('Input detection confidence threshold (0.0-1.0)')
+
+        return threshold
+

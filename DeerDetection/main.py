@@ -10,14 +10,14 @@ import cv2
 from tkinter import filedialog
 from gui_video_output import Gui_video_output
 from processThread import ProcessThread
-from sourceSelect import SourceSelect
+from startupsetup import StartupSetup
 
 
 
 class Main:
     """ The main application class which is ran """ 
 
-    def __init__(self, title, videoSource, modelSource, forceReload, captureDetection):
+    def __init__(self, title, videoSource, modelSource, forceReload, captureDetection, detectionThreshold):
         """ Initialization of the main class """ 
 
         # Initialize the GUI by calling the Gui_video_output
@@ -34,7 +34,7 @@ class Main:
         self.callback_queue = queue.LifoQueue(maxsize = 1)
         
         # Initialize a thread which fetches the Video input
-        self.process_thread = ProcessThread(self.gui, self.callback_queue, videoSource, modelSource, forceReload, self.fps, captureDetection)
+        self.process_thread = ProcessThread(self.gui, self.callback_queue, videoSource, modelSource, forceReload, self.fps, captureDetection, detectionThreshold)
            
         # Callback for when GUI window get's closed.
         self.gui.root.protocol("WM_DELETE_WINDOW", self.on_exit)
@@ -123,6 +123,7 @@ if __name__ == "__main__":
         modelSource = 'trainedModel_v1.pt'
         forceReload = False
         captureDetection = False
+        detectionThreshold = 0.5
         
 
 
@@ -130,19 +131,20 @@ if __name__ == "__main__":
 Popen([executable, 'MQTT_subscriberClient/DeerDetection_MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
 
 # Start setup for launching the program
-pick = SourceSelect.manualOrAutomatic() 
+pick = StartupSetup.setManualOrAutomatic() 
 
 # If automatic, use defined values
 if pick == 'Automatic':
     print('[SETUP] Automatic setup initiated')
 
-    main = Main("Deer Detection [Automatic setup]", videoSource, modelSource, forceReload, captureDetection)
+    main = Main("Deer Detection [Automatic setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
 
     print('[SETUP] Launching with:')
     print('[SETUP] SOURCE VIDEO: ', videoSource)
     print('[SETUP] SOURCE MODEL: ', modelSource)
     print('[SETUP] FORCE RELOAD: ', forceReload)
     print('[SETUP] SAVING DETECTIONS: ', captureDetection)
+    print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
     
     main.launch()
 
@@ -151,20 +153,22 @@ elif pick == 'Manual':
     print('[SETUP] Manual setup initiated')
 
     # TODO: Write video source adress / model to source.txt file and use it in automatic or let them be available for picking when starting up next time
-    videoSource = SourceSelect.chooseVideoSource()
-    modelSetup = SourceSelect.localOrUserModel()
-    if modelSetup == 'User-defined':
-        modelSource = SourceSelect.chooseModelSource()
-    forceReload = SourceSelect.chooseForceReload()
-    captureDetection = SourceSelect.captureDetection()
+    videoSource = StartupSetup.setVideoSource()
+    pickDefaultOrUserModel = StartupSetup.setLocalOrUserModel()
+    if pickDefaultOrUserModel == 'User-defined':
+        modelSource = StartupSetup.setModelSource()
+    forceReload = StartupSetup.setForceReload()
+    captureDetection = StartupSetup.setCaptureDetection()
+    detectionThreshold = StartupSetup.setDetectionThreshold()
 
-    main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload, captureDetection)
+    main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
 
     print('[SETUP] Launching with:')
     print('[SETUP] SOURCE VIDEO: ', videoSource)
     print('[SETUP] SOURCE MODEL: ', modelSource)
     print('[SETUP] FORCE RELOAD: ', forceReload)
     print('[SETUP] SAVING DETECTIONS: ', captureDetection)
+    print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
 
     main.launch()
     

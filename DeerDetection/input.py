@@ -8,7 +8,7 @@ import os
 class Input:
     """ Class for supplying and manipulating input data """ 
 
-    def __init__(self, videoSource, modelSource, forceReload, captureDetection):
+    def __init__(self, videoSource, modelSource, forceReload, captureDetection, detectionThreshold):
         """ Initializing the input data stream """ 
 
         # Load flags passed from main
@@ -16,6 +16,7 @@ class Input:
         self.modelSource = modelSource
         self.forceReload = forceReload
         self.captureDetection = captureDetection
+        self.detectionThreshold = detectionThreshold
         
 
         # Load the model defined in the load_model function
@@ -110,11 +111,8 @@ class Input:
             # Grab the confidence value from the tuple
             confidenceValue = row[4]
 
-            # Set confidence threshold to predict on
-            confidenceThreshold = 0.5
-
             # If confidence interval is greater than confidenceThreshold do:
-            if row[4] >= confidenceThreshold:
+            if row[4] >= float(self.detectionThreshold):
                 detection = True
                 detectionCount = labelLength
 
