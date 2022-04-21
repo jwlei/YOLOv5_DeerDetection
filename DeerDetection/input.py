@@ -176,8 +176,8 @@ class Input:
             secondIterator = (60.0 - (time.time() - self.startTime) % 60.0)
             
 
-            # Print image if detection ever 60-59 seconds
-            if secondIterator <= 54: # Current every 4 seconds
+            # Print image if detection every 60 minus X seconds
+            if secondIterator <= 54: # Current every 4 seconds EDIT THIS VALUE
                 cv2.imwrite(os.path.join(self.path, imgLabel), rawFrame)
                 self.savedImageCounter += 1
                 self.startTime = time.time()
