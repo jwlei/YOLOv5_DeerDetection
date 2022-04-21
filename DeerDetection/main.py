@@ -17,7 +17,7 @@ from sourceSelect import SourceSelect
 class Main:
     """ The main application class which is ran """ 
 
-    def __init__(self, title, videoSource, modelSource, forceReload):
+    def __init__(self, title, videoSource, modelSource, forceReload, captureDetection):
         """ Initialization of the main class """ 
 
         # Initialize the GUI by calling the Gui_video_output
@@ -34,7 +34,7 @@ class Main:
         self.callback_queue = queue.LifoQueue(maxsize = 1)
         
         # Initialize a thread which fetches the Video input
-        self.process_thread = ProcessThread(self.gui, self.callback_queue, videoSource, modelSource, forceReload, self.fps)
+        self.process_thread = ProcessThread(self.gui, self.callback_queue, videoSource, modelSource, forceReload, self.fps, captureDetection)
            
         # Callback for when GUI window get's closed.
         self.gui.root.protocol("WM_DELETE_WINDOW", self.on_exit)
@@ -43,8 +43,7 @@ class Main:
         self.callbackUpdateDelay = 1
 
         # Start the input source by calling the process thread
-        self.start_input_source()
-        
+        self.start_input_source()  
         # Start the callback loop
         self.callback_get_input()    
 
@@ -110,9 +109,9 @@ class Main:
             # Default to 30 fps if no data is available
             fps = 30
             return fps
-            
+
         
-        
+
 
 
 
@@ -122,7 +121,8 @@ if __name__ == "__main__":
         #videoSource = "https://www.youtube.com/watch?v=8SDm48ieYP8"
         videoSource = 'test.mp4'
         modelSource = 'trainedModel_v1.pt'
-        forceReload = True
+        forceReload = False
+        captureDetection = False
         
 
 
@@ -136,11 +136,13 @@ pick = SourceSelect.manualOrAutomatic()
 if pick == 'Automatic':
     print('[SETUP] Automatic setup initiated')
 
-    main = Main("Deer Detection [Automatic setup]", videoSource, modelSource, forceReload)
+    main = Main("Deer Detection [Automatic setup]", videoSource, modelSource, forceReload, captureDetection)
 
     print('[SETUP] Launching with:')
-    print('[SETUP] SOURCE VIDEO: ', videoSource )
-    print('[SETUP] SOURCE MODEL: ', modelSource )
+    print('[SETUP] SOURCE VIDEO: ', videoSource)
+    print('[SETUP] SOURCE MODEL: ', modelSource)
+    print('[SETUP] FORCE RELOAD: ', forceReload)
+    print('[SETUP] SAVING DETECTIONS: ', captureDetection)
     
     main.launch()
 
@@ -148,18 +150,21 @@ if pick == 'Automatic':
 elif pick == 'Manual':
     print('[SETUP] Manual setup initiated')
 
-    
     # TODO: Write video source adress / model to source.txt file and use it in automatic or let them be available for picking when starting up next time
     videoSource = SourceSelect.chooseVideoSource()
-    modelSource = SourceSelect.chooseModelSource()
+    modelSetup = SourceSelect.localOrUserModel()
+    if modelSetup == 'User-defined':
+        modelSource = SourceSelect.chooseModelSource()
     forceReload = SourceSelect.chooseForceReload()
+    captureDetection = SourceSelect.captureDetection()
 
-    main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload )
+    main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload, captureDetection)
 
     print('[SETUP] Launching with:')
-    print('[SETUP] SOURCE VIDEO: ', videoSource )
-    print('[SETUP] SOURCE MODEL: ', modelSource )
-    print('[SETUP] FORCE RELOAD: ', forceReload )
+    print('[SETUP] SOURCE VIDEO: ', videoSource)
+    print('[SETUP] SOURCE MODEL: ', modelSource)
+    print('[SETUP] FORCE RELOAD: ', forceReload)
+    print('[SETUP] SAVING DETECTIONS: ', captureDetection)
 
     main.launch()
     

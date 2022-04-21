@@ -19,7 +19,7 @@ from input import Input
 
 class ProcessThread(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
-    def __init__(self, gui, callback_queue, videoSource, modelSource, forceReload, fps):
+    def __init__(self, gui, callback_queue, videoSource, modelSource, forceReload, fps, captureDetection):
         """ Initialize the thread """
 
         # Call the super class constructor
@@ -32,7 +32,7 @@ class ProcessThread(threading.Thread):
         print('[MQTT Publisher] Client started')
         
         # Create an instance of the input data
-        self.input_instance = Input(videoSource, modelSource, forceReload)
+        self.input_instance = Input(videoSource, modelSource, forceReload, captureDetection)
 
         # Convert float FPS number to INT for cv2 waitkey
         # Floor vs roof, decided to use floor so we dont process more frames than we have
@@ -48,6 +48,7 @@ class ProcessThread(threading.Thread):
         
         # Initialize a reference for the GUI
         self.gui = gui
+        self.gui.update_savingDetection_status(captureDetection)
 
         # Setup default values
         self.waitingToStop = False # Flag for if the process should stop
@@ -95,8 +96,7 @@ class ProcessThread(threading.Thread):
             # Send json list through MQTT
             self.client.publish("DEER_DETECTION", self.jsonMessage)
 
-            
-            
+
             
             # TODO: Match source video fps
             # Wait for delay until next iteration
@@ -108,7 +108,7 @@ class ProcessThread(threading.Thread):
     def score_label_send_to_output(self, current_frame, gui):
         """ 
         Function where the current frame is processed
-        This function is used as callback and executed by thread 
+        This function is used as callback and executed by the thread 
         """
 
         global detected
@@ -159,7 +159,6 @@ class ProcessThread(threading.Thread):
         # Update the current alarm status
         gui.update_alarm_status(detected)
 
-        
 
         # Location is gotten in the initialization
      

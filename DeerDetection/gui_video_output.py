@@ -31,7 +31,11 @@ class Gui_video_output:
 
     def update_alarm_status(self, detection):
         # Use the output_view detection check value to update the alarm status of the GUI
-        self.output_view.detectedCheck(detection)
+        self.output_view.detectionIndicator(detection)
+
+    def update_savingDetection_status(self, saveDetections):
+        # Use the output_view detection check value to update the saving indicator of the GUI
+        self.output_view.savingIndicator(saveDetections)
 
     def launch(self):
         # Launch the GUI and listen for callback events

@@ -1,29 +1,27 @@
 import cv2
 import pafy
 import torch
-from time import time
+import time
+from pathlib import Path
 import os
 
 class Input:
     """ Class for supplying and manipulating input data """ 
 
-    def __init__(self, videoSource, modelSource, forceReload):
+    def __init__(self, videoSource, modelSource, forceReload, captureDetection):
         """ Initializing the input data stream """ 
 
-        # Load the URL passed from the Main class
+        # Load flags passed from main
         self.videoSource = videoSource
-
-        # Load the file passed from Main
         self.modelSource = modelSource
-
         self.forceReload = forceReload
+        self.captureDetection = captureDetection
+        
 
         # Load the model defined in the load_model function
         self.model = self.load_model()
-
         # Load the classes defined in the model
         self.classes = self.model.names
-
         # Set the device for the model to load on to be the cuda device, otherwise the cpu
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
@@ -37,18 +35,15 @@ class Input:
         self.frame = None
         # Set initial value for detection
         self.detection = False
+        # Set initial value imageSaving
+        self.imgCounter = 0
+        self.savedImageCounter = 0
+        self.path = Path.cwd() / 'SavedDetections'
+        print('[SETUP] Saved RAW images will be saved to: ', self.path)
 
-        # Set the video source
-        self.video_capture = cv2.VideoCapture(videoSource)
-        # Apply settings for video
-        self.input_settings()
+        # Process and set the videoSource
+        self.video_capture = self.processInputURL(videoSource)
 
-        
-        """
-        # For testing purposes, uncomment to use a YouTube video link
-        ytlink = self.get_video_from_url()
-        self.video_capture = ytlink
-        """
     
     def load_model(self):
         """ Function to load the YOLOv5 model from the pyTorch GitHub when not implemented locally """ 
@@ -122,6 +117,10 @@ class Input:
             if row[4] >= confidenceThreshold:
                 detection = True
                 detectionCount = labelLength
+
+                if self.captureDetection:
+                    self.saveScreen(frame)
+
                 # Get the coordinates of the box to be plot
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
                 
@@ -140,29 +139,41 @@ class Input:
 
         
     def read_current_frame(self):
-        """ Function to get a single frame and it's return boolean value """ 
-
+        """ Function to get a single frame and it's return boolean value """
         # Get boolean return and frame from the video feed
         ret, frame = self.video_capture.read()
 
         return ret, frame
 
 
-    def get_ytVideo_from_url(self):
-        """ Function to process a youtube URL """
-
-        ytLink = pafy.new(self.videoSource).streams[-1]
-        assert ytLink is not None
-        ytVideo = cv2.VideoCapture(ytLink.url)
+    def processInputURL(self, videoSource):
+        """ Function to URL of video, if it's youtube or not """
+        if "youtube" in videoSource or "youtu.be" in videoSource:
+            ytLink = pafy.new(videoSource).streams[-1]
+            assert ytLink is not None
+            processedSource = cv2.VideoCapture(ytLink.url)
+            return processedSource
         
-        # Define constraints to the video
+        else:
+            processedSource = cv2.VideoCapture(videoSource)
+            return processedSource
 
-        return ytVideo
-    
-    def input_settings(self):
-        self.video_capture.set(cv2.CAP_PROP_BUFFERSIZE, 2)
-        self.video_capture.set(cv2.CAP_PROP_FRAME_WIDTH, 100)
-        self.video_capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 100)
+
+    def saveScreen(self, frame, imgLabel=None):
+        """ Function to save image from the frame """
+        global imgCounter
+        global savedImageCounter
+
+        if not imgLabel:
+           
+            current_time = time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime())
+            imgLabel = f'detection-{current_time}_{self.savedImageCounter}.jpg'
+            self.imgCounter += 1
+
+            if self.imgCounter % 60 == 0:
+                cv2.imwrite(os.path.join(self.path, imgLabel), frame)
+                self.savedImageCounter += 1
+            
 
     def release(self):
         """ Function to manually release the resource """
