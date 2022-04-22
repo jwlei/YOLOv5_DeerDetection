@@ -239,6 +239,9 @@ https://dl.dropboxusercontent.com/s/jitj2721dah1ng8/trainedModel_v1.pt
 https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt
 default model url
 
+example youtube stream
+https://www.youtube.com/watch?v=bdEYa2oBtII
+
 '
 """
     

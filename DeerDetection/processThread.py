@@ -19,6 +19,7 @@ from startupsetup import StartupSetup
 
 newVideoSource = None
 newModelSource = None
+noInput = False
 
 class ProcessThread(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
@@ -80,6 +81,7 @@ class ProcessThread(threading.Thread):
         """ The thread's run method """
         global newVideoSource
         global newModelSource
+        global noInput
         # While the thread is running
         while (True):
 
@@ -101,29 +103,28 @@ class ProcessThread(threading.Thread):
                 self.input_instance = Input(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
                 print('[INFO] New model source selected: ', self.modelSource)
                
-
-                
-
             # Get a frame and return value from the input_instance
             ret, self.current_frame, self.rawFrame = self.input_instance.read_current_frame()
             
             
-            # If the return value of the input_instance is false, print an error and exit the program
+            # If the return value of the input_instance is false, display no_input
             if(ret == False):
-                print('No input data')
-                print('Please select another video source')
-
-                exit(-1)
-                #pass
+                noInput = True
+                self.gui.update_output_image(ImageTk.PhotoImage(Image.open('media/no_input.jpg')))
+            else:
+                noInput = False
             
+            if not noInput:
             # If the callback_queue is not full, put the current frame into the queue for execution of the thread
-            if self.callback_queue.full() == False:
-                self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.rawFrame, self.gui)))
+                if self.callback_queue.full() == False:
+                    self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.rawFrame, self.gui)))
 
-            # If the callback_queue is full, remove the item in the queue and put the current frame into the queue for execution of the thread
-            elif self.callback_queue.full() == True:
-                self.callback_queue.get()
-                self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.rawFrame, self.gui)))
+                # If the callback_queue is full, remove the item in the queue and put the current frame into the queue for execution of the thread
+                elif self.callback_queue.full() == True:
+                    self.callback_queue.get()
+                    self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.rawFrame, self.gui)))
+
+
 
             # Publish the JSON list through MQTT
             self.client.publish("DEER_DETECTION", self.jsonMessage)
