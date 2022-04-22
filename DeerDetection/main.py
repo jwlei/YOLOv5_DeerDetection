@@ -120,12 +120,18 @@ class Main:
 
 
 # ------------------------------------------ Launch configuration ------------------------------------------ #
+model_exists = os.path.exists('model/defaultModel.pt')
+defaultModelUrl = 'https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt'
 
 # Launch the program with the following parameters
 if __name__ == "__main__":
         #videoSource = "https://www.youtube.com/watch?v=8SDm48ieYP8"
         videoSource = 'test.mp4'
-        modelSource = 'model/defaultModel.pt'
+        if not model_exists:
+            print('[SETUP]: Default model not present, fetching ...')
+            modelSource = StartupSetup.downloadModel(defaultModelUrl)
+        else:
+            modelSource = 'model/defaultModel.pt'
         forceReload = False
         captureDetection = False
         detectionThreshold = 0.5
@@ -221,7 +227,10 @@ https://www.youtube.com/watch?v=PlN54DufHME
 
 model test download url
 https://dl.dropboxusercontent.com/s/jitj2721dah1ng8/trainedModel_v1.pt
+https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt
+default model url
 
+'
 """
     
     
