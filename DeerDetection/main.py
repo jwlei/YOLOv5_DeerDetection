@@ -22,6 +22,7 @@ class Main:
 
         # Initialize the GUI by calling the Gui_video_output
         self.gui = Gui_video_output(self.on_exit)
+
         # Initialize a LastInn-FirstOut queue which will fetch and execute callbacks
         # Maxsize = 1 to ensure that the freshest frame is always the one processed and shown by the GUI
         self.callback_queue = queue.LifoQueue(maxsize = 1)
@@ -41,7 +42,6 @@ class Main:
         
         # Callback for when GUI window get's closed.
         self.gui.root.protocol("WM_DELETE_WINDOW", self.on_exit)
-
 
         # Start the input source by calling the process thread
         self.start_input_source()  
@@ -77,7 +77,7 @@ class Main:
 
     def on_exit(self):
         """ Function for closing the process when closing the GUI """
-        try: 
+        try:
             # Stop the thread
             self.process_thread.stop()
 
@@ -125,7 +125,7 @@ class Main:
 if __name__ == "__main__":
         #videoSource = "https://www.youtube.com/watch?v=8SDm48ieYP8"
         videoSource = 'test.mp4'
-        modelSource = 'trainedModel_v1.pt'
+        modelSource = 'model/defaultModel.pt'
         forceReload = False
         captureDetection = False
         detectionThreshold = 0.5
@@ -217,7 +217,10 @@ https://www.youtube.com/watch?v=9ApLIRUd4dk
 https://www.youtube.com/watch?v=IXpr_h1rbpQ 
 https://www.youtube.com/watch?v=mNpG5tEBTB8 
 https://www.youtube.com/watch?v=X69HPQ2R9Vs
-https://www.youtube.com/watch?v=PlN54DufHME 
+https://www.youtube.com/watch?v=PlN54DufHME
+
+model test download url
+https://dl.dropboxusercontent.com/s/jitj2721dah1ng8/trainedModel_v1.pt
 
 """
     

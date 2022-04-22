@@ -1,5 +1,11 @@
 import pymsgbox
+import os
+import requests
+import shutil
+
 from tkinter import filedialog
+
+
 
 class StartupSetup:
 
@@ -25,11 +31,17 @@ class StartupSetup:
         return ans
 
     def setModelSource():
-        """ Choose local model source """ 
-        pymsgbox.alert('Choose model data (.pt)', 'Pick model source')
-        model = filedialog.askopenfilename(initialdir="/",title="Select model", filetypes=(("PT Files", ".pt"), ("All files",".*")))
+        """ Choose model source """ 
+        ans = pymsgbox.confirm('Local or remote model?', 'Selecting model', buttons = ['Local', 'URL'])
 
-        return model
+        if ans == 'Local':
+            pymsgbox.alert('Choose model data (.pt)', 'Pick model source')
+            model = filedialog.askopenfilename(initialdir="model/",title="Select model", filetypes=(("PT Files", ".pt"), ("All files",".*")))
+            return model
+        elif ans == 'URL':
+            modelUrl = pymsgbox.prompt('Input URL of model')
+            model = StartupSetup.downloadModel(modelUrl)
+            return model
 
 
     def setForceReload():
@@ -55,8 +67,49 @@ class StartupSetup:
 
         return captureBoolean
 
+
     def setDetectionThreshold():
         threshold = pymsgbox.prompt('Input detection confidence threshold (0.0-1.0)')
 
         return threshold
+
+
+    def downloadModel(modelUrl):
+        """ Save supplied Model URL to disk """ 
+        # TODO: Check if working on correct link
+        path = 'model/'
+        filenameFromUrl = modelUrl.rpartition('/')[-1]
+        path_to_check = os.path.join(path, filenameFromUrl)
+        # Check if file already exists
+        file_exists = os.path.exists(path_to_check)
+
+        # If the file already exists, allow the user to assign a custom name to the downloaded model
+        if file_exists: 
+            user_defined_filename = pymsgbox.prompt(f'A model named {filenameFromUrl} already exists, please rename the model.')
+            if not '.pt' in user_defined_filename:
+                filename = user_defined_filename+'.pt'
+            if '.pt' in user_defined_filename:
+                filename = user_defined_filename   
+        else:
+            filename = filenameFromUrl
+
+        path_filename = os.path.join(path, filename)
+
+        # Download the file and save to disk 
+        r = requests.get(modelUrl, stream=True)
+  
+
+        with requests.get(modelUrl, stream=True) as r:
+            with open(path_filename, 'wb') as file:
+                print('[SETUP] Downloading remote model file ... ')
+                shutil.copyfileobj(r.raw, file)
+                    
+     
+        print('[SETUP] '+filename+' download complete and saved to '+path)
+
+        return path_filename
+        
+        
+                
+                
 

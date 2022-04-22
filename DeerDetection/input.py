@@ -51,7 +51,10 @@ class Input:
     
     def load_model(self):
         """ Function to load the YOLOv5 model from the pyTorch GitHub when not implemented locally """ 
-        model = torch.hub.load('ultralytics/yolov5', 'custom', path=self.modelSource, force_reload=self.forceReload)
+        try:
+            model = torch.hub.load('ultralytics/yolov5', 'custom', path=self.modelSource, force_reload=self.forceReload)
+        except Exception:
+            model = torch.hub.load('ultralytics/yolov5', 'custom', path=self.modelSource, force_reload=True)
         
         # Set custom parameters for the model
         # Set confidence limit to 0.75

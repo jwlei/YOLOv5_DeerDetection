@@ -12,7 +12,7 @@ class Gui_Setup(tk.Frame):
         # Frame constructor from the super class
         tk.Frame.__init__(self, root)
 
-        # Load flags passed from main
+        # Load passed from main
         self.on_exit = on_exit
 
         # layout reference
