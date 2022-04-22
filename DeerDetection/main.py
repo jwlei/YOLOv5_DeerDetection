@@ -19,9 +19,8 @@ class Main:
 
     def __init__(self, title, videoSource, modelSource, forceReload, captureDetection, detectionThreshold):
         """ Initialization of the main class """ 
-        self.flag = False
-        # Initialize the GUI by calling the Gui_video_output
-        self.gui = Gui_video_output(self.on_exit, ProcessThread.getNewVideoSource, ProcessThread.getNewModelSource)
+        self.sourceTitle = videoSource
+        
 
         # Initialize a LastInn-FirstOut queue which will fetch and execute callbacks
         # Maxsize = 1 to ensure that the freshest frame is always the one processed and shown by the GUI
@@ -38,7 +37,8 @@ class Main:
         # Initialize the delay in which the callback waits for re-execution
         self.callbackUpdateDelay = 1
         
-
+        # Initialize the GUI by calling the Gui_video_output
+        self.gui = Gui_video_output(self.on_exit, ProcessThread.getNewVideoSource, ProcessThread.getNewModelSource, self.sourceTitle)
         # Initialize a thread which fetches the Video input
         self.process_thread = ProcessThread(self.gui, self.callback_queue, videoSource, modelSource, forceReload, self.fps, captureDetection, detectionThreshold)
         

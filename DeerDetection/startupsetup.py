@@ -83,7 +83,6 @@ class StartupSetup:
 
     def downloadModel(modelUrl):
         """ Save supplied Model URL to disk """ 
-        # TODO: Check if working on correct link
         path = 'model/'
         filenameFromUrl = modelUrl.rpartition('/')[-1]
         path_to_check = os.path.join(path, filenameFromUrl)

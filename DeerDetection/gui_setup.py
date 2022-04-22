@@ -19,6 +19,7 @@ class Gui_Setup(tk.Frame):
 
         # layout reference
         self.root = root
+        
 
         # init UI
         self.setup_gui()
@@ -30,31 +31,45 @@ class Gui_Setup(tk.Frame):
         """
 
         # Label for image
+        self.titleLabel = tk.Label(self)
+        self.titleLabel.pack(side="top", fill="both", expand=True, ipady=3, padx=10, pady=10)
+
         self.video_output = tk.Label(self)
-        self.video_output.pack(side="top", fill="both", expand="yes", padx=10, pady=10) # Position
+        self.video_output.pack(side="top", fill="both", expand=True, padx=10, pady=10) # Position
+        
+        #self.video_output.pack_propagate(0) # Children fill the size
 
         # Detection indicator
         self.alert_status = tk.Label(self, text="Alert Status", fg="black")
         self.alert_status.config(bg = "orange")
-        self.alert_status.pack(side="top", fill="both", expand="yes", padx=10) # Position
+        self.alert_status.pack(side="top", fill="both", expand=True, padx=10) # Position
 
         # Is saving detections indicator
         self.save_status = tk.Label(self, fg="black")
         self.save_status.config(text="Save on detection status")
-        self.save_status.pack(side="left", fill="both", expand="yes", padx=10, pady=10) # Position
+        self.save_status.pack(side="left", fill="both", expand=True, padx=10, pady=10) # Position
 
         # Change video source
         self.sourceBtn = tk.Button(self, text="Choose video source", command=self.getNewVideoSource)
-        self.sourceBtn.pack(fill="both", expand=True, side="left", padx=10, pady=10) # Position
+        self.sourceBtn.pack(side="left", fill="both", expand=True, padx=10, pady=10) # Position
 
         # Change model source
         self.sourceBtn = tk.Button(self, text="Choose training model", command=self.getNewModelSource)
-        self.sourceBtn.pack(fill="both", expand=True, side="left", padx=10, pady=10) # Position
+        self.sourceBtn.pack(side="left", fill="both", expand=True, padx=10, pady=10) # Position
 
         # Button Exit
         self.exitBtn = tk.Button(self, text="Exit program", command=self.on_exit)
-        self.exitBtn.pack(fill="both", expand=True, side="left", padx=10, pady=10) # Position
+        self.exitBtn.pack(side="left", fill="both", expand=True, padx=10, pady=10) # Position
         
+
+    def update_source_title(self, title):
+        """ Function to update the GUI with a new image """ 
+
+        # Update the title label with a new title
+        self.titleLabel.configure(text='Input source: '+ title)
+
+        # Self reference to avoid garbage collection
+        self.title = title
 
     def update_gui_image(self, image):
         """ Function to update the GUI with a new image """ 

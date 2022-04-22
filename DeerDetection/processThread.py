@@ -93,6 +93,7 @@ class ProcessThread(threading.Thread):
             # Checking if source is changed
             if newVideoSource is not None:
                 self.videoSource = newVideoSource
+                self.gui.update_title(self.videoSource)
                 newVideoSource = None
                 self.input_instance = Input(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
                 print('[INFO] New video source selected: ', self.videoSource)
@@ -111,6 +112,7 @@ class ProcessThread(threading.Thread):
             if(ret == False):
                 noInput = True
                 self.gui.update_output_image(ImageTk.PhotoImage(Image.open('media/no_input.jpg')))
+                self.gui.update_title('No input')
             else:
                 noInput = False
             
@@ -172,7 +174,7 @@ class ProcessThread(threading.Thread):
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Resize the frame to dimensions width, height
-        frame = cv2.resize(frame, (640, 480))
+        #frame = cv2.resize(frame, (640, 480))
 
         # Convert the image from array to PIL in order to show it using tkinter
         image = Image.fromarray(frame)
@@ -184,7 +186,7 @@ class ProcessThread(threading.Thread):
 
         # Update the output image with the current image
         gui.update_output_image(image)
-
+        
         # Update the current alarm status
         gui.update_alarm_status(detected)
 
@@ -238,4 +240,8 @@ class ProcessThread(threading.Thread):
     def getNewModelSource():
         global newModelSource
         newModelSource = StartupSetup.setModelSource()
+
+    def getNewTitle(self):
+        global newVideoSource
+        self.gui.update_title(newVideoSource)
        

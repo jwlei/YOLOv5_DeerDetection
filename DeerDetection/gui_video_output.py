@@ -7,7 +7,7 @@ from input import Input
 class Gui_video_output:
     """ Class for handling the updating of the GUI frame """ 
 
-    def __init__(self, on_exit, getNewVideoSource, getNewModelSource): 
+    def __init__(self, on_exit, getNewVideoSource, getNewModelSource, sourceTitle): 
         """ Initialization of the video output """ 
 
         #initialize the gui toolkit
@@ -15,15 +15,17 @@ class Gui_video_output:
    
         # Window Title
         self.root.title("Deer Detection")
+        self.root.geometry("1080x768") # static size
         
         # Initialize the Gui by calling the Gui_setup class
         self.output_view = Gui_Setup(self.root, on_exit, getNewVideoSource, getNewModelSource)
-        self.output_view.pack(side='bottom')
-        
-        #define image width/height that we will use
-        #while showing output image 
-        # TODO: Set static size for GUI Window
-        
+        self.output_view.pack(side='top')
+        self.output_view.update_source_title(sourceTitle)
+
+    
+    def update_title(self, title):
+        # Use the output_view image to update the image in the frame
+        self.output_view.update_source_title(title)
 
     def update_output_image(self, image):
         # Use the output_view image to update the image in the frame
