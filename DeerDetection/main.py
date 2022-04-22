@@ -123,10 +123,6 @@ class Main:
             
         
 
-        
-
-
-
 
 # ------------------------------------------ Launch configuration ------------------------------------------ #
 model_exists = os.path.exists('model/defaultModel.pt')
