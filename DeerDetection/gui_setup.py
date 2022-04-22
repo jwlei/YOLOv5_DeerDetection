@@ -1,6 +1,8 @@
-from tkinter import*
 import tkinter as tk
 import os
+
+from tkinter import font as tkFont
+
 
 
 class Gui_Setup(tk.Frame):
@@ -16,9 +18,11 @@ class Gui_Setup(tk.Frame):
         self.on_exit = on_exit
         self.getNewVideoSource = getNewVideoSource
         self.getNewModelSource = getNewModelSource
-
+        
         # layout reference
         self.root = root
+        titleLogo = tk.PhotoImage(file='media/logo_text_60px.png')
+        self.logo = titleLogo
         
 
         # init UI
@@ -29,37 +33,42 @@ class Gui_Setup(tk.Frame):
         """
         Function for creating the GUI, defines buttons to create
         """
+        helvetica = tkFont.Font(family="Helvetica", size=12)
 
         # Label for image
-        self.titleLabel = tk.Label(self)
-        self.titleLabel.pack(side="top", fill="both", expand=True, ipady=3, padx=10, pady=10)
+        
+        self.titleLogo = tk.Label(self, image=self.logo)
+        self.titleLogo.grid(row = 0, column = 0, columnspan = 1, sticky="NESW")
+
+        self.titleLabel = tk.Label(self, font = helvetica, wraplength = 700)
+        self.titleLabel.grid(row = 0, column = 1, columnspan = 3, padx=50, sticky="SE")
 
         self.video_output = tk.Label(self)
-        self.video_output.pack(side="top", fill="both", expand=True, padx=10, pady=10) # Position
+        self.video_output.grid(row = 1, column = 0, columnspan = 4,  padx=10, pady=10, sticky="NESW") # Position
         
         #self.video_output.pack_propagate(0) # Children fill the size
 
         # Detection indicator
         self.alert_status = tk.Label(self, text="Alert Status", fg="black")
         self.alert_status.config(bg = "orange")
-        self.alert_status.pack(side="top", fill="both", expand=True, padx=10) # Position
+        self.alert_status.grid(row = 2, column = 0, columnspan = 4, padx=10, sticky="NESW") # Position
 
         # Is saving detections indicator
         self.save_status = tk.Label(self, fg="black")
         self.save_status.config(text="Save on detection status")
-        self.save_status.pack(side="left", fill="both", expand=True, padx=10, pady=10) # Position
+        self.save_status.grid(row = 3, column = 0, columnspan = 1, padx=5, pady=10, sticky="NESW") # Position
 
         # Change video source
         self.sourceBtn = tk.Button(self, text="Choose video source", command=self.getNewVideoSource)
-        self.sourceBtn.pack(side="left", fill="both", expand=True, padx=10, pady=10) # Position
+        self.sourceBtn.grid(row = 3, column = 1, columnspan = 1, padx=5, pady=10, sticky="NESW") # Position
 
         # Change model source
         self.sourceBtn = tk.Button(self, text="Choose training model", command=self.getNewModelSource)
-        self.sourceBtn.pack(side="left", fill="both", expand=True, padx=10, pady=10) # Position
+        self.sourceBtn.grid(row = 3, column = 2, columnspan = 1,  padx=5, pady=10, sticky="NESW") # Position
 
         # Button Exit
         self.exitBtn = tk.Button(self, text="Exit program", command=self.on_exit)
-        self.exitBtn.pack(side="left", fill="both", expand=True, padx=10, pady=10) # Position
+        self.exitBtn.grid(row = 3, column = 3, columnspan = 1,  padx=5, pady=10, sticky="NESW") # Position 
         
 
     def update_source_title(self, title):

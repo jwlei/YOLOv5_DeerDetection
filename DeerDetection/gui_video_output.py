@@ -15,7 +15,8 @@ class Gui_video_output:
    
         # Window Title
         self.root.title("Deer Detection")
-        self.root.geometry("1080x768") # static size
+        # (index, weight) 
+        
         
         # Initialize the Gui by calling the Gui_setup class
         self.output_view = Gui_Setup(self.root, on_exit, getNewVideoSource, getNewModelSource)
