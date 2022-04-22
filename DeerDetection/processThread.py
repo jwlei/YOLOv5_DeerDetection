@@ -155,6 +155,7 @@ class ProcessThread(threading.Thread):
         prediction = labels, cord
 
         # Plot graphics for the current frame
+
         frame, detected, detectedCount = self.input_instance.plot_frame(prediction, current_frame, rawFrame)
 
         # Assign end time to calculate and output FPS(frames per second) on the screen
@@ -203,7 +204,6 @@ class ProcessThread(threading.Thread):
 
         # Creating a json message to send with MQTT
         self.jsonMessage = json.dumps({'time' : self.currentTime, 'location' : self.currentLocation,  'detected' : self.detected, 'detectedCount' : self.detectedCount}, indent = 4)
-
 
         
     def __del__(self):

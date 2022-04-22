@@ -37,6 +37,7 @@ class Input:
         self.frame = None
         # Set initial value for detection
         self.detection = False
+
         # Set initial value imageSaving
         self.startTime = time.time()
         self.imgCounter = 0
@@ -89,6 +90,7 @@ class Input:
         """ Function to plot boxes, labels and confidence values around detections on the frame """ 
 
         global detection
+
         global detectionCount
         detection = False
         detectionCount = 0
@@ -123,6 +125,7 @@ class Input:
                 
                 self.saveScreen(rawFrame)
 
+
                 # Get the coordinates of the box to be plot
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
                 
@@ -138,6 +141,7 @@ class Input:
                 detection = False
 
         return frame, detection, detectionCount
+
 
         
     def read_current_frame(self):
