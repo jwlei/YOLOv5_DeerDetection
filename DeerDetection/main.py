@@ -238,6 +238,9 @@ default model url
 example youtube stream
 https://www.youtube.com/watch?v=bdEYa2oBtII
 
+Logo source:
+https://www.vecteezy.com/vector-art/585990-head-deer-animals-logo-black-silhouete-icons 23/04
+
 '
 """
     
