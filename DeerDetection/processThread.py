@@ -112,8 +112,8 @@ class ProcessThread(threading.Thread):
             if(ret == False):
                 print('No input data')
                 print('Please select another video source')
-                self.getNewVideoSource()
-                #exit(-1)
+
+                exit(-1)
                 #pass
             
             # If the callback_queue is not full, put the current frame into the queue for execution of the thread

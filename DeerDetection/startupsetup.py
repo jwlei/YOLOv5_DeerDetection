@@ -17,12 +17,14 @@ class StartupSetup:
 
     def setVideoSource():
         """ Choose local or remote video source """
-        ans = pymsgbox.confirm('Please choose your source for video', 'Pick video source', buttons = ['URL', 'Local Media'])
+        ans = pymsgbox.confirm('Please choose your source for video', 'Pick video source', buttons = ['URL', 'Local Media', 'Camera'])
 
         if ans == 'URL':
             input = pymsgbox.prompt('Input URL of video input')
         elif ans == 'Local Media':
             input = filedialog.askopenfilename(initialdir="/",title="Select video", filetypes=(("MP4 Files", ".mp4"), ("All files",".*")))
+        elif ans == 'Camera':
+            input = '0'
 
         return input
 
