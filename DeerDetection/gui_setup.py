@@ -6,7 +6,7 @@ import os
 class Gui_Setup(tk.Frame):
     """ Class to set up the initial GUI """ 
 
-    def __init__(self, root, on_exit):
+    def __init__(self, root, on_exit, getNewVideoSource, getNewModelSource):
         """ Initialization of the GUI_Setup class, which calls the setup_gui function to create the GUI """
 
         # Frame constructor from the super class
@@ -14,6 +14,8 @@ class Gui_Setup(tk.Frame):
 
         # Load passed from main
         self.on_exit = on_exit
+        self.getNewVideoSource = getNewVideoSource
+        self.getNewModelSource = getNewModelSource
 
         # layout reference
         self.root = root
@@ -41,12 +43,12 @@ class Gui_Setup(tk.Frame):
         self.save_status.config(text="Save on detection status")
         self.save_status.pack(side="left", fill="both", expand="yes", padx=10, pady=10) # Position
 
-        # TODO: Not functional Button Video source
-        self.sourceBtn = tk.Button(self, text="Choose video source", command=self.chooseVideoSource)
+        # Change video source
+        self.sourceBtn = tk.Button(self, text="Choose video source", command=self.getNewVideoSource)
         self.sourceBtn.pack(fill="both", expand=True, side="left", padx=10, pady=10) # Position
 
-        # TODO: Not functional Button Model Source
-        self.sourceBtn = tk.Button(self, text="Choose training model", command=self.chooseModelSource)
+        # Change model source
+        self.sourceBtn = tk.Button(self, text="Choose training model", command=self.getNewModelSource)
         self.sourceBtn.pack(fill="both", expand=True, side="left", padx=10, pady=10) # Position
 
         # Button Exit

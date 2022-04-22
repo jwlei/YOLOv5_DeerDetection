@@ -15,7 +15,10 @@ from PIL import Image, ImageTk
 from time import time as tm
 from gui_video_output import Gui_video_output
 from input import Input
+from startupsetup import StartupSetup
 
+newVideoSource = None
+newModelSource = None
 
 class ProcessThread(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
@@ -30,9 +33,17 @@ class ProcessThread(threading.Thread):
         self.client = mqtt.Client("DEER_DETECTOR")
         self.client.connect(self.mqttBroker)
         print('[MQTT Publisher] Client started')
+
+        
         
         # Create an instance of the input data
-        self.input_instance = Input(videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
+        self.videoSource = videoSource
+        self.modelSource = modelSource
+        self.forceReload = forceReload
+        self.captureDetection = captureDetection
+        self.detectionThreshold = detectionThreshold
+
+        self.input_instance = Input(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
 
         # Convert float FPS number to INT for cv2 waitkey
         # Floor vs roof, decided to use floor so we dont process more frames than we have
@@ -67,7 +78,8 @@ class ProcessThread(threading.Thread):
     
     def run(self):
         """ The thread's run method """
-
+        global newVideoSource
+        global newModelSource
         # While the thread is running
         while (True):
 
@@ -76,6 +88,22 @@ class ProcessThread(threading.Thread):
                 self.runningStatus = True
                 break
             
+            # Checking if source is changed
+            if newVideoSource is not None:
+                self.videoSource = newVideoSource
+                newVideoSource = None
+                self.input_instance = Input(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
+                print('[INFO] New video source selected: ', self.videoSource)
+
+            if newModelSource is not None:
+                self.modelSource = newModelSource
+                newModelSource = None
+                self.input_instance = Input(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
+                print('[INFO] New model source selected: ', self.modelSource)
+               
+
+                
+
             # Get a frame and return value from the input_instance
             ret, self.current_frame, self.rawFrame = self.input_instance.read_current_frame()
             
@@ -83,7 +111,9 @@ class ProcessThread(threading.Thread):
             # If the return value of the input_instance is false, print an error and exit the program
             if(ret == False):
                 print('No input data')
-                exit(-1)
+                print('Please select another video source')
+                self.getNewVideoSource()
+                #exit(-1)
                 #pass
             
             # If the callback_queue is not full, put the current frame into the queue for execution of the thread
@@ -200,3 +230,11 @@ class ProcessThread(threading.Thread):
         """ Function to get detected """ 
         return self.detected
 
+    def getNewVideoSource():
+        global newVideoSource
+        newVideoSource = StartupSetup.setVideoSource()
+
+    def getNewModelSource():
+        global newModelSource
+        newModelSource = StartupSetup.setModelSource()
+       

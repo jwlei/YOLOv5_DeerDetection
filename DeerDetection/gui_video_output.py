@@ -7,7 +7,7 @@ from input import Input
 class Gui_video_output:
     """ Class for handling the updating of the GUI frame """ 
 
-    def __init__(self, on_exit): 
+    def __init__(self, on_exit, getNewVideoSource, getNewModelSource): 
         """ Initialization of the video output """ 
 
         #initialize the gui toolkit
@@ -17,7 +17,7 @@ class Gui_video_output:
         self.root.title("Deer Detection")
         
         # Initialize the Gui by calling the Gui_setup class
-        self.output_view = Gui_Setup(self.root, on_exit)
+        self.output_view = Gui_Setup(self.root, on_exit, getNewVideoSource, getNewModelSource)
         self.output_view.pack(side='bottom')
         
         #define image width/height that we will use

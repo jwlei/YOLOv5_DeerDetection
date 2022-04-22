@@ -46,7 +46,7 @@ class Input:
         
 
         # Process and set the videoSource
-        self.video_capture = self.processInputURL(videoSource)
+        self.video_capture = self.processInputPath(videoSource)
 
     
     def load_model(self):
@@ -153,7 +153,7 @@ class Input:
         return ret, frame, rawFrame
 
 
-    def processInputURL(self, videoSource):
+    def processInputPath(self, videoSource):
         """ Function to process URL of video, if it's youtube process through PAFY """
         if "youtube" in videoSource or "youtu.be" in videoSource:
             print('[SETUP] URL supplied points to YouTube, processing ... ')

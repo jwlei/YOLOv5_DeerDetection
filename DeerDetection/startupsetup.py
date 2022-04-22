@@ -26,22 +26,27 @@ class StartupSetup:
 
         return input
 
-    def setLocalOrUserModel():
-        ans = pymsgbox.confirm('Use default or user-defined model?', 'Selecting model', buttons = ['Default', 'User-defined'])
-        return ans
-
+  
     def setModelSource():
-        """ Choose model source """ 
-        ans = pymsgbox.confirm('Local or remote model?', 'Selecting model', buttons = ['Local', 'URL'])
+        """ Choose model source """
+        ans = pymsgbox.confirm('Use default or user-defined model?', 'Selecting model', buttons = ['Default', 'User-defined'])
+        if ans == 'User-defined':
+            
+            ans = pymsgbox.confirm('Local or remote model?', 'Selecting model', buttons = ['Local', 'URL'])
 
-        if ans == 'Local':
-            pymsgbox.alert('Choose model data (.pt)', 'Pick model source')
-            model = filedialog.askopenfilename(initialdir="model/",title="Select model", filetypes=(("PT Files", ".pt"), ("All files",".*")))
-            return model
-        elif ans == 'URL':
-            modelUrl = pymsgbox.prompt('Input URL of model')
-            model = StartupSetup.downloadModel(modelUrl)
-            return model
+            if ans == 'Local':
+                pymsgbox.confirm('Choose model data (.pt)', buttons = ['OK'])
+                model = filedialog.askopenfilename(initialdir="model/",title="Select model", filetypes=(("PT Files", ".pt"), ("All files",".*")))
+                return model
+
+            elif ans == 'URL':
+                modelUrl = pymsgbox.prompt('Input URL of model')
+                model = StartupSetup.downloadModel(modelUrl)
+                return model
+
+        elif ans == 'Default':
+            return ans
+            
 
 
     def setForceReload():
@@ -58,7 +63,7 @@ class StartupSetup:
 
     def setCaptureDetection():
         """ Choose if detections should be captured """ 
-        ans = pymsgbox.confirm('Save detection images?', 'DeerDetection Setup', buttons = ['Yes', 'No'])
+        ans = pymsgbox.confirm('Save detection images?', 'DeerDetection Setup', buttons = ['Save', 'Don\'t save'])
 
         if ans == 'Yes':
             captureBoolean = True
@@ -98,13 +103,11 @@ class StartupSetup:
         # Download the file and save to disk 
         r = requests.get(modelUrl, stream=True)
   
-
         with requests.get(modelUrl, stream=True) as r:
             with open(path_filename, 'wb') as file:
                 print('[SETUP] Downloading remote model file ... ')
                 shutil.copyfileobj(r.raw, file)
                     
-     
         print('[SETUP] '+filename+' download complete and saved to '+path)
 
         return path_filename

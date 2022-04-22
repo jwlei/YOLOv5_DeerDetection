@@ -19,9 +19,9 @@ class Main:
 
     def __init__(self, title, videoSource, modelSource, forceReload, captureDetection, detectionThreshold):
         """ Initialization of the main class """ 
-
+        self.flag = False
         # Initialize the GUI by calling the Gui_video_output
-        self.gui = Gui_video_output(self.on_exit)
+        self.gui = Gui_video_output(self.on_exit, ProcessThread.getNewVideoSource, ProcessThread.getNewModelSource)
 
         # Initialize a LastInn-FirstOut queue which will fetch and execute callbacks
         # Maxsize = 1 to ensure that the freshest frame is always the one processed and shown by the GUI
@@ -33,6 +33,8 @@ class Main:
         self.current_frame = None
         # Get and set FPS for the video_source
         self.fps = self.getFps()
+        # New video source reference
+        self.newVideoSource = None
         # Initialize the delay in which the callback waits for re-execution
         self.callbackUpdateDelay = 1
         
@@ -82,7 +84,10 @@ class Main:
             self.process_thread.stop()
 
             # Merge the threads
-            self.process_thread.join()
+            try:
+                self.process_thread.join()
+            except Exception:
+                pass
 
             # Release the video resource
             self.process_thread.release_resources()
@@ -114,6 +119,10 @@ class Main:
             print('[SETUP] FPS could not be read from video source, set to default: ', fps)
             return fps
 
+
+            
+        
+
         
 
 
@@ -122,7 +131,7 @@ class Main:
 # ------------------------------------------ Launch configuration ------------------------------------------ #
 model_exists = os.path.exists('model/defaultModel.pt')
 defaultModelUrl = 'https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt'
-
+defaultModelSource = 'model/defaultModel.pt'
 # Launch the program with the following parameters
 if __name__ == "__main__":
         #videoSource = "https://www.youtube.com/watch?v=8SDm48ieYP8"
@@ -131,7 +140,7 @@ if __name__ == "__main__":
             print('[SETUP]: Default model not present, fetching ...')
             modelSource = StartupSetup.downloadModel(defaultModelUrl)
         else:
-            modelSource = 'model/defaultModel.pt'
+            modelSource = defaultModelSource
         forceReload = False
         captureDetection = False
         detectionThreshold = 0.5
@@ -165,9 +174,9 @@ elif pick == 'Manual':
 
     # TODO: Write video source adress / model to source.txt file and use it in automatic or let them be available for picking when starting up next time
     videoSource = StartupSetup.setVideoSource()
-    pickDefaultOrUserModel = StartupSetup.setLocalOrUserModel()
-    if pickDefaultOrUserModel == 'User-defined':
-        modelSource = StartupSetup.setModelSource()
+    modelSource = StartupSetup.setModelSource()
+    if modelSource == 'Default':
+        modelSource = defaultModelSource
     forceReload = StartupSetup.setForceReload()
     captureDetection = StartupSetup.setCaptureDetection()
     detectionThreshold = StartupSetup.setDetectionThreshold()
