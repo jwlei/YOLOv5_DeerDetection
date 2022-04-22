@@ -365,5 +365,4 @@ FodyWeavers.xsd
 /DeerDetection/test2.mp4
 /DeerDetection/log.txt
 *.jpg
-/DeerDetection/model/trainedModel_v1.pt
 *.pt
