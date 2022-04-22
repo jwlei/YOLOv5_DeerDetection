@@ -123,6 +123,7 @@ class Input:
                 detection = True
                 detectionCount = labelLength
                 
+                # If enabled, save picture on detection
                 self.saveScreen(rawFrame)
 
 
@@ -163,12 +164,11 @@ class Input:
             print('[SETUP] URL supplied points to YouTube, processing ... ')
             ytLink = pafy.new(videoSource).streams[-1]
             assert ytLink is not None
-            processedSource = cv2.VideoCapture(ytLink.url)
-            return processedSource
-        
+            processedSource = cv2.VideoCapture(ytLink.url) 
         else:
             processedSource = cv2.VideoCapture(videoSource)
-            return processedSource
+        
+        return processedSource
 
 
     def saveScreen(self, rawFrame, imgLabel=None):
@@ -177,12 +177,10 @@ class Input:
         global startTime
 
         if not imgLabel:
-           
             current_time = time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime())
             imgLabel = f'detection-{current_time}_{self.savedImageCounter}.jpg'
             self.imgCounter += 1
             secondIterator = (60.0 - (time.time() - self.startTime) % 60.0)
-            
 
             # Print image if detection every 60 minus X seconds
             if secondIterator <= 54: # Current every 4 seconds EDIT THIS VALUE
