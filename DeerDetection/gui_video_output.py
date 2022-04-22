@@ -7,7 +7,7 @@ from input import Input
 class Gui_video_output:
     """ Class for handling the updating of the GUI frame """ 
 
-    def __init__(self): 
+    def __init__(self, on_exit, getNewVideoSource, getNewModelSource): 
         """ Initialization of the video output """ 
 
         #initialize the gui toolkit
@@ -17,7 +17,7 @@ class Gui_video_output:
         self.root.title("Deer Detection")
         
         # Initialize the Gui by calling the Gui_setup class
-        self.output_view = Gui_Setup(self.root)
+        self.output_view = Gui_Setup(self.root, on_exit, getNewVideoSource, getNewModelSource)
         self.output_view.pack(side='bottom')
         
         #define image width/height that we will use
@@ -31,7 +31,11 @@ class Gui_video_output:
 
     def update_alarm_status(self, detection):
         # Use the output_view detection check value to update the alarm status of the GUI
-        self.output_view.detectedCheck(detection)
+        self.output_view.detectionIndicator(detection)
+
+    def update_savingDetection_status(self, saveDetections):
+        # Use the output_view detection check value to update the saving indicator of the GUI
+        self.output_view.savingIndicator(saveDetections)
 
     def launch(self):
         # Launch the GUI and listen for callback events

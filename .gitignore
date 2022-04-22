@@ -362,3 +362,7 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /DeerDetection/test.mp4
+/DeerDetection/test2.mp4
+/DeerDetection/log.txt
+*.jpg
+*.pt
