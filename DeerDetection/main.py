@@ -21,26 +21,27 @@ class Main:
         """ Initialization of the main class """ 
 
         # Initialize the GUI by calling the Gui_video_output
-        self.gui = Gui_video_output()
-        
-        # Initialize variable to hold the current frame from the video output
-        self.current_frame = None
-
-        # Get and set FPS for the video_source
-        self.fps = self.getFps()
-        
+        self.gui = Gui_video_output(self.on_exit)
         # Initialize a LastInn-FirstOut queue which will fetch and execute callbacks
         # Maxsize = 1 to ensure that the freshest frame is always the one processed and shown by the GUI
         self.callback_queue = queue.LifoQueue(maxsize = 1)
         
-        # Initialize a thread which fetches the Video input
-        self.process_thread = ProcessThread(self.gui, self.callback_queue, videoSource, modelSource, forceReload, self.fps, captureDetection, detectionThreshold)
-           
-        # Callback for when GUI window get's closed.
-        self.gui.root.protocol("WM_DELETE_WINDOW", self.on_exit)
-        
+
+        # Initialization of default values
+        # Reference for current_frame
+        self.current_frame = None
+        # Get and set FPS for the video_source
+        self.fps = self.getFps()
         # Initialize the delay in which the callback waits for re-execution
         self.callbackUpdateDelay = 1
+        
+
+        # Initialize a thread which fetches the Video input
+        self.process_thread = ProcessThread(self.gui, self.callback_queue, videoSource, modelSource, forceReload, self.fps, captureDetection, detectionThreshold)
+        
+        # Callback for when GUI window get's closed.
+        self.gui.root.protocol("WM_DELETE_WINDOW", self.on_exit)
+
 
         # Start the input source by calling the process thread
         self.start_input_source()  
@@ -59,7 +60,6 @@ class Main:
 
     def callback_get_input(self):
             """ Callback function which listens for a new frame and executes """
-
             # Try to get a callback from the process thread
             try:
                 self.callback_get_input
@@ -71,27 +71,29 @@ class Main:
             except queue.Empty:
                 # If the que is empty, run the callback to get a frame
                 self.gui.root.after(self.callbackUpdateDelay, self.callback_get_input)
-
             else: 
                 self.gui.root.after(self.callbackUpdateDelay, self.callback_get_input)
 
 
     def on_exit(self):
         """ Function for closing the process when closing the GUI """
+        try: 
+            # Stop the thread
+            self.process_thread.stop()
 
-        # Stop the thread
-        self.process_thread.stop()
+            # Merge the threads
+            self.process_thread.join()
 
-        # Merge the threads
-        self.process_thread.join()
-
-        # Release the video resource
-        self.process_thread.release_resources()
+            # Release the video resource
+            self.process_thread.release_resources()
         
-        # Destroy the GUI window
-        self.gui.root.destroy()
+            # Destroy the GUI window
+            self.gui.root.destroy()
 
-        # TODO: Close subprocess
+            # Close subprocess
+            mqtt_subscriber.kill()
+        except Exception:
+            pass
 
         
     def __del__(self):
@@ -104,10 +106,12 @@ class Main:
         fps = vid.get(cv2.CAP_PROP_FPS)
 
         if fps >= 1:
+            print('[SETUP] FPS set to: ', fps)
             return fps
         else:
             # Default to 30 fps if no data is available
             fps = 30
+            print('[SETUP] FPS could not be read from video source, set to default: ', fps)
             return fps
 
         
@@ -115,6 +119,7 @@ class Main:
 
 
 
+# ------------------------------------------ Launch configuration ------------------------------------------ #
 
 # Launch the program with the following parameters
 if __name__ == "__main__":
@@ -128,7 +133,7 @@ if __name__ == "__main__":
 
 
 # Create subprocess for MQTT subscriber client
-Popen([executable, 'MQTT_subscriberClient/DeerDetection_MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
+mqtt_subscriber = Popen([executable, 'MQTT_subscriberClient/DeerDetection_MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
 
 # Start setup for launching the program
 pick = StartupSetup.setManualOrAutomatic() 
@@ -193,25 +198,28 @@ elif pick == 'Gather images':
 
     main.launch()
 
-    """
-    Videos used
-    https://www.youtube.com/watch?v=B2jW99WWVF0
-    https://www.youtube.com/watch?v=C0Ja5QsQ2uQ
-    https://www.youtube.com/watch?v=4Rnr9OSNYj4
-    https://www.youtube.com/watch?v=8SDm48ieYP8
-    https://www.youtube.com/watch?v=BJj4OoqPmkg
-    https://www.youtube.com/watch?v=zkuQI5Pp9F4
-    https://www.youtube.com/watch?v=6Jq97RAkZDs
-    https://www.youtube.com/watch?v=1FJcXLiuA5k
-    https://www.youtube.com/watch?v=q5apMaG6mIg
-    https://www.youtube.com/watch?v=6bEPd7HuW1M 
-    https://www.youtube.com/watch?v=9ApLIRUd4dk 
-    https://www.youtube.com/watch?v=IXpr_h1rbpQ 
-    https://www.youtube.com/watch?v=mNpG5tEBTB8 
-    https://www.youtube.com/watch?v=X69HPQ2R9Vs
-    https://www.youtube.com/watch?v=PlN54DufHME 
 
-    """
+
+
+"""
+Videos used
+https://www.youtube.com/watch?v=B2jW99WWVF0
+https://www.youtube.com/watch?v=C0Ja5QsQ2uQ
+https://www.youtube.com/watch?v=4Rnr9OSNYj4
+https://www.youtube.com/watch?v=8SDm48ieYP8
+https://www.youtube.com/watch?v=BJj4OoqPmkg
+https://www.youtube.com/watch?v=zkuQI5Pp9F4
+https://www.youtube.com/watch?v=6Jq97RAkZDs
+https://www.youtube.com/watch?v=1FJcXLiuA5k
+https://www.youtube.com/watch?v=q5apMaG6mIg
+https://www.youtube.com/watch?v=6bEPd7HuW1M 
+https://www.youtube.com/watch?v=9ApLIRUd4dk 
+https://www.youtube.com/watch?v=IXpr_h1rbpQ 
+https://www.youtube.com/watch?v=mNpG5tEBTB8 
+https://www.youtube.com/watch?v=X69HPQ2R9Vs
+https://www.youtube.com/watch?v=PlN54DufHME 
+
+"""
     
     
 

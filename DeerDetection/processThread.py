@@ -95,15 +95,10 @@ class ProcessThread(threading.Thread):
                 self.callback_queue.get()
                 self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.rawFrame, self.gui)))
 
-            # Send json list through MQTT
+            # Publish the JSON list through MQTT
             self.client.publish("DEER_DETECTION", self.jsonMessage)
 
-
-            
-            # TODO: Match source video fps
             # Wait for delay until next iteration
-            # Decides playback speed
-  
             cv2.waitKey(self.fps) 
 
     

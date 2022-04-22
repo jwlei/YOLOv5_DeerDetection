@@ -1,18 +1,19 @@
 from tkinter import*
 import tkinter as tk
-from input import Input
+import os
+
 
 class Gui_Setup(tk.Frame):
     """ Class to set up the initial GUI """ 
 
-    def __init__(self, root):
-        """
-        Initialization of the GUI_Setup class, which calls the setup_gui function to create
-        the GUI
-        """
+    def __init__(self, root, on_exit):
+        """ Initialization of the GUI_Setup class, which calls the setup_gui function to create the GUI """
 
         # Frame constructor from the super class
         tk.Frame.__init__(self, root)
+
+        # Load flags passed from main
+        self.on_exit = on_exit
 
         # layout reference
         self.root = root
@@ -26,7 +27,6 @@ class Gui_Setup(tk.Frame):
         Function for creating the GUI, defines buttons to create
         """
 
-        # TODO: comment btns
         # Label for image
         self.video_output = tk.Label(self)
         self.video_output.pack(side="top", fill="both", expand="yes", padx=10, pady=10) # Position
@@ -41,29 +41,19 @@ class Gui_Setup(tk.Frame):
         self.save_status.config(text="Save on detection status")
         self.save_status.pack(side="left", fill="both", expand="yes", padx=10, pady=10) # Position
 
-        # Button Video source
+        # TODO: Not functional Button Video source
         self.sourceBtn = tk.Button(self, text="Choose video source", command=self.chooseVideoSource)
         self.sourceBtn.pack(fill="both", expand=True, side="left", padx=10, pady=10) # Position
 
-        # Button Model Source
+        # TODO: Not functional Button Model Source
         self.sourceBtn = tk.Button(self, text="Choose training model", command=self.chooseModelSource)
         self.sourceBtn.pack(fill="both", expand=True, side="left", padx=10, pady=10) # Position
 
         # Button Exit
-        self.exitBtn = tk.Button(self, text="Exit program", command=self.exit)
+        self.exitBtn = tk.Button(self, text="Exit program", command=self.on_exit)
         self.exitBtn.pack(fill="both", expand=True, side="left", padx=10, pady=10) # Position
         
 
-      
-        
-
-       
-
-        # TODO: Implement snapshot saving on detection?
-        # create a button, that when pressed, will take the current frame and save it to file
-        
-
-        
     def update_gui_image(self, image):
         """ Function to update the GUI with a new image """ 
 
@@ -72,12 +62,6 @@ class Gui_Setup(tk.Frame):
 
         # Self reference to avoid garbage collection
         self.image = image
-
-    
-            
-        
-        
-
 
     # -------------------------------------------------- Button Functions --------------------------------------------------
 
@@ -98,11 +82,14 @@ class Gui_Setup(tk.Frame):
         self.save_status.config(text="NOT SAVING ON DETECTION", bg="green")
 
 
+
  
     def chooseVideoSource(self):
         # do change source
         #Main.chooseVideoSource()
-        print('placeholder')
+        self.root.destroy()
+        os.startfile('main.py')
+       
 
     def chooseModelSource(self): 
         # do change source
@@ -111,10 +98,11 @@ class Gui_Setup(tk.Frame):
 
     def exit(self):
         # Do exit
+        self
         print('placeholder')
 
 
-    # -------------------------------------------------- Logic for deciding action --------------------------------------------------
+    # -------------------------------------------------- Checks for deciding indicator status --------------------------------------------------
 
     def detectionIndicator(self, detection):
         """ Function for deciding the detection warning status """ 

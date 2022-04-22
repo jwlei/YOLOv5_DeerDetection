@@ -28,7 +28,7 @@ class Input:
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
         # Print the Device used for logging purposes
-        print("\n\nDevice Used:",self.device)
+        print('[SETUP] Device Used: ',self.device)
 
         # Set default values
         # Boolean for successfully returned frame
@@ -138,8 +138,9 @@ class Input:
 
         
     def read_current_frame(self):
-        """ Function to get a single frame and it's return boolean value """
+        """ Function to get a single frame, copy it for raw photo collection, and it's return boolean value """
         # Get boolean return and frame from the video feed
+        # Try to copy the frame
         ret, frame = self.video_capture.read()
         try:
             rawFrame = frame.copy()
@@ -150,8 +151,9 @@ class Input:
 
 
     def processInputURL(self, videoSource):
-        """ Function to URL of video, if it's youtube or not """
+        """ Function to process URL of video, if it's youtube process through PAFY """
         if "youtube" in videoSource or "youtu.be" in videoSource:
+            print('[SETUP] URL supplied points to YouTube, processing ... ')
             ytLink = pafy.new(videoSource).streams[-1]
             assert ytLink is not None
             processedSource = cv2.VideoCapture(ytLink.url)
@@ -163,8 +165,7 @@ class Input:
 
 
     def saveScreen(self, rawFrame, imgLabel=None):
-        """ Function to save image from the frame """
-      
+        """ Function to save an image from the frame """
         global savedImageCounter
         global startTime
 
@@ -182,9 +183,7 @@ class Input:
                 self.savedImageCounter += 1
                 self.startTime = time.time()
                 
-                
-                
-            
+
 
     def release(self):
         """ Function to manually release the resource """
