@@ -367,3 +367,4 @@ FodyWeavers.xsd
 *.jpg
 
 /DeerDetection/media/video_testLong.mp4
+/DeerDetection/docs/log_detections.txt

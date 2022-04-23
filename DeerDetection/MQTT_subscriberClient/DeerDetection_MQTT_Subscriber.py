@@ -2,23 +2,42 @@ import paho.mqtt.client as mqtt
 import time
 import json
 import jsonschema
+import logging
 
 from jsonschema import validate
 
+""" MQTT Subscriber class """ 
+# ------------------------------ Setup ------------------------------ #
+file_log_detections = "docs/log_detections.txt"
+file_log_mqtt = "docs/log_mqtt.log"
 
+# Logging basic config for MQTT 
+logging.basicConfig(filename = file_log_mqtt, 
+                    filemode = 'w', 
+                    encoding = 'utf-8', 
+                    format = '%(message)s')
+
+console = logging.StreamHandler()
+console.setLevel(logging.INFO)
+logger = logging.getLogger('').addHandler(console)
+
+logging.warning('[MQTT Subscriber] Initializing')
+logging.warning(f'[MQTT Subscriber] MQTT Subscriber log can be found at {file_log_mqtt}')
+
+# Just getting a fresh file to write detections in
+# TODO: New log file on each run
+log_detections = open(file_log_detections, "w") # "a" if we rather want to append
+log_detections.write('')
+log_detections.close()
 
 # Init the subscriber
 mqttBroker = "mqtt.eclipseprojects.io"
+topic = "DEER_DETECTION"
 client = mqtt.Client("Subscriber")
 client.connect(mqttBroker)
 
 currentTimeStamp = None
 currentDetectionCount = None
-
-# Just getting a fresh file to write
-deerLog = open("log.txt", "w")
-deerLog.write('')
-deerLog.close()
 
 # Validation schema
 detectionSchema = {
@@ -30,6 +49,8 @@ detectionSchema = {
             "detectedCount": {"type": "number"},
         },
 }
+
+# ------------------------------ Logic ------------------------------ #
 
 def validateJson(msg):
     """ Function to validate incoming messages against a predefined schema """ 
@@ -47,7 +68,7 @@ def on_message(client, userdata, message):
     jsonToDecode = None
     isValid = False
 
-    deerLog = open("log.txt", "a") # "a" add to file, "w" overwrite
+    log_detections = open(file_log_detections, "a") # "a" add to file, "w" overwrite
     
 
     # Decode the message from an MQTT object to a string
@@ -56,9 +77,7 @@ def on_message(client, userdata, message):
     # Try to check if the json data can be loaded and validated
     try: 
         msg = json.loads(decodedMessage)
-        isValid = validateJson(msg)
-        
-        
+        isValid = validateJson(msg) 
     except:
         pass
 
@@ -72,27 +91,33 @@ def on_message(client, userdata, message):
             freshTimeStamp = msg["time"]
             freshDetectionCount = msg["detectedCount"]
 
-            if (currentTimeStamp != freshTimeStamp) or (currentDetectionCount != freshDetectionCount):
+            # Only log/print if there is a difference in detection and a second has passed
+            if (currentTimeStamp != freshTimeStamp) or (currentDetectionCount != freshDetectionCount) and freshDetectionCount != 0:
                 currentTimeStamp = freshTimeStamp
                 currentDetectionCount = freshDetectionCount
 
                 #print(decodedMessage) # Prints JSON-syntax representation of the message
                 print(msg) # Prints single line representation of the JSON
-                deerLog.write(str(msg)) # Write to log file
-                deerLog.write('\n')
-                deerLog.close()
+                log_detections.write(str(msg)) # Write to detections log file
                 
-
+                log_detections.write('\n')
+                log_detections.close()
             else:
                 break
                 
+def loop():
+    logging.warning('[MQTT Subscriber] Client loop started')
+    client.loop_start()        
+    client.subscribe(topic)
+    logging.warning(f'[MQTT Subscriber] Subscribed to: {topic}')
+    
+    client.on_message = on_message
 
+    #Timeout
+    time.sleep(100000)
+    client.loop_end() 
+    
 
-
-# Run the subscriber loop
-client.loop_start()        
-print('[MQTT Subscriber] Client running and subscribed to "DEER_DETECTION"')
-client.subscribe("DEER_DETECTION")
-client.on_message = on_message 
-time.sleep(100000)
-client.loop_end()  
+# ------------------------------ Launch ------------------------------ #
+logging.warning(f'[MQTT Subscriber] Setup complete, detections are logged to {file_log_detections}')
+loop()
