@@ -131,7 +131,7 @@ defaultModelSource = 'model/defaultModel.pt'
 # Launch the program with the following parameters
 if __name__ == "__main__":
         #videoSource = "https://www.youtube.com/watch?v=8SDm48ieYP8"
-        videoSource = 'test.mp4'
+        videoSource = 'media/video_test.mp4'
         if not model_exists:
             print('[SETUP]: Default model not present, fetching ...')
             modelSource = StartupSetup.downloadModel(defaultModelUrl)

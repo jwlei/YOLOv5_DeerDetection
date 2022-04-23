@@ -60,7 +60,7 @@ def on_message(client, userdata, message):
         
         
     except:
-        print(' ... Waiting for data ... ')
+        pass
 
     # If the data is valid, get unique timestamp to avoid spam
     if isValid:

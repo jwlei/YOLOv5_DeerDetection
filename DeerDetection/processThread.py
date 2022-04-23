@@ -49,7 +49,7 @@ class ProcessThread(threading.Thread):
         # Convert float FPS number to INT for cv2 waitkey
         # Floor vs roof, decided to use floor so we dont process more frames than we have
         self.fps = math.floor(fps)
-        print('[THREAD] FPS set to: ', self.fps)
+        print('[SETUP] FPS set to: ', self.fps)
        
 
         # Initialize a reference for the callback queue
@@ -111,7 +111,7 @@ class ProcessThread(threading.Thread):
             # If the return value of the input_instance is false, display no_input
             if(ret == False):
                 noInput = True
-                self.gui.update_output_image(ImageTk.PhotoImage(Image.open('media/no_input.jpg')))
+                self.gui.update_output_image(ImageTk.PhotoImage(Image.open('media/image_no-input.jpg')))
                 self.gui.update_title('No input')
             else:
                 noInput = False
