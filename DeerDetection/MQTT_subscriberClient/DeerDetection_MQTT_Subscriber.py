@@ -12,8 +12,8 @@ file_log_detections = "docs/log_detections.txt"
 file_log_mqtt = "docs/log_mqtt.log"
 
 # Logging basic config for MQTT 
-logging.basicConfig(filename = file_log_mqtt, 
-                    filemode = 'w', 
+logging.basicConfig(filename = file_log_mqtt, # Log to fresh file
+                    filemode = 'w',           # every launch
                     encoding = 'utf-8', 
                     format = '%(message)s')
 
@@ -25,7 +25,7 @@ logging.warning('[MQTT Subscriber] Initializing')
 logging.warning(f'[MQTT Subscriber] MQTT Subscriber log can be found at {file_log_mqtt}')
 
 # Just getting a fresh file to write detections in
-# TODO: New log file on each run
+# TODO: New log file on each run (?)
 log_detections = open(file_log_detections, "w") # "a" if we rather want to append
 log_detections.write('')
 log_detections.close()
@@ -55,8 +55,7 @@ detectionSchema = {
 def validateJson(msg):
     """ Function to validate incoming messages against a predefined schema """ 
     try:
-        validate(instance=msg, schema=detectionSchema)
-        
+        validate(instance=msg, schema=detectionSchema) 
     except jsonschema.exceptions.ValidationError as err:
         return False
     return True
@@ -69,7 +68,6 @@ def on_message(client, userdata, message):
     isValid = False
 
     log_detections = open(file_log_detections, "a") # "a" add to file, "w" overwrite
-    
 
     # Decode the message from an MQTT object to a string
     decodedMessage = message.payload.decode("utf-8")
@@ -99,16 +97,17 @@ def on_message(client, userdata, message):
                 #print(decodedMessage) # Prints JSON-syntax representation of the message
                 print(msg) # Prints single line representation of the JSON
                 log_detections.write(str(msg)) # Write to detections log file
-                
                 log_detections.write('\n')
-                log_detections.close()
             else:
                 break
+        log_detections.close()
                 
+
 def loop():
     logging.warning('[MQTT Subscriber] Client loop started')
     client.loop_start()        
     client.subscribe(topic)
+
     logging.warning(f'[MQTT Subscriber] Subscribed to: {topic}')
     
     client.on_message = on_message
