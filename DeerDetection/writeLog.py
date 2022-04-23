@@ -1,8 +1,9 @@
 import logging
 
 class Logger:
+    """ Class to handle logging in application """ 
     def __init__():
-        """ Logger class """ 
+        
         # TODO: Implement logging
 
         return

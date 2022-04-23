@@ -17,7 +17,7 @@ from startupsetup import StartupSetup
 class Main:
     """ The main application class which is ran """ 
 
-    def __init__(self, title, videoSource, modelSource, forceReload, captureDetection, detectionThreshold):
+    def __init__(self, videoSource, modelSource, forceReload, captureDetection, detectionThreshold):
         """ Initialization of the main class """ 
         self.sourceTitle = videoSource
         
