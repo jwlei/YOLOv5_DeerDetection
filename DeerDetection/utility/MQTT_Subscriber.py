@@ -103,20 +103,17 @@ def on_message(client, userdata, message):
         log_detections.close()
                 
 
-def loop():
-    logging.warning('[MQTT Subscriber] Client loop started')
-    client.loop_start()        
-    client.subscribe(topic)
+logging.warning('[MQTT Subscriber] Client loop started')
+client.loop_start()        
+client.subscribe(topic)
 
-    logging.warning(f'[MQTT Subscriber] Subscribed to: {topic}')
-    
-    client.on_message = on_message
+logging.warning(f'[MQTT Subscriber] Subscribed to: {topic}')
+logging.warning(f'[MQTT Subscriber] Setup complete, detections are logged to {file_log_detections}')
+client.on_message = on_message
 
-    #Timeout
-    time.sleep(100000)
-    client.loop_end() 
+#Timeout
+time.sleep(100000)
+client.loop_end() 
     
 
 # ------------------------------ Launch ------------------------------ #
-logging.warning(f'[MQTT Subscriber] Setup complete, detections are logged to {file_log_detections}')
-loop()

@@ -1,5 +1,5 @@
 import cv2
-import pafy
+import pafy # pip install youtube-dl==2020.12.2
 import torch
 import time
 from pathlib import Path
