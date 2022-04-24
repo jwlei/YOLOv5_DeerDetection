@@ -1,0 +1,22 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32228.343
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{888888A0-9F3D-457C-B088-3A5042F75D52}") = "DeerDetection", "DeerDetection\DeerDetection.pyproj", "{1743BD19-5857-47BD-986A-C31174D4A18D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1743BD19-5857-47BD-986A-C31174D4A18D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1743BD19-5857-47BD-986A-C31174D4A18D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0E07C3BB-AC6E-44DD-8646-D88F4BA9F681}
+	EndGlobalSection
+EndGlobal

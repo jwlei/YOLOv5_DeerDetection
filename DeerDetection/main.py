@@ -3,7 +3,6 @@ import subprocess
 import os
 import cv2
 
-from typing import DefaultDict
 from sys import executable
 from subprocess import Popen, CREATE_NEW_CONSOLE
 
