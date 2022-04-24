@@ -14,7 +14,7 @@ from app_view.startup_setup import Setup
 
 
 class Main:
-    """ The main application class which is ran """ 
+    """ The main application class which is ran when starting the application """ 
 
     def __init__(self, title, videoSource, modelSource, forceReload, captureDetection, detectionThreshold):
         """ Initialization of the main class """ 
