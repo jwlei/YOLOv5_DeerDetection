@@ -4,9 +4,8 @@ import torch
 import time
 from pathlib import Path
 import os
-import threading
 
-class Input:
+class Input_handler:
     """ Class for supplying and manipulating input data """ 
 
     def __init__(self, videoSource, modelSource, forceReload, captureDetection, detectionThreshold):
@@ -42,7 +41,8 @@ class Input:
         self.startTime = time.time()
         self.imgCounter = 0
         self.savedImageCounter = 0
-        self.path = Path.cwd() / 'SavedDetections'
+        # TODO: Fix path
+        self.path = Path.cwd() / 'resources/SavedDetections'
         print('[SETUP] Saved RAW images will be saved to: ', self.path)
         
 

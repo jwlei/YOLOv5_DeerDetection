@@ -1,10 +1,8 @@
 import threading
-import input
 import cv2
 import numpy
 import math
 import torch
-
 import time
 import paho.mqtt.client as mqtt
 import geocoder
@@ -13,15 +11,16 @@ import json
 
 from PIL import Image, ImageTk
 from time import time as tm
-from gui_video_output import Gui_video_output
-from input import Input
-from startupsetup import StartupSetup
+
+from app_controller.gui_output import Gui_output
+from app_model.input_handler import Input_handler
+from app_view.startup_setup import Setup
 
 newVideoSource = None
 newModelSource = None
 noInput = False
 
-class ProcessThread(threading.Thread):
+class Process(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
     def __init__(self, gui, callback_queue, videoSource, modelSource, forceReload, fps, captureDetection, detectionThreshold):
         """ Initialize the thread """
@@ -44,7 +43,7 @@ class ProcessThread(threading.Thread):
         self.captureDetection = captureDetection
         self.detectionThreshold = detectionThreshold
 
-        self.input_instance = Input(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
+        self.input_instance = Input_handler(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
 
         # Convert float FPS number to INT for cv2 waitkey
         # Floor vs roof, decided to use floor so we dont process more frames than we have
@@ -95,13 +94,13 @@ class ProcessThread(threading.Thread):
                 self.videoSource = newVideoSource
                 self.gui.update_title(self.videoSource)
                 newVideoSource = None
-                self.input_instance = Input(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
+                self.input_instance = Input_handler(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
                 print('[INFO] New video source selected: ', self.videoSource)
 
             if newModelSource is not None:
                 self.modelSource = newModelSource
                 newModelSource = None
-                self.input_instance = Input(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
+                self.input_instance = Input_handler(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
                 print('[INFO] New model source selected: ', self.modelSource)
                
             # Get a frame and return value from the input_instance
@@ -111,7 +110,7 @@ class ProcessThread(threading.Thread):
             # If the return value of the input_instance is false, display no_input
             if(ret == False):
                 noInput = True
-                self.gui.update_output_image(ImageTk.PhotoImage(Image.open('media/image_no-input.jpg')))
+                self.gui.update_output_image(ImageTk.PhotoImage(Image.open('resources/media/image_no-input.jpg')))
                 self.gui.update_title('No input')
             else:
                 noInput = False
@@ -235,13 +234,12 @@ class ProcessThread(threading.Thread):
 
     def getNewVideoSource():
         global newVideoSource
-        newVideoSource = StartupSetup.setVideoSource()
+        newVideoSource = Setup.setVideoSource()
 
     def getNewModelSource():
         global newModelSource
-        newModelSource = StartupSetup.setModelSource()
+        newModelSource = Setup.setModelSource()
 
     def getNewTitle(self):
         global newVideoSource
         self.gui.update_title(newVideoSource)
-       

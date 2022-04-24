@@ -7,7 +7,7 @@ from tkinter import filedialog
 
 
 
-class StartupSetup:
+class Setup:
 
     def setManualOrAutomatic():
         """ Decide automatic or manual setup """ 
@@ -22,7 +22,7 @@ class StartupSetup:
         if ans == 'URL':
             input = pymsgbox.prompt('Input URL of video input')
         elif ans == 'Local Media':
-            input = filedialog.askopenfilename(initialdir="/",title="Select video", filetypes=(("MP4 Files", ".mp4"), ("All files",".*")))
+            input = filedialog.askopenfilename(initialdir="resources/media",title="Select video", filetypes=(("MP4 Files", ".mp4"), ("All files",".*")))
         elif ans == 'Camera':
             input = '0'
 
@@ -38,7 +38,7 @@ class StartupSetup:
 
             if ans == 'Local':
                 pymsgbox.confirm('Choose model data (.pt)', buttons = ['OK'])
-                model = filedialog.askopenfilename(initialdir="model/",title="Select model", filetypes=(("PT Files", ".pt"), ("All files",".*")))
+                model = filedialog.askopenfilename(initialdir="resources/models/",title="Select model", filetypes=(("PT Files", ".pt"), ("All files",".*")))
                 return model
 
             elif ans == 'URL':
@@ -83,7 +83,7 @@ class StartupSetup:
 
     def downloadModel(modelUrl):
         """ Save supplied Model URL to disk """ 
-        path = 'model/'
+        path = 'resources/models/'
         filenameFromUrl = modelUrl.rpartition('/')[-1]
         path_to_check = os.path.join(path, filenameFromUrl)
         # Check if file already exists

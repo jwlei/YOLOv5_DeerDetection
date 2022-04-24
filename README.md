@@ -3,3 +3,34 @@ An application to detect wildlife in vicinity of roads in real time using video 
 
 # TODO
 Fill out the rest
+
+
+## Misc
+
+Videos used for collecting photos for model
+https://www.youtube.com/watch?v=B2jW99WWVF0
+https://www.youtube.com/watch?v=C0Ja5QsQ2uQ
+https://www.youtube.com/watch?v=4Rnr9OSNYj4
+https://www.youtube.com/watch?v=8SDm48ieYP8
+https://www.youtube.com/watch?v=BJj4OoqPmkg
+https://www.youtube.com/watch?v=zkuQI5Pp9F4
+https://www.youtube.com/watch?v=6Jq97RAkZDs
+https://www.youtube.com/watch?v=1FJcXLiuA5k
+https://www.youtube.com/watch?v=q5apMaG6mIg
+https://www.youtube.com/watch?v=6bEPd7HuW1M 
+https://www.youtube.com/watch?v=9ApLIRUd4dk 
+https://www.youtube.com/watch?v=IXpr_h1rbpQ 
+https://www.youtube.com/watch?v=mNpG5tEBTB8 
+https://www.youtube.com/watch?v=X69HPQ2R9Vs
+https://www.youtube.com/watch?v=PlN54DufHME
+
+model test download url
+https://dl.dropboxusercontent.com/s/jitj2721dah1ng8/trainedModel_v1.pt
+https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt
+default model url
+
+example youtube stream
+https://www.youtube.com/watch?v=bdEYa2oBtII
+
+Logo source:
+https://www.vecteezy.com/vector-art/585990-head-deer-animals-logo-black-silhouete-icons 23/04

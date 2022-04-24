@@ -21,7 +21,7 @@ class Gui_Setup(tk.Frame):
         
         # layout reference
         self.root = root
-        titleLogo = tk.PhotoImage(file='media/image_logo-text-76px.png')
+        titleLogo = tk.PhotoImage(file='resources/media/image_logo-text-76px.png')
         self.logo = titleLogo
         
         # init UI

@@ -1,10 +1,10 @@
 import tkinter as tk
 
-from gui_setup import Gui_Setup
-from input import Input
+from app_view.gui_setup import Gui_Setup
 
 
-class Gui_video_output:
+
+class Gui_output:
     """ Class for handling the updating of the GUI frame """ 
 
     def __init__(self, on_exit, getNewVideoSource, getNewModelSource, sourceTitle): 
@@ -14,7 +14,7 @@ class Gui_video_output:
         self.root = tk.Tk()
    
         # Window Title
-        self.root.title("Deer Detection")
+        self.root.title("Deer Detector 5000")
         # (index, weight) 
         
         
