@@ -3,11 +3,24 @@ import time
 import json
 import jsonschema
 import logging
+import tkinter as tk
 
+from tkinter import font as tkFont
 from jsonschema import validate
 
 """ MQTT Subscriber class """ 
 # ------------------------------ Setup ------------------------------ #
+alarmWindow = tk.Tk()
+alarmWindow.title("MQTT Subscriber: I'm getting a remote warning")
+alarmWindow.geometry("450x250")
+
+helvetica = tkFont.Font(family="Helvetica", size=16)
+alert_status = tk.Label(text='Waiting for input', bg='orange', font = helvetica)
+alert_status.pack(fill="both", expand=True)
+alert_Timestamp = tk.Label(bg='orange', font = helvetica)
+alert_Timestamp.pack(fill="both", expand=True)
+
+
 file_log_detections = "docs/log_detections.txt"
 file_log_mqtt = "docs/log_mqtt.log"
 
@@ -84,6 +97,8 @@ def on_message(client, userdata, message):
 
         freshTimeStamp = None
         freshDetectionCount = None
+        lastDetectedTimeStamp = None
+        lastDetectedText = None
 
         for value in msg:
             freshTimeStamp = msg["time"]
@@ -94,11 +109,21 @@ def on_message(client, userdata, message):
                 currentTimeStamp = freshTimeStamp
                 currentDetectionCount = freshDetectionCount
 
+                if msg["detected"]:
+                    alert_status.config(bg="red", text="DETECTED")
+                    alert_Timestamp.config(bg="red", text=f'{freshTimeStamp}')
+                    lastDetectedTimeStamp = freshTimeStamp
+                else:
+                    alert_status.config(bg="green", text="NO DETECTION")
+                    alert_Timestamp.config(bg="green", text = f'Last detection occured at {lastDetectedTimeStamp}')
+                    
+
                 #print(decodedMessage) # Prints JSON-syntax representation of the message
                 print(msg) # Prints single line representation of the JSON
                 log_detections.write(str(msg)) # Write to detections log file
                 log_detections.write('\n')
             else:
+                
                 break
         log_detections.close()
                 
@@ -110,10 +135,7 @@ client.subscribe(topic)
 logging.warning(f'[MQTT Subscriber] Subscribed to: {topic}')
 logging.warning(f'[MQTT Subscriber] Setup complete, detections are logged to {file_log_detections}')
 client.on_message = on_message
-
+alarmWindow.mainloop()
 #Timeout
 time.sleep(100000)
 client.loop_end() 
-    
-
-# ------------------------------ Launch ------------------------------ #
