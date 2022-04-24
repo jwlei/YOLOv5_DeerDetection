@@ -40,7 +40,7 @@ class Gui_Setup(tk.Frame):
                             column = 0, columnspan = 1, 
                             sticky="NESW")
         # Title source label
-        self.titleLabel = tk.Label(self, font = helvetica, wraplength = 700)
+        self.titleLabel = tk.Label(self, font = helvetica, wraplength = 300)
         self.titleLabel.grid(row = 0, 
                              column = 1, columnspan = 3, 
                              padx=50, 
@@ -94,17 +94,21 @@ class Gui_Setup(tk.Frame):
     def detectionIndicator(self, detection):
         """ Function for deciding the detection warning status """ 
         if detection:
-            self.alert_status.config(bg="red")
+            self.alert_status.config(text = "DETECTED", 
+                                     bg="red")
         else:
-            self.alert_status.config(bg="green")
+            self.alert_status.config(text = "NO DETECTIONS", 
+                                     bg="green")
 
 
     def savingIndicator(self, saveDetections):
         """ Function for deciding the detection warning status """ 
         if saveDetections:
-            self.save_status.config(text="SAVING ON DETECTION", bg="red")
+            self.save_status.config(text="SAVING ON DETECTION", 
+                                    bg="red")
         else:
-            self.save_status.config(text="NOT SAVING ON DETECTION", bg="green")
+            self.save_status.config(text="NOT SAVING ON DETECTION", 
+                                    bg="green")
 
 
     def update_source_title(self, title):
@@ -112,6 +116,7 @@ class Gui_Setup(tk.Frame):
 
         self.titleLabel.configure(text='Input source: '+ title)
         self.title = title # Garbage reference
+
 
     def update_gui_image(self, image):
         """ Function to update the GUI image label with a new image """ 

@@ -43,7 +43,11 @@ class Process(threading.Thread):
         self.captureDetection = captureDetection
         self.detectionThreshold = detectionThreshold
 
-        self.input_instance = Input_handler(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
+        self.input_instance = Input_handler(self.videoSource, 
+                                            self.modelSource, 
+                                            self.forceReload, 
+                                            self.captureDetection, 
+                                            self.detectionThreshold)
 
         # Convert float FPS number to INT for cv2 waitkey
         # Floor vs roof, decided to use floor so we dont process more frames than we have
@@ -94,13 +98,21 @@ class Process(threading.Thread):
                 self.videoSource = newVideoSource
                 self.gui.update_title(self.videoSource)
                 newVideoSource = None
-                self.input_instance = Input_handler(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
+                self.input_instance = Input_handler(self.videoSource, 
+                                                    self.modelSource, 
+                                                    self.forceReload, 
+                                                    self.captureDetection, 
+                                                    self.detectionThreshold)
                 print('[INFO] New video source selected: ', self.videoSource)
 
             if newModelSource is not None:
                 self.modelSource = newModelSource
                 newModelSource = None
-                self.input_instance = Input_handler(self.videoSource, self.modelSource, self.forceReload, self.captureDetection, self.detectionThreshold)
+                self.input_instance = Input_handler(self.videoSource, 
+                                                    self.modelSource, 
+                                                    self.forceReload, 
+                                                    self.captureDetection, 
+                                                    self.detectionThreshold)
                 print('[INFO] New model source selected: ', self.modelSource)
                
             # Get a frame and return value from the input_instance
@@ -118,14 +130,16 @@ class Process(threading.Thread):
             if not noInput:
             # If the callback_queue is not full, put the current frame into the queue for execution of the thread
                 if self.callback_queue.full() == False:
-                    self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.rawFrame, self.gui)))
+                    self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, 
+                                                                                     self.rawFrame, 
+                                                                                     self.gui)))
 
                 # If the callback_queue is full, remove the item in the queue and put the current frame into the queue for execution of the thread
                 elif self.callback_queue.full() == True:
                     self.callback_queue.get()
-                    self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.rawFrame, self.gui)))
-
-
+                    self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, 
+                                                                                     self.rawFrame, 
+                                                                                     self.gui)))
 
             # Publish the JSON list through MQTT
             self.client.publish("DEER_DETECTION", self.jsonMessage)
@@ -148,32 +162,20 @@ class Process(threading.Thread):
         detected = None
         detectedCount = 0
         currentTime = None
-
-        # Assign a start time to calculate and output FPS(frames per second) on the screen
-        #start_time = tm()
         
         # Score the frame and get the labels and coordinates from the current frame
         labels, cord = self.input_instance.predict_with_model(current_frame)
         prediction = labels, cord
 
-        # Plot graphics for the current frame
-
+        # Plot bounding box and label to the frame
         frame, detected, detectedCount = self.input_instance.plot_frame(prediction, current_frame, rawFrame)
 
-        # Assign end time to calculate and output FPS(frames per second) on the screen
-        #end_time = tm()
-
-        # Calculate the frames per second
-        #onScreenFps = 1/numpy.round(end_time - start_time, 3)
-
-        # Plot the frames per second unto the image
-        #cv2.putText(frame, f'FPS: {int(onScreenFps)}', (20,70), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0,255,0), 2)
 
         # Convert the frame to RGB
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Resize the frame to dimensions width, height
-        #frame = cv2.resize(frame, (640, 480))
+        frame = cv2.resize(frame, (640, 480))
 
         # Convert the image from array to PIL in order to show it using tkinter
         image = Image.fromarray(frame)
@@ -182,30 +184,25 @@ class Process(threading.Thread):
         image = ImageTk.PhotoImage(image)
 
 
-
         # Update the output image with the current image
         gui.update_output_image(image)
-        
         # Update the current alarm status
         gui.update_alarm_status(detected)
 
 
+        # JSON MQTT Message
         # Location is gotten in the initialization
-     
-        # Current Time
         currTimePreFormat = time.localtime()
-        self.currentTime = time.strftime('%Y-%m-%d %H:%M:%S', currTimePreFormat)
-
-        # Set detection status for MQTT
-        self.set_detected(detected)
-        
-            
-
-        # Set counter for how many animals detected
-        self.set_detectedCount(detectedCount)
+        self.currentTime = time.strftime('%Y-%m-%d %H:%M:%S', currTimePreFormat) # Current Time
+        self.set_detected(detected) # Set detection status for MQTT
+        self.set_detectedCount(detectedCount) # Set counter for how many animals detected
 
         # Creating a json message to send with MQTT
-        self.jsonMessage = json.dumps({'time' : self.currentTime, 'location' : self.currentLocation,  'detected' : self.detected, 'detectedCount' : self.detectedCount}, indent = 4)
+        self.jsonMessage = json.dumps({'time' : self.currentTime, 
+                                       'location' : self.currentLocation,  
+                                       'detected' : self.detected, 
+                                       'detectedCount' : self.detectedCount}, 
+                                      indent = 4)
 
         
     def __del__(self):
@@ -233,13 +230,16 @@ class Process(threading.Thread):
         return self.detected
 
     def getNewVideoSource():
+        """ Function to get a new video source while running """ 
         global newVideoSource
         newVideoSource = Setup.setVideoSource()
 
     def getNewModelSource():
+        """ Function to get a new model source while running """
         global newModelSource
         newModelSource = Setup.setModelSource()
 
     def getNewTitle(self):
+        """ Function to get a new title from the video source while running """
         global newVideoSource
         self.gui.update_title(newVideoSource)

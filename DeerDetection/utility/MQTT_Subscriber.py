@@ -9,18 +9,24 @@ from tkinter import font as tkFont
 from jsonschema import validate
 
 """ MQTT Subscriber class """ 
-# ------------------------------ Setup ------------------------------ #
+# ------------------------------ GUI ------------------------------ #
 alarmWindow = tk.Tk()
 alarmWindow.title("MQTT Subscriber: I'm getting a remote warning")
 alarmWindow.geometry("450x250")
 
 helvetica = tkFont.Font(family="Helvetica", size=16)
-alert_status = tk.Label(text='Waiting for input', bg='orange', font = helvetica)
+alert_status = tk.Label(text='Waiting for input', 
+                        bg='orange', 
+                        font = helvetica)
 alert_status.pack(fill="both", expand=True)
-alert_Timestamp = tk.Label(bg='orange', font = helvetica)
+
+alert_Timestamp = tk.Label(bg='orange', 
+                           font = helvetica, 
+                           wraplength = 400)
 alert_Timestamp.pack(fill="both", expand=True)
 
 
+# ------------------------------ Logging ------------------------------ #
 file_log_detections = "docs/log_detections.txt"
 file_log_mqtt = "docs/log_mqtt.log"
 
@@ -43,7 +49,7 @@ log_detections = open(file_log_detections, "w") # "a" if we rather want to appen
 log_detections.write('')
 log_detections.close()
 
-# Init the subscriber
+# ------------------------------ MQTT Subscriber client ------------------------------ #
 mqttBroker = "mqtt.eclipseprojects.io"
 topic = "DEER_DETECTION"
 client = mqtt.Client("Subscriber")
@@ -51,22 +57,25 @@ client.connect(mqttBroker)
 
 currentTimeStamp = None
 currentDetectionCount = None
+lastDetectedTimeStamp = None
 
-# Validation schema
-detectionSchema = {
-        "type": "object",
-        "properties": {
-            "time": {"type": "string"},
-            "location": {"type": "string"},
-            "detected": {"type": "boolean"},
-            "detectedCount": {"type": "number"},
-        },
-}
+
 
 # ------------------------------ Logic ------------------------------ #
 
 def validateJson(msg):
-    """ Function to validate incoming messages against a predefined schema """ 
+    """ Function to validate incoming messages against a predefined schema """
+    # Validation schema
+    detectionSchema = {
+            "type": "object",
+            "properties": {
+                "time": {"type": "string"},
+                "location": {"type": "string"},
+                "detected": {"type": "boolean"},
+                "detectedCount": {"type": "number"},
+            },
+    }
+
     try:
         validate(instance=msg, schema=detectionSchema) 
     except jsonschema.exceptions.ValidationError as err:
@@ -77,6 +86,7 @@ def on_message(client, userdata, message):
     """ On message recieved do: """
     global currentTimeStamp
     global currentDetectionCount
+    global lastDetectedTimeStamp
     jsonToDecode = None
     isValid = False
 
@@ -97,8 +107,6 @@ def on_message(client, userdata, message):
 
         freshTimeStamp = None
         freshDetectionCount = None
-        lastDetectedTimeStamp = None
-        lastDetectedText = None
 
         for value in msg:
             freshTimeStamp = msg["time"]
@@ -113,11 +121,13 @@ def on_message(client, userdata, message):
                     alert_status.config(bg="red", text="DETECTED")
                     alert_Timestamp.config(bg="red", text=f'{freshTimeStamp}')
                     lastDetectedTimeStamp = freshTimeStamp
+
                 else:
                     alert_status.config(bg="green", text="NO DETECTION")
-                    alert_Timestamp.config(bg="green", text = f'Last detection occured at {lastDetectedTimeStamp}')
+                    alert_Timestamp.config(bg="green")
+                    if lastDetectedTimeStamp is not None:
+                        alert_Timestamp.config(bg="green", text = f'Last detection occured at {lastDetectedTimeStamp}')
                     
-
                 #print(decodedMessage) # Prints JSON-syntax representation of the message
                 print(msg) # Prints single line representation of the JSON
                 log_detections.write(str(msg)) # Write to detections log file
@@ -128,14 +138,18 @@ def on_message(client, userdata, message):
         log_detections.close()
                 
 
-logging.warning('[MQTT Subscriber] Client loop started')
-client.loop_start()        
-client.subscribe(topic)
+# ------------------------------ Run the client ------------------------------ #
 
+client.loop_start() 
+logging.warning('[MQTT Subscriber] Client loop started')
+client.subscribe(topic)
 logging.warning(f'[MQTT Subscriber] Subscribed to: {topic}')
-logging.warning(f'[MQTT Subscriber] Setup complete, detections are logged to {file_log_detections}')
+
 client.on_message = on_message
+
 alarmWindow.mainloop()
+logging.warning(f'[MQTT Subscriber] Setup complete, detections are logged to {file_log_detections}')
+
 #Timeout
 time.sleep(100000)
 client.loop_end() 

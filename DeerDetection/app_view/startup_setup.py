@@ -11,18 +11,24 @@ class Setup:
 
     def setManualOrAutomatic():
         """ Decide automatic or manual setup """ 
-        ans = pymsgbox.confirm('Please choose Automatic or Manual setup', 'DeerDetection Setup', buttons = ['Automatic', 'Manual', 'Gather images'])
+        ans = pymsgbox.confirm('Please choose Automatic or Manual setup', 
+                               'DeerDetection Setup', 
+                               buttons = ['Automatic', 'Manual', 'Gather images'])
         return ans
 
 
     def setVideoSource():
         """ Choose local or remote video source """
-        ans = pymsgbox.confirm('Please choose your source for video', 'Pick video source', buttons = ['URL', 'Local Media', 'Camera'])
+        ans = pymsgbox.confirm('Please choose your source for video', 
+                               'Pick video source', 
+                               buttons = ['URL', 'Local Media', 'Camera'])
 
         if ans == 'URL':
             input = pymsgbox.prompt('Input URL of video input')
         elif ans == 'Local Media':
-            input = filedialog.askopenfilename(initialdir="resources/media",title="Select video", filetypes=(("MP4 Files", ".mp4"), ("All files",".*")))
+            input = filedialog.askopenfilename(initialdir="resources/media",
+                                               title="Select video", 
+                                               filetypes=(("MP4 Files", ".mp4"), ("All files",".*")))
         elif ans == 'Camera':
             input = '0'
 
@@ -31,14 +37,22 @@ class Setup:
   
     def setModelSource():
         """ Choose model source """
-        ans = pymsgbox.confirm('Use default or user-defined model?', 'Selecting model', buttons = ['Default', 'User-defined'])
+        ans = pymsgbox.confirm('Use default or user-defined model?', 
+                               'Selecting model', 
+                               buttons = ['Default', 'User-defined'])
+
         if ans == 'User-defined':
-            
-            ans = pymsgbox.confirm('Local or remote model?', 'Selecting model', buttons = ['Local', 'URL'])
+            ans = pymsgbox.confirm('Local or remote model?', 
+                                   'Selecting model', 
+                                   buttons = ['Local', 'URL'])
 
             if ans == 'Local':
-                pymsgbox.confirm('Choose model data (.pt)', buttons = ['OK'])
-                model = filedialog.askopenfilename(initialdir="resources/models/",title="Select model", filetypes=(("PT Files", ".pt"), ("All files",".*")))
+                pymsgbox.confirm('Choose model data (.pt)', 
+                                 buttons = ['OK'])
+
+                model = filedialog.askopenfilename(initialdir="resources/models/",
+                                                   title="Select model", 
+                                                   filetypes=(("PT Files", ".pt"), ("All files",".*")))
                 return model
 
             elif ans == 'URL':
@@ -53,7 +67,9 @@ class Setup:
 
     def setForceReload():
         """ Choose force reload of pyTorch cache on or off """
-        ans = pymsgbox.confirm('Reload the pyTorch cache', 'DeerDetection Setup', buttons = ['No', 'Yes'])
+        ans = pymsgbox.confirm('Reload the pyTorch cache', 
+                               'DeerDetection Setup', 
+                               buttons = ['No', 'Yes'])
 
         if ans == 'Yes':
             reloadBoolean = True
@@ -65,7 +81,9 @@ class Setup:
 
     def setCaptureDetection():
         """ Choose if detections should be captured """ 
-        ans = pymsgbox.confirm('Save detection images?', 'DeerDetection Setup', buttons = ['Save', 'Don\'t save'])
+        ans = pymsgbox.confirm('Save detection images?', 
+                               'DeerDetection Setup', 
+                               buttons = ['Save', 'Don\'t save'])
 
         if ans == 'Yes':
             captureBoolean = True
@@ -77,6 +95,7 @@ class Setup:
 
     def setDetectionThreshold():
         threshold = pymsgbox.prompt('Input detection confidence threshold (0.0-1.0)')
+        # TODO: Assert that float number is correct
 
         return threshold
 
@@ -102,12 +121,12 @@ class Setup:
         path_filename = os.path.join(path, filename)
 
         # Download the file and save to disk 
-        r = requests.get(modelUrl, stream=True)
+        response = requests.get(modelUrl, stream=True)
   
-        with requests.get(modelUrl, stream=True) as r:
+        with requests.get(modelUrl, stream=True) as response:
             with open(path_filename, 'wb') as file:
                 print('[SETUP] Downloading remote model file ... ')
-                shutil.copyfileobj(r.raw, file)
+                shutil.copyfileobj(response.raw, file)
                     
         print('[SETUP] '+filename+' download complete and saved to '+path)
 

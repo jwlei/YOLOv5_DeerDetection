@@ -7,15 +7,19 @@ from app_view.gui_setup import Gui_Setup
 class Gui_output:
     """ Class for handling the updating of the GUI frame """ 
 
-    def __init__(self, on_exit, getNewVideoSource, getNewModelSource, sourceTitle): 
+    def __init__(self, on_exit, sourceTitle, title, getNewVideoSource, getNewModelSource): 
         """ Initialization of the video output """ 
 
         #initialize the gui toolkit
         self.root = tk.Tk()
-   
-        # Window Title
-        self.root.title("Deer Detector 5000")
-        # (index, weight) 
+        
+        # Setup values
+        device_w = int(self.root.winfo_screenwidth()/2)
+        device_h = int(self.root.winfo_screenheight()/2)
+        self.root.title(title)
+        #self.root.geometry(f'{device_w}x{device_h}')
+        
+        
         
         
         # Initialize the Gui by calling the Gui_setup class

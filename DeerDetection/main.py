@@ -2,6 +2,7 @@ import queue
 import subprocess
 import os
 import cv2
+import math
 
 from sys import executable
 from subprocess import Popen, CREATE_NEW_CONSOLE
@@ -28,17 +29,30 @@ class Main:
         # Initialization of default values
         # Reference for current_frame
         self.current_frame = None
-        # Get and set FPS for the video_source
-        self.fps = self.getFps()
         # New video source reference
         self.newVideoSource = None
+
+        # Get and set FPS for the video_source
+        self.fps = self.getFps()
         # Initialize the delay in which the callback waits for re-execution
-        self.callbackUpdateDelay = 1
+        self.callbackUpdateDelay = 1 # math.floor(1000/self.fps)
         
         # Initialize the GUI by calling the Gui_video_output
-        self.gui = Gui_output(self.on_exit, Process.getNewVideoSource, Process.getNewModelSource, self.sourceTitle)
+        self.gui = Gui_output(self.on_exit, 
+                              self.sourceTitle,
+                              title,
+                              Process.getNewVideoSource, 
+                              Process.getNewModelSource)
+
         # Initialize a thread which fetches the Video input
-        self.process_thread = Process(self.gui, self.callback_queue, videoSource, modelSource, forceReload, self.fps, captureDetection, detectionThreshold)
+        self.process_thread = Process(self.gui, 
+                                      self.callback_queue, 
+                                      videoSource, 
+                                      modelSource, 
+                                      forceReload, 
+                                      self.fps, 
+                                      captureDetection, 
+                                      detectionThreshold)
         
         # Callback for when GUI window get's closed.
         self.gui.root.protocol("WM_DELETE_WINDOW", self.on_exit)
@@ -121,7 +135,7 @@ class Main:
             
         
 
-
+# TODO: Replace with config file stuff
 # ------------------------------------------ Launch configuration ------------------------------------------ #
 defaultModelUrl = 'https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt'
 defaultModelSource = 'resources/models/defaultModel.pt'
@@ -186,6 +200,8 @@ elif pick == 'Manual':
 
     main.launch()
 
+# Mode for gathering images for further training of model
+# TODO: User defined interval on pictures saved
 elif pick == 'Gather images':
     print('[SETUP] Image collection setup initiated')
 
@@ -203,7 +219,7 @@ elif pick == 'Gather images':
     print('[SETUP] SAVING DETECTIONS: ', captureDetection)
     print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
 
-    main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
+    main = Main("Deer Detection [Image Collection]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
 
     main.launch()
 

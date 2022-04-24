@@ -2,8 +2,10 @@ import cv2
 import pafy # pip install youtube-dl==2020.12.2
 import torch
 import time
-from pathlib import Path
+import numpy as np
 import os
+
+from pathlib import Path
 
 class Input_handler:
     """ Class for supplying and manipulating input data """ 
@@ -41,27 +43,30 @@ class Input_handler:
         self.startTime = time.time()
         self.imgCounter = 0
         self.savedImageCounter = 0
-        # TODO: Fix path
+        # TODO: Fix path?
         self.path = Path.cwd() / 'resources/SavedDetections'
         print('[SETUP] Saved RAW images will be saved to: ', self.path)
         
 
         # Process and set the videoSource
         self.video_capture = self.processInputPath(videoSource)
+        
 
-    
     def load_model(self):
         """ Function to load the YOLOv5 model from the pyTorch GitHub when not implemented locally """ 
         try:
-            model = torch.hub.load('ultralytics/yolov5', 'custom', path=self.modelSource, force_reload=self.forceReload)
+            model = torch.hub.load('ultralytics/yolov5', 
+                                   'custom', 
+                                   path=self.modelSource, 
+                                   force_reload=self.forceReload)
         except Exception:
-            model = torch.hub.load('ultralytics/yolov5', 'custom', path=self.modelSource, force_reload=True)
-        
-        # Set custom parameters for the model
-        # Set confidence limit to 0.75
-        #model.conf = 0.75
+            model = torch.hub.load('ultralytics/yolov5', 
+                                   'custom', 
+                                   path=self.modelSource, 
+                                   force_reload=True)
         return model
     
+
     def predict_with_model(self, frame):
         """ Function to score a frame with the model """ 
 
@@ -98,7 +103,7 @@ class Input_handler:
         # Color of the box
         background_color = (0, 0, 255)
         # Color of the text
-        text_color = (0, 255, 0)
+        text_color = (255, 255, 255)
 
         # Grab the labels and coordinates from the results 
         labels, coordinates = prediction
@@ -131,13 +136,22 @@ class Input_handler:
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
                 
                 # Plot bounding box
-                cv2.rectangle(frame, (x1, y1), (x2, y2), background_color, 2)
+                cv2.rectangle(frame, 
+                              (x1, y1), (x2, y2), 
+                              background_color, 2)
 
                 # Plot label
-                cv2.putText(frame, self.label_toString(labels[i]), (x1, y1), cv2.FONT_HERSHEY_SIMPLEX, 1.1, text_color, 4)
+                w, h = 190, 40
+                cv2.rectangle(frame,
+                              (x1, y1), (x1 + w, y1 - h),
+                              background_color,
+                              -1)
 
-                # Plot confidence value
-                cv2.putText(frame, str("%.2f" % confidenceValue.item()), (x2, y1), cv2.FONT_HERSHEY_SIMPLEX, 1.1, text_color, 4)
+                cv2.putText(frame, 
+                            self.label_toString(labels[i]).upper()+' '+str("%.2f" % confidenceValue.item()), 
+                            (x1, y1-10), 
+                            cv2.FONT_HERSHEY_SIMPLEX, 1, text_color, 2)
+
             else:
                 detection = False
 
@@ -161,7 +175,7 @@ class Input_handler:
     def processInputPath(self, videoSource):
         """ Function to process URL of video, if it's youtube process through PAFY """
         if "youtube" in videoSource or "youtu.be" in videoSource:
-            print('[SETUP] URL supplied points to YouTube, processing ... ')
+            print('[SETUP] URL supplied is a YouTube-link, processing ... ')
             ytLink = pafy.new(videoSource).streams[-1]
             assert ytLink is not None
             processedSource = cv2.VideoCapture(ytLink.url) 
@@ -187,7 +201,6 @@ class Input_handler:
                 cv2.imwrite(os.path.join(self.path, imgLabel), rawFrame)
                 self.savedImageCounter += 1
                 self.startTime = time.time()
-                
 
 
     def release(self):
