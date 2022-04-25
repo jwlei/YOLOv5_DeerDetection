@@ -22,7 +22,7 @@ noInput = False
 
 class Process(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
-    def __init__(self, gui, callback_queue, videoSource, modelSource, forceReload, fps, captureDetection, detectionThreshold):
+    def __init__(self, gui, callback_queue, videoSource, modelSource, forceReload, fps, captureDetection, captureFrequency, detectionThreshold):
         """ Initialize the thread """
 
         # Call the super class constructor
@@ -41,12 +41,14 @@ class Process(threading.Thread):
         self.modelSource = modelSource
         self.forceReload = forceReload
         self.captureDetection = captureDetection
+        self.captureFrequency = captureFrequency
         self.detectionThreshold = detectionThreshold
 
         self.input_instance = Input_handler(self.videoSource, 
                                             self.modelSource, 
                                             self.forceReload, 
-                                            self.captureDetection, 
+                                            self.captureDetection,
+                                            self.captureFrequency,
                                             self.detectionThreshold)
 
         # Convert float FPS number to INT for cv2 waitkey
@@ -101,7 +103,8 @@ class Process(threading.Thread):
                 self.input_instance = Input_handler(self.videoSource, 
                                                     self.modelSource, 
                                                     self.forceReload, 
-                                                    self.captureDetection, 
+                                                    self.captureDetection,
+                                                    self.captureFrequency,
                                                     self.detectionThreshold)
                 print('[INFO] New video source selected: ', self.videoSource)
                 newVideoSource = None
@@ -110,8 +113,9 @@ class Process(threading.Thread):
                 self.modelSource = newModelSource
                 self.input_instance = Input_handler(self.videoSource, 
                                                     self.modelSource, 
-                                                    self.forceReload, 
-                                                    self.captureDetection, 
+                                                    self.forceReload,
+                                                    self.captureDetection,
+                                                    self.captureFrequency,
                                                     self.detectionThreshold)
                 print('[INFO] New model source selected: ', self.modelSource)
                 newModelSource = None

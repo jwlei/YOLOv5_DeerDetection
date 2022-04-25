@@ -10,7 +10,7 @@ from pathlib import Path
 class Input_handler:
     """ Class for supplying and manipulating input data """ 
 
-    def __init__(self, videoSource, modelSource, forceReload, captureDetection, detectionThreshold):
+    def __init__(self, videoSource, modelSource, forceReload, captureDetection, captureFrequency, detectionThreshold):
         """ Initializing the input data stream """ 
 
         # Load flags passed from main
@@ -18,6 +18,7 @@ class Input_handler:
         self.modelSource = modelSource
         self.forceReload = forceReload
         self.captureDetection = captureDetection
+        self.captureFrequency = captureFrequency
         self.detectionThreshold = detectionThreshold
         
 
@@ -124,7 +125,7 @@ class Input_handler:
             confidenceValue = row[4]
 
             # If confidence interval is greater than confidenceThreshold do:
-            if row[4] >= float(self.detectionThreshold):
+            if row[4] >= self.detectionThreshold:
                 detection = True
                 detectionCount = labelLength
                 
@@ -189,15 +190,15 @@ class Input_handler:
         """ Function to save an image from the frame """
         global savedImageCounter
         global startTime
-
+        interval = 60-self.captureFrequency
         if not imgLabel:
             current_time = time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime())
             imgLabel = f'detection-{current_time}_{self.savedImageCounter}.jpg'
             self.imgCounter += 1
             secondIterator = (60.0 - (time.time() - self.startTime) % 60.0)
 
-            # Print image if detection every 60 minus X seconds
-            if secondIterator <= 54: # Current every 4 seconds EDIT THIS VALUE
+            # Print image if detection and int(interval) seconds has passed
+            if secondIterator <= interval:
                 cv2.imwrite(os.path.join(self.path, imgLabel), rawFrame)
                 self.savedImageCounter += 1
                 self.startTime = time.time()

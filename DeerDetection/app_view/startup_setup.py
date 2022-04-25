@@ -92,12 +92,34 @@ class Setup:
 
         return captureBoolean
 
+    def setCaptureFrequency():
+        """ Set the frequency in seconds at interval between detections the application should save a new image """
+        interval = None
+
+        ans = pymsgbox.prompt('Minimum interval in seconds between each picture: ')
+        
+        try:
+            interval = int(ans)
+        except Exception:
+            pymsgbox.alert('The number must be a valid number [1, 2, ... 59]', 'Error')
+            Setup.setCaptureFrequency()
+            
+        if isinstance(interval, int):
+            return interval
+        
 
     def setDetectionThreshold():
-        threshold = pymsgbox.prompt('Input detection confidence threshold (0.0-1.0)')
-        # TODO: Assert that float number is correct
-
-        return threshold
+        threshold = None
+        ans = pymsgbox.prompt('Input detection confidence threshold (0.0-1.0)')
+        
+        try:
+            threshold = float(ans)
+        except Exception:
+            pymsgbox.alert('The number must be a valid number [0.0-1.0]', 'Error')
+            Setup.setDetectionThreshold
+            
+        if isinstance(threshold, float):
+            return threshold
 
 
     def downloadModel(modelUrl):

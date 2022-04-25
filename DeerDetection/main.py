@@ -18,7 +18,7 @@ from utility.config import Config
 class Main:
     """ The main application class which is ran when starting the application """ 
 
-    def __init__(self, title, videoSource, modelSource, forceReload, captureDetection, detectionThreshold):
+    def __init__(self, title, videoSource, modelSource, forceReload, captureDetection, detectionThreshold, captureFrequency):
         """ Initialization of the main class """ 
         self.sourceTitle = videoSource
         
@@ -37,7 +37,7 @@ class Main:
         # Get and set FPS for the video_source
         self.fps = self.getFps()
         # Initialize the delay in which the callback waits for re-execution
-        self.callbackUpdateDelay = 1 # math.floor(1000/self.fps)
+        self.callbackUpdateDelay = 10 # math.floor(1000/self.fps)
         
         # Initialize the GUI by calling the Gui_video_output
         self.gui = Gui_output(self.on_exit, 
@@ -53,7 +53,8 @@ class Main:
                                       modelSource, 
                                       forceReload, 
                                       self.fps, 
-                                      captureDetection, 
+                                      captureDetection,
+                                      captureFrequency,
                                       detectionThreshold)
         
         # Callback for when GUI window get's closed.
@@ -154,6 +155,7 @@ if __name__ == "__main__":
         forceReload = False
         captureDetection = False
         detectionThreshold = 0.5
+        captureFrequency = 5
         
 
 
@@ -167,13 +169,15 @@ pick = Setup.setManualOrAutomatic()
 if pick == 'Automatic':
     print('[SETUP] Automatic setup initiated')
 
-    main = Main("Deer Detection [Automatic setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
+    main = Main("Deer Detection [Automatic setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold, captureFrequency)
 
     print('[SETUP] Launching with:')
     print('[SETUP] SOURCE VIDEO: ', videoSource)
     print('[SETUP] SOURCE MODEL: ', modelSource)
     print('[SETUP] FORCE RELOAD: ', forceReload)
     print('[SETUP] SAVING DETECTIONS: ', captureDetection)
+    if captureDetection:
+        print(f'[SETUP] CAPTURE FREQUENCY {captureFrequency}s')
     print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
     
     main.launch()
@@ -190,15 +194,19 @@ elif pick == 'Manual':
     forceReload = Setup.setForceReload()
     captureDetection = Setup.setCaptureDetection()
     detectionThreshold = Setup.setDetectionThreshold()
+    captureFrequency = Setup.setCaptureFrequency()
 
-    main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
+    main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold, captureFrequency)
 
     print('[SETUP] Launching with:')
     print('[SETUP] SOURCE VIDEO: ', videoSource)
     print('[SETUP] SOURCE MODEL: ', modelSource)
     print('[SETUP] FORCE RELOAD: ', forceReload)
     print('[SETUP] SAVING DETECTIONS: ', captureDetection)
+    if captureDetection:
+        print(f'[SETUP] CAPTURE FREQUENCY {captureFrequency}s')
     print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
+    
 
     main.launch()
 
@@ -211,8 +219,8 @@ elif pick == 'Gather images':
     # Default model
     # Force reload false
     captureDetection = True
-    #detectionThreshold = '0.3'
-    detectionThreshold = Setup.setDetectionThreshold()
+    captureFrequency = Setup.setCaptureFrequency()
+    detectionThreshold = Setup.setDetectionThreshold() #detectionThreshold = '0.3'
 
     print('[SETUP] Launching with:')
     print('[SETUP] SOURCE VIDEO: ', videoSource)
@@ -221,7 +229,7 @@ elif pick == 'Gather images':
     print('[SETUP] SAVING DETECTIONS: ', captureDetection)
     print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
 
-    main = Main("Deer Detection [Image Collection]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
+    main = Main("Deer Detection [Image Collection]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold, captureFrequency)
 
     main.launch()
 
