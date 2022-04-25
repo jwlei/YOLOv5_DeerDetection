@@ -211,8 +211,8 @@ elif pick == 'Gather images':
     # Default model
     # Force reload false
     captureDetection = True
-    detectionThreshold = '0.3'
-    #detectionThreshold = StartupSetup.setDetectionThreshold()
+    #detectionThreshold = '0.3'
+    detectionThreshold = StartupSetup.setDetectionThreshold()
 
     print('[SETUP] Launching with:')
     print('[SETUP] SOURCE VIDEO: ', videoSource)
