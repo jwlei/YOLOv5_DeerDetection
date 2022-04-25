@@ -8,8 +8,10 @@ from sys import executable
 from subprocess import Popen, CREATE_NEW_CONSOLE
 
 from app_controller.gui_output import Gui_output
-from app_controller.process import Process
 from app_view.startup_setup import Setup
+from app_controller.process import Process
+from utility.config import Config
+
 
 
 

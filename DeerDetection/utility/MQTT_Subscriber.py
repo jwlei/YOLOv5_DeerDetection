@@ -49,6 +49,7 @@ log_detections = open(file_log_detections, "w") # "a" if we rather want to appen
 log_detections.write('')
 log_detections.close()
 
+
 # ------------------------------ MQTT Subscriber client ------------------------------ #
 mqttBroker = "mqtt.eclipseprojects.io"
 topic = "DEER_DETECTION"
@@ -58,7 +59,6 @@ client.connect(mqttBroker)
 currentTimeStamp = None
 currentDetectionCount = None
 lastDetectedTimeStamp = None
-
 
 
 # ------------------------------ Logic ------------------------------ #
@@ -81,6 +81,7 @@ def validateJson(msg):
     except jsonschema.exceptions.ValidationError as err:
         return False
     return True
+
 
 def on_message(client, userdata, message):
     """ On message recieved do: """

@@ -51,8 +51,9 @@ class Process(threading.Thread):
 
         # Convert float FPS number to INT for cv2 waitkey
         # Floor vs roof, decided to use floor so we dont process more frames than we have
-        self.fps = math.floor(fps)
-        print('[SETUP] FPS set to: ', self.fps)
+        self.fps = int(700/math.floor(fps)) # Set delay a bit faster than frame time since we're processing the frames
+        print('[SETUP] FPS set to: ', fps)
+        print(f'[SETUP] DELAY set to {self.fps}ms')
        
 
         # Initialize a reference for the callback queue
@@ -97,23 +98,23 @@ class Process(threading.Thread):
             if newVideoSource is not None:
                 self.videoSource = newVideoSource
                 self.gui.update_title(self.videoSource)
-                newVideoSource = None
                 self.input_instance = Input_handler(self.videoSource, 
                                                     self.modelSource, 
                                                     self.forceReload, 
                                                     self.captureDetection, 
                                                     self.detectionThreshold)
                 print('[INFO] New video source selected: ', self.videoSource)
+                newVideoSource = None
 
             if newModelSource is not None:
                 self.modelSource = newModelSource
-                newModelSource = None
                 self.input_instance = Input_handler(self.videoSource, 
                                                     self.modelSource, 
                                                     self.forceReload, 
                                                     self.captureDetection, 
                                                     self.detectionThreshold)
                 print('[INFO] New model source selected: ', self.modelSource)
+                newModelSource = None
                
             # Get a frame and return value from the input_instance
             ret, self.current_frame, self.rawFrame = self.input_instance.read_current_frame()
