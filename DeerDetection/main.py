@@ -3,6 +3,8 @@ import subprocess
 import os
 import cv2
 import math
+import configparser
+
 
 from sys import executable
 from subprocess import Popen, CREATE_NEW_CONSOLE
@@ -10,7 +12,9 @@ from subprocess import Popen, CREATE_NEW_CONSOLE
 from app_controller.gui_output import Gui_output
 from app_view.startup_setup import Setup
 from app_controller.process import Process
-from utility.config import Config
+import utility.config
+
+
 
 
 
@@ -112,6 +116,7 @@ class Main:
 
             # Close subprocess
             mqtt_subscriber.kill()
+            
         except Exception:
             pass
 
@@ -140,27 +145,47 @@ class Main:
 
 # TODO: Replace with config file stuff
 # ------------------------------------------ Launch configuration ------------------------------------------ #
-defaultModelUrl = 'https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt'
-defaultModelSource = 'resources/models/defaultModel.pt'
+
+# Create subprocess for MQTT subscriber client and config
+#config_exec = Popen([executable, 'utility/config.py'], subprocess.CREATE_NEW_CONSOLE)
+
+checkConf = utility.config
+checkConf.generate_config()
+
+mqtt_subscriber = Popen([executable, 'utility/MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
+
+config_automatic = configparser.ConfigParser(allow_no_value=True)
+config_automatic.read('config.ini')
+
+# Load default config
+
+
+
+
+
+
+defaultRemoteModelUrl = config_automatic['Automatic']['RemoteModelUrl']
+defaultModelSource = config_automatic['Automatic']['ModelSource']
+
 model_exists = os.path.exists(defaultModelSource)
+
+
 # Launch the program with the following parameters
 if __name__ == "__main__":
-        #videoSource = "https://www.youtube.com/watch?v=8SDm48ieYP8"
-        videoSource = 'resources/media/video_testLong.mp4'
+        videoSource = config_automatic['Automatic']['VideoSource']
         if not model_exists:
-            print('[SETUP]: Default model not present, fetching ...')
-            modelSource = Setup.downloadModel(defaultModelUrl)
+            print('[SETUP]: Default model not present, fetching default from the cloud ... ')
+            print(f'[SETUP: Fetching from URL: {defaultRemoteModelUrl}]')
+            modelSource = Setup.downloadModel(defaultRemoteModelUrl)
         else:
             modelSource = defaultModelSource
-        forceReload = False
-        captureDetection = False
-        detectionThreshold = 0.5
-        captureFrequency = 5
+        forceReload = config_automatic['Automatic'].getboolean('forceReload')
+        captureDetection = config_automatic['Automatic'].getboolean('captureDetection')
+        detectionThreshold = config_automatic['Automatic'].getint('captureFrequency')
+        captureFrequency = config_automatic['Automatic'].getfloat('detectionThreshold')
         
 
 
-# Create subprocess for MQTT subscriber client
-mqtt_subscriber = Popen([executable, 'utility/MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
 
 # Start setup for launching the program
 pick = Setup.setManualOrAutomatic() 
