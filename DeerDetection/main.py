@@ -52,11 +52,11 @@ class Main:
 
         # Initialize a thread which fetches the Video input
         self.process_thread = Process(self.gui, 
-                                      self.callback_queue, 
+                                      self.callback_queue,
+                                      self.fps,
                                       videoSource, 
                                       modelSource, 
-                                      forceReload, 
-                                      self.fps, 
+                                      forceReload,  
                                       captureDetection,
                                       captureFrequency,
                                       detectionThreshold)
@@ -131,7 +131,7 @@ class Main:
         vid = cv2.VideoCapture(videoSource)
         fps = vid.get(cv2.CAP_PROP_FPS)
 
-        if fps >= 1:
+        if fps >= 1 and fps <= 60:
             print('[SETUP] FPS set to: ', fps)
             return fps
         else:
@@ -176,16 +176,18 @@ if startMQTTsubscriber:
 # Launch the program with the following parameters
 if __name__ == "__main__":
         videoSource = config_automatic['Automatic']['VideoSource']
+
         if not model_exists:
             print('[SETUP]: Default model not present, fetching default from the cloud ... ')
             print(f'[SETUP: Fetching from URL: {defaultRemoteModelUrl}]')
             modelSource = Setup.downloadModel(defaultRemoteModelUrl)
         else:
             modelSource = defaultModelSource
+
         forceReload = config_automatic['Automatic'].getboolean('forceReload')
         captureDetection = config_automatic['Automatic'].getboolean('captureDetection')
-        detectionThreshold = config_automatic['Automatic'].getint('captureFrequency')
-        captureFrequency = config_automatic['Automatic'].getfloat('detectionThreshold')
+        detectionThreshold = config_automatic['Automatic'].getfloat('detectionThreshold')
+        captureFrequency = config_automatic['Automatic'].getint('captureFrequency')
         
 
 if not skipSetup:
@@ -273,4 +275,4 @@ elif skipSetup:
     
     
 
-
+    # rtsp://192.168.39.147:8080/h264_ulaw.sdp

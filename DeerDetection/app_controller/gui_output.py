@@ -13,15 +13,13 @@ class Gui_output:
         #initialize the gui toolkit
         self.root = tk.Tk()
         
-        # Setup values
-        device_w = int(self.root.winfo_screenwidth()/2)
-        device_h = int(self.root.winfo_screenheight()/2)
+        # GUI Setup values
         self.root.title(title)
         #self.root.geometry(f'{device_w}x{device_h}')
+        #device_w = int(self.root.winfo_screenwidth()/2)
+        #device_h = int(self.root.winfo_screenheight()/2)
         
-        
-        
-        
+
         # Initialize the Gui by calling the Gui_setup class
         self.output_view = Gui_Setup(self.root, on_exit, getNewVideoSource, getNewModelSource)
         self.output_view.pack(side='top')

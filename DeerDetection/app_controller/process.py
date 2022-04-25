@@ -2,8 +2,8 @@ import threading
 import cv2
 import numpy
 import math
-import torch
 import time
+import torch
 import paho.mqtt.client as mqtt
 import geocoder
 import json
@@ -22,7 +22,7 @@ noInput = False
 
 class Process(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
-    def __init__(self, gui, callback_queue, videoSource, modelSource, forceReload, fps, captureDetection, captureFrequency, detectionThreshold):
+    def __init__(self, gui, callback_queue, fps, videoSource, modelSource, forceReload, captureDetection, captureFrequency, detectionThreshold):
         """ Initialize the thread """
 
         # Call the super class constructor

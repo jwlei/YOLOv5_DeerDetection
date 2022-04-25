@@ -88,13 +88,13 @@ class Input_handler:
 
     def label_toString(self, x):
         """ Function to return the label of in which to assign to a score """ 
-
+        
         return self.classes[int(x)]
 
 
     def plot_frame(self, prediction, frame, rawFrame):
         """ Function to plot boxes, labels and confidence values around detections on the frame """ 
-
+        
         global detection
 
         global detectionCount
@@ -132,7 +132,6 @@ class Input_handler:
                 # If enabled, save picture on detection
                 self.saveScreen(rawFrame)
 
-
                 # Get the coordinates of the box to be plot
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
                 
@@ -152,7 +151,6 @@ class Input_handler:
                             self.label_toString(labels[i]).upper()+' '+str("%.2f" % confidenceValue.item()), 
                             (x1, y1-10), 
                             cv2.FONT_HERSHEY_SIMPLEX, 1, text_color, 2)
-
             else:
                 detection = False
 
