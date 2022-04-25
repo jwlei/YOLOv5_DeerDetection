@@ -10,14 +10,14 @@ from pathlib import Path
 class Input_handler:
     """ Class for supplying and manipulating input data """ 
 
-    def __init__(self, videoSource, modelSource, forceReload, captureDetection, captureFrequency, detectionThreshold):
+    def __init__(self, videoSource, modelSource, forceReload_flag, savingDetection_flag, captureFrequency, detectionThreshold):
         """ Initializing the input data stream """ 
 
         # Load flags passed from main
         self.videoSource = videoSource
         self.modelSource = modelSource
-        self.forceReload = forceReload
-        self.captureDetection = captureDetection
+        self.forceReload = forceReload_flag
+        self.captureDetection = savingDetection_flag
         self.captureFrequency = captureFrequency
         self.detectionThreshold = detectionThreshold
         
@@ -38,7 +38,7 @@ class Input_handler:
         # Actual frame to be processed and output on the tkinter canvas
         self.frame = None
         # Set initial value for detection
-        self.detection = False
+        self.detected_flag = False
 
         # Set initial value imageSaving
         self.startTime = time.time()
@@ -95,10 +95,10 @@ class Input_handler:
     def plot_frame(self, prediction, frame, rawFrame):
         """ Function to plot boxes, labels and confidence values around detections on the frame """ 
         
-        global detection
+        global detection_flag
 
         global detectionCount
-        detection = False
+        detection_flag = False
         detectionCount = 0
 
         # Color of the box
@@ -126,11 +126,11 @@ class Input_handler:
 
             # If confidence interval is greater than confidenceThreshold do:
             if row[4] >= self.detectionThreshold:
-                detection = True
+                detection_flag = True
                 detectionCount = labelLength
                 
                 # If enabled, save picture on detection
-                self.saveScreen(rawFrame)
+                self.save_raw_image(rawFrame)
 
                 # Get the coordinates of the box to be plot
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
@@ -153,7 +153,7 @@ class Input_handler:
                             cv2.FONT_HERSHEY_SIMPLEX, 1, text_color, 2)
             
 
-        return frame, detection, detectionCount
+        return frame, detection_flag, detectionCount
 
 
         
@@ -183,11 +183,11 @@ class Input_handler:
         return processedSource
 
 
-    def saveScreen(self, rawFrame, imgLabel=None):
+    def save_raw_image(self, rawFrame, imgLabel=None):
         """ Function to save an image from the frame """
         global savedImageCounter
         global startTime
-        interval = 60-self.captureFrequency
+        capture_interval = 60-self.captureFrequency
         if not imgLabel:
             current_time = time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime())
             imgLabel = f'detection-{current_time}_{self.savedImageCounter}.jpg'
@@ -195,7 +195,7 @@ class Input_handler:
             secondIterator = (60.0 - (time.time() - self.startTime) % 60.0)
 
             # Print image if detection and int(interval) seconds has passed
-            if secondIterator <= interval:
+            if secondIterator <= capture_interval:
                 cv2.imwrite(os.path.join(self.path, imgLabel), rawFrame)
                 self.savedImageCounter += 1
                 self.startTime = time.time()

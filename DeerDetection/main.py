@@ -22,7 +22,7 @@ import utility.config
 class Main:
     """ The main application class which is ran when starting the application """ 
 
-    def __init__(self, title, videoSource, modelSource, forceReload, captureDetection, detectionThreshold, captureFrequency):
+    def __init__(self, windowTitle, videoSource, modelSource, forceReload_flag, saveDetection_flag, detectionThreshold, captureFrequency):
         """ Initialization of the main class """ 
         self.sourceTitle = videoSource
         
@@ -46,7 +46,7 @@ class Main:
         # Initialize the GUI by calling the Gui_video_output
         self.gui = Gui_output(self.on_exit, 
                               self.sourceTitle,
-                              title,
+                              windowTitle,
                               Process.getNewVideoSource, 
                               Process.getNewModelSource)
 
@@ -56,8 +56,8 @@ class Main:
                                       self.fps,
                                       videoSource, 
                                       modelSource, 
-                                      forceReload,  
-                                      captureDetection,
+                                      forceReload_flag,  
+                                      saveDetection_flag,
                                       captureFrequency,
                                       detectionThreshold)
         
@@ -157,7 +157,7 @@ checkConf.generate_config()
 
 config_automatic = configparser.ConfigParser(allow_no_value=True)
 config_automatic.read('config.ini')
-
+defaultModelSource = config_automatic['Automatic']['ModelSource']
 # Load default config
 
 

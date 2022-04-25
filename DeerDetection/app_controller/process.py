@@ -22,7 +22,7 @@ noInput = False
 
 class Process(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
-    def __init__(self, gui, callback_queue, fps, videoSource, modelSource, forceReload, captureDetection, captureFrequency, detectionThreshold):
+    def __init__(self, gui, callback_queue, fps, videoSource, modelSource, forceReload_flag, savingDetection_flag, captureFrequency, detectionThreshold):
         """ Initialize the thread """
 
         # Call the super class constructor
@@ -39,8 +39,8 @@ class Process(threading.Thread):
         # Create an instance of the input data
         self.videoSource = videoSource
         self.modelSource = modelSource
-        self.forceReload = forceReload
-        self.captureDetection = captureDetection
+        self.forceReload = forceReload_flag
+        self.captureDetection = savingDetection_flag
         self.captureFrequency = captureFrequency
         self.detectionThreshold = detectionThreshold
 
@@ -66,7 +66,7 @@ class Process(threading.Thread):
         
         # Initialize a reference for the GUI
         self.gui = gui
-        self.gui.update_savingDetection_status(captureDetection)
+        self.gui.update_savingDetection_status(savingDetection_flag)
 
         # Setup default values
         self.waitingToStop = False # Flag for if the process should stop
@@ -75,7 +75,7 @@ class Process(threading.Thread):
         ipLocation = geocoder.ip('me')
         self.currentLocation = str(ipLocation.latlng)
         self.currentTime = None
-        self.detected = None
+        self.detected_flag = None
         self.detectedCount = 0
 
         self.jsonMessage = None
@@ -99,7 +99,7 @@ class Process(threading.Thread):
             # Checking if source is changed
             if newVideoSource is not None:
                 self.videoSource = newVideoSource
-                self.gui.update_title(self.videoSource)
+                self.gui.update_title_from_input_source(self.videoSource)
                 self.input_handler = Input_handler(self.videoSource, 
                                                     self.modelSource, 
                                                     self.forceReload, 
@@ -128,7 +128,7 @@ class Process(threading.Thread):
             if(ret == False):
                 noInput = True
                 self.gui.update_output_image(ImageTk.PhotoImage(Image.open('resources/media/image_no-input.jpg')))
-                self.gui.update_title('No input')
+                self.gui.update_title_from_input_source('No input')
             else:
                 noInput = False
             
@@ -159,12 +159,12 @@ class Process(threading.Thread):
         This function is used as callback and executed by the thread 
         """
 
-        global detected
+        global detected_flag
         global detectedCount
         global currentTime
 
         # For each iteration, set detection to False
-        detected = None
+        detected_flag = None
         detectedCount = 0
         currentTime = None
         
@@ -173,7 +173,7 @@ class Process(threading.Thread):
         prediction = labels, cord
 
         # Plot bounding box and label to the frame
-        frame, detected, detectedCount = self.input_handler.plot_frame(prediction, current_frame, rawFrame)
+        frame, detected_flag, detectedCount = self.input_handler.plot_frame(prediction, current_frame, rawFrame)
 
 
         # Convert the frame to RGB
@@ -183,29 +183,29 @@ class Process(threading.Thread):
         frame = cv2.resize(frame, (640, 480))
 
         # Convert the image from array to PIL in order to show it using tkinter
-        image = Image.fromarray(frame)
+        output_image = Image.fromarray(frame)
         
         # Convert the image to a Tkinter compatible Image 
-        image = ImageTk.PhotoImage(image)
+        output_image = ImageTk.PhotoImage(output_image)
 
 
         # Update the output image with the current image
-        gui.update_output_image(image)
+        gui.update_output_image(output_image)
         # Update the current alarm status
-        gui.update_alarm_status(detected)
+        gui.update_alarm_status(detected_flag)
 
 
         # JSON MQTT Message
         # Location is gotten in the initialization
         currTimePreFormat = time.localtime()
         self.currentTime = time.strftime('%Y-%m-%d %H:%M:%S', currTimePreFormat) # Current Time
-        self.set_detected(detected) # Set detection status for MQTT
+        self.set_detected(detected_flag) # Set detection status for MQTT
         self.set_detectedCount(detectedCount) # Set counter for how many animals detected
 
         # Creating a json message to send with MQTT
         self.jsonMessage = json.dumps({'time' : self.currentTime, 
                                        'location' : self.currentLocation,  
-                                       'detected' : self.detected, 
+                                       'detected' : self.detected_flag, 
                                        'detectedCount' : self.detectedCount}, 
                                       indent = 4)
 
@@ -224,7 +224,7 @@ class Process(threading.Thread):
 
     def set_detected(self, detection):
         """ Function to set detected """
-        self.detected = detection
+        self.detected_flag = detection
 
     def set_detectedCount(self, detectedCount):
         """ Function to set detectedCount """ 
@@ -232,7 +232,7 @@ class Process(threading.Thread):
 
     def get_detection(self):
         """ Function to get detected """ 
-        return self.detected
+        return self.detected_flag
 
     def getNewVideoSource():
         """ Function to get a new video source while running """ 
@@ -247,4 +247,4 @@ class Process(threading.Thread):
     def getNewTitle(self):
         """ Function to get a new title from the video source while running """
         global newVideoSource
-        self.gui.update_title(newVideoSource)
+        self.gui.update_title_from_input_source(newVideoSource)

@@ -2,6 +2,7 @@ import pymsgbox
 import os
 import requests
 import shutil
+import configparser
 
 from tkinter import filedialog
 
@@ -61,7 +62,10 @@ class Setup:
                 return model
 
         elif ans == 'Default':
-            return ans
+            config_automatic = configparser.ConfigParser(allow_no_value=True)
+            config_automatic.read('config.ini')
+            defaultModelSource = config_automatic['Automatic']['ModelSource']
+            return defaultModelSource
             
 
 
