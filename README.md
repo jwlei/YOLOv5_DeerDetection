@@ -41,6 +41,12 @@ https://www.youtube.com/watch?v=PlN54DufHME
 
 https://www.youtube.com/watch?v=zg9HK-bE3k0
 
+https://www.youtube.com/watch?v=dAdyfH6fG54
+
+https://www.youtube.com/watch?v=EI6DTBgXu90
+
+https://www.youtube.com/watch?v=gyy2BlY726Q
+
 model test download url
 https://dl.dropboxusercontent.com/s/jitj2721dah1ng8/trainedModel_v1.pt
 
