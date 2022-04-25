@@ -115,7 +115,8 @@ class Main:
             self.gui.root.destroy()
 
             # Close subprocess
-            mqtt_subscriber.kill()
+            if startMQTTsubscriber:
+                mqtt_subscriber.kill()
             
         except Exception:
             pass
@@ -152,7 +153,7 @@ class Main:
 checkConf = utility.config
 checkConf.generate_config()
 
-mqtt_subscriber = Popen([executable, 'utility/MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
+
 
 config_automatic = configparser.ConfigParser(allow_no_value=True)
 config_automatic.read('config.ini')
@@ -162,13 +163,15 @@ config_automatic.read('config.ini')
 
 
 
-
+skipSetup = config_automatic['Automatic'].getboolean('SkipSetup')
+startMQTTsubscriber = config_automatic['Automatic'].getboolean('startMQTTsubscriber')
 
 defaultRemoteModelUrl = config_automatic['Automatic']['RemoteModelUrl']
 defaultModelSource = config_automatic['Automatic']['ModelSource']
 
 model_exists = os.path.exists(defaultModelSource)
-
+if startMQTTsubscriber:
+    mqtt_subscriber = Popen([executable, 'utility/MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
 
 # Launch the program with the following parameters
 if __name__ == "__main__":
@@ -185,78 +188,83 @@ if __name__ == "__main__":
         captureFrequency = config_automatic['Automatic'].getfloat('detectionThreshold')
         
 
+if not skipSetup:
+    # Start setup for launching the program
+    pick = Setup.setManualOrAutomatic() 
 
+    # If automatic, use defined values
+    if pick == 'Automatic':
+        print('[SETUP] Automatic setup initiated')
 
-# Start setup for launching the program
-pick = Setup.setManualOrAutomatic() 
+        main = Main("Deer Detection [Automatic setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold, captureFrequency)
 
-# If automatic, use defined values
-if pick == 'Automatic':
-    print('[SETUP] Automatic setup initiated')
-
-    main = Main("Deer Detection [Automatic setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold, captureFrequency)
-
-    print('[SETUP] Launching with:')
-    print('[SETUP] SOURCE VIDEO: ', videoSource)
-    print('[SETUP] SOURCE MODEL: ', modelSource)
-    print('[SETUP] FORCE RELOAD: ', forceReload)
-    print('[SETUP] SAVING DETECTIONS: ', captureDetection)
-    if captureDetection:
-        print(f'[SETUP] CAPTURE FREQUENCY {captureFrequency}s')
-    print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
+        print('[SETUP] Launching with:')
+        print('[SETUP] SOURCE VIDEO: ', videoSource)
+        print('[SETUP] SOURCE MODEL: ', modelSource)
+        print('[SETUP] FORCE RELOAD: ', forceReload)
+        print('[SETUP] SAVING DETECTIONS: ', captureDetection)
+        if captureDetection:
+            print(f'[SETUP] CAPTURE FREQUENCY {captureFrequency}s')
+        print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
     
-    main.launch()
+        main.launch()
 
-# If manual, use values defined by the user
-elif pick == 'Manual':
-    print('[SETUP] Manual setup initiated')
+    # If manual, use values defined by the user
+    elif pick == 'Manual':
+        print('[SETUP] Manual setup initiated')
 
-    # TODO: Write video source adress / model to source.txt file and use it in automatic or let them be available for picking when starting up next time
-    videoSource = Setup.setVideoSource()
-    modelSource = Setup.setModelSource()
-    if modelSource == 'Default':
-        modelSource = defaultModelSource
-    forceReload = Setup.setForceReload()
-    captureDetection = Setup.setCaptureDetection()
-    detectionThreshold = Setup.setDetectionThreshold()
-    captureFrequency = Setup.setCaptureFrequency()
+        # TODO: Write video source adress / model to source.txt file and use it in automatic or let them be available for picking when starting up next time
+        videoSource = Setup.setVideoSource()
+        modelSource = Setup.setModelSource()
+        if modelSource == 'Default':
+            modelSource = defaultModelSource
+        forceReload = Setup.setForceReload()
+        captureDetection = Setup.setCaptureDetection()
+        detectionThreshold = Setup.setDetectionThreshold()
+        captureFrequency = Setup.setCaptureFrequency()
 
-    main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold, captureFrequency)
+        main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold, captureFrequency)
 
-    print('[SETUP] Launching with:')
-    print('[SETUP] SOURCE VIDEO: ', videoSource)
-    print('[SETUP] SOURCE MODEL: ', modelSource)
-    print('[SETUP] FORCE RELOAD: ', forceReload)
-    print('[SETUP] SAVING DETECTIONS: ', captureDetection)
-    if captureDetection:
-        print(f'[SETUP] CAPTURE FREQUENCY {captureFrequency}s')
-    print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
+        print('[SETUP] Launching with:')
+        print('[SETUP] SOURCE VIDEO: ', videoSource)
+        print('[SETUP] SOURCE MODEL: ', modelSource)
+        print('[SETUP] FORCE RELOAD: ', forceReload)
+        print('[SETUP] SAVING DETECTIONS: ', captureDetection)
+        if captureDetection:
+            print(f'[SETUP] CAPTURE FREQUENCY {captureFrequency}s')
+        print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
     
 
+        main.launch()
+
+    # Mode for gathering images for further training of model
+    # TODO: User defined interval on pictures saved
+    elif pick == 'Gather images':
+        print('[SETUP] Image collection setup initiated')
+
+        videoSource = Setup.setVideoSource()
+        # Default model
+        # Force reload false
+        captureDetection = True
+        captureFrequency = Setup.setCaptureFrequency()
+        detectionThreshold = Setup.setDetectionThreshold() #detectionThreshold = '0.3'
+
+        print('[SETUP] Launching with:')
+        print('[SETUP] SOURCE VIDEO: ', videoSource)
+        print('[SETUP] SOURCE MODEL: ', modelSource)
+        print('[SETUP] FORCE RELOAD: ', forceReload)
+        print('[SETUP] SAVING DETECTIONS: ', captureDetection)
+        print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
+
+        main = Main("Deer Detection [Image Collection]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold, captureFrequency)
+
+        main.launch()
+
+elif skipSetup:
+    main = Main("Deer Detection [Skipped setup, running on config]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold, captureFrequency)
+
     main.launch()
 
-# Mode for gathering images for further training of model
-# TODO: User defined interval on pictures saved
-elif pick == 'Gather images':
-    print('[SETUP] Image collection setup initiated')
-
-    videoSource = Setup.setVideoSource()
-    # Default model
-    # Force reload false
-    captureDetection = True
-    captureFrequency = Setup.setCaptureFrequency()
-    detectionThreshold = Setup.setDetectionThreshold() #detectionThreshold = '0.3'
-
-    print('[SETUP] Launching with:')
-    print('[SETUP] SOURCE VIDEO: ', videoSource)
-    print('[SETUP] SOURCE MODEL: ', modelSource)
-    print('[SETUP] FORCE RELOAD: ', forceReload)
-    print('[SETUP] SAVING DETECTIONS: ', captureDetection)
-    print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
-
-    main = Main("Deer Detection [Image Collection]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold, captureFrequency)
-
-    main.launch()
 
 
 

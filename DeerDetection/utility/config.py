@@ -12,6 +12,14 @@ def generate_config():
         config_file.add_section('Automatic')
         config_file.set('Automatic', '; Default settings when choosing [Automatic setup]:')
 
+        config_file.set('Automatic', '\n; Launch directly with config values and skip all prompts:')
+        config_file.set('Automatic', '; Legal values: True, False')
+        config_file.set('Automatic', 'SkipSetup', 'False')
+
+        config_file.set('Automatic', '\n; Start separate MQTT Subscriber client:')
+        config_file.set('Automatic', '; Legal values: True, False')
+        config_file.set('Automatic', 'startMQTTsubscriber', 'True')
+
         config_file.set('Automatic', '\n; Default video source to load when choosing [Automatic setup]:')
         config_file.set('Automatic', 'VideoSource', 'https://www.youtube.com/watch?v=fpWVAZRb0R0')
 
