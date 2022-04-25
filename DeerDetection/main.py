@@ -1,27 +1,27 @@
 import queue
-import numpy as np
-from sys import executable
-from subprocess import Popen, CREATE_NEW_CONSOLE
 import subprocess
 import os
 import cv2
+import math
 
+from sys import executable
+from subprocess import Popen, CREATE_NEW_CONSOLE
 
-from tkinter import filedialog
-from gui_video_output import Gui_video_output
-from processThread import ProcessThread
-from startupsetup import StartupSetup
+from app_controller.gui_output import Gui_output
+from app_view.startup_setup import Setup
+from app_controller.process import Process
+from utility.config import Config
+
 
 
 
 class Main:
-    """ The main application class which is ran """ 
+    """ The main application class which is ran when starting the application """ 
 
     def __init__(self, title, videoSource, modelSource, forceReload, captureDetection, detectionThreshold):
         """ Initialization of the main class """ 
-        self.flag = False
-        # Initialize the GUI by calling the Gui_video_output
-        self.gui = Gui_video_output(self.on_exit, ProcessThread.getNewVideoSource, ProcessThread.getNewModelSource)
+        self.sourceTitle = videoSource
+        
 
         # Initialize a LastInn-FirstOut queue which will fetch and execute callbacks
         # Maxsize = 1 to ensure that the freshest frame is always the one processed and shown by the GUI
@@ -31,16 +31,30 @@ class Main:
         # Initialization of default values
         # Reference for current_frame
         self.current_frame = None
-        # Get and set FPS for the video_source
-        self.fps = self.getFps()
         # New video source reference
         self.newVideoSource = None
+
+        # Get and set FPS for the video_source
+        self.fps = self.getFps()
         # Initialize the delay in which the callback waits for re-execution
-        self.callbackUpdateDelay = 1
+        self.callbackUpdateDelay = 1 # math.floor(1000/self.fps)
         
+        # Initialize the GUI by calling the Gui_video_output
+        self.gui = Gui_output(self.on_exit, 
+                              self.sourceTitle,
+                              title,
+                              Process.getNewVideoSource, 
+                              Process.getNewModelSource)
 
         # Initialize a thread which fetches the Video input
-        self.process_thread = ProcessThread(self.gui, self.callback_queue, videoSource, modelSource, forceReload, self.fps, captureDetection, detectionThreshold)
+        self.process_thread = Process(self.gui, 
+                                      self.callback_queue, 
+                                      videoSource, 
+                                      modelSource, 
+                                      forceReload, 
+                                      self.fps, 
+                                      captureDetection, 
+                                      detectionThreshold)
         
         # Callback for when GUI window get's closed.
         self.gui.root.protocol("WM_DELETE_WINDOW", self.on_exit)
@@ -123,18 +137,18 @@ class Main:
             
         
 
-
+# TODO: Replace with config file stuff
 # ------------------------------------------ Launch configuration ------------------------------------------ #
-model_exists = os.path.exists('model/defaultModel.pt')
 defaultModelUrl = 'https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt'
-defaultModelSource = 'model/defaultModel.pt'
+defaultModelSource = 'resources/models/defaultModel.pt'
+model_exists = os.path.exists(defaultModelSource)
 # Launch the program with the following parameters
 if __name__ == "__main__":
         #videoSource = "https://www.youtube.com/watch?v=8SDm48ieYP8"
-        videoSource = 'test.mp4'
+        videoSource = 'resources/media/video_testLong.mp4'
         if not model_exists:
             print('[SETUP]: Default model not present, fetching ...')
-            modelSource = StartupSetup.downloadModel(defaultModelUrl)
+            modelSource = Setup.downloadModel(defaultModelUrl)
         else:
             modelSource = defaultModelSource
         forceReload = False
@@ -144,10 +158,10 @@ if __name__ == "__main__":
 
 
 # Create subprocess for MQTT subscriber client
-mqtt_subscriber = Popen([executable, 'MQTT_subscriberClient/DeerDetection_MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
+mqtt_subscriber = Popen([executable, 'utility/MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
 
 # Start setup for launching the program
-pick = StartupSetup.setManualOrAutomatic() 
+pick = Setup.setManualOrAutomatic() 
 
 # If automatic, use defined values
 if pick == 'Automatic':
@@ -169,13 +183,13 @@ elif pick == 'Manual':
     print('[SETUP] Manual setup initiated')
 
     # TODO: Write video source adress / model to source.txt file and use it in automatic or let them be available for picking when starting up next time
-    videoSource = StartupSetup.setVideoSource()
-    modelSource = StartupSetup.setModelSource()
+    videoSource = Setup.setVideoSource()
+    modelSource = Setup.setModelSource()
     if modelSource == 'Default':
         modelSource = defaultModelSource
-    forceReload = StartupSetup.setForceReload()
-    captureDetection = StartupSetup.setCaptureDetection()
-    detectionThreshold = StartupSetup.setDetectionThreshold()
+    forceReload = Setup.setForceReload()
+    captureDetection = Setup.setCaptureDetection()
+    detectionThreshold = Setup.setDetectionThreshold()
 
     main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
 
@@ -188,10 +202,12 @@ elif pick == 'Manual':
 
     main.launch()
 
+# Mode for gathering images for further training of model
+# TODO: User defined interval on pictures saved
 elif pick == 'Gather images':
     print('[SETUP] Image collection setup initiated')
 
-    videoSource = StartupSetup.setVideoSource()
+    videoSource = Setup.setVideoSource()
     # Default model
     # Force reload false
     captureDetection = True
@@ -205,41 +221,14 @@ elif pick == 'Gather images':
     print('[SETUP] SAVING DETECTIONS: ', captureDetection)
     print('[SETUP] DETECTION CONFIDENCE THRESHOLD: ', detectionThreshold)
 
-    main = Main("Deer Detection [Manual setup]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
+    main = Main("Deer Detection [Image Collection]", videoSource, modelSource, forceReload, captureDetection, detectionThreshold)
 
     main.launch()
 
 
 
 
-"""
-Videos used
-https://www.youtube.com/watch?v=B2jW99WWVF0
-https://www.youtube.com/watch?v=C0Ja5QsQ2uQ
-https://www.youtube.com/watch?v=4Rnr9OSNYj4
-https://www.youtube.com/watch?v=8SDm48ieYP8
-https://www.youtube.com/watch?v=BJj4OoqPmkg
-https://www.youtube.com/watch?v=zkuQI5Pp9F4
-https://www.youtube.com/watch?v=6Jq97RAkZDs
-https://www.youtube.com/watch?v=1FJcXLiuA5k
-https://www.youtube.com/watch?v=q5apMaG6mIg
-https://www.youtube.com/watch?v=6bEPd7HuW1M 
-https://www.youtube.com/watch?v=9ApLIRUd4dk 
-https://www.youtube.com/watch?v=IXpr_h1rbpQ 
-https://www.youtube.com/watch?v=mNpG5tEBTB8 
-https://www.youtube.com/watch?v=X69HPQ2R9Vs
-https://www.youtube.com/watch?v=PlN54DufHME
 
-model test download url
-https://dl.dropboxusercontent.com/s/jitj2721dah1ng8/trainedModel_v1.pt
-https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt
-default model url
-
-example youtube stream
-https://www.youtube.com/watch?v=bdEYa2oBtII
-
-'
-"""
     
     
 
