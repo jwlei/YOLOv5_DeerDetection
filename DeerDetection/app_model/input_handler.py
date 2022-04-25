@@ -151,8 +151,7 @@ class Input_handler:
                             self.label_toString(labels[i]).upper()+' '+str("%.2f" % confidenceValue.item()), 
                             (x1, y1-10), 
                             cv2.FONT_HERSHEY_SIMPLEX, 1, text_color, 2)
-            else:
-                detection = False
+            
 
         return frame, detection, detectionCount
 

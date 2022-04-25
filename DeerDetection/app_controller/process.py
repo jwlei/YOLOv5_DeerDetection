@@ -44,7 +44,7 @@ class Process(threading.Thread):
         self.captureFrequency = captureFrequency
         self.detectionThreshold = detectionThreshold
 
-        self.input_instance = Input_handler(self.videoSource, 
+        self.input_handler = Input_handler(self.videoSource, 
                                             self.modelSource, 
                                             self.forceReload, 
                                             self.captureDetection,
@@ -100,7 +100,7 @@ class Process(threading.Thread):
             if newVideoSource is not None:
                 self.videoSource = newVideoSource
                 self.gui.update_title(self.videoSource)
-                self.input_instance = Input_handler(self.videoSource, 
+                self.input_handler = Input_handler(self.videoSource, 
                                                     self.modelSource, 
                                                     self.forceReload, 
                                                     self.captureDetection,
@@ -111,7 +111,7 @@ class Process(threading.Thread):
 
             if newModelSource is not None:
                 self.modelSource = newModelSource
-                self.input_instance = Input_handler(self.videoSource, 
+                self.input_handler = Input_handler(self.videoSource, 
                                                     self.modelSource, 
                                                     self.forceReload,
                                                     self.captureDetection,
@@ -121,7 +121,7 @@ class Process(threading.Thread):
                 newModelSource = None
                
             # Get a frame and return value from the input_instance
-            ret, self.current_frame, self.rawFrame = self.input_instance.read_current_frame()
+            ret, self.current_frame, self.rawFrame = self.input_handler.read_current_frame()
             
             
             # If the return value of the input_instance is false, display no_input
@@ -169,11 +169,11 @@ class Process(threading.Thread):
         currentTime = None
         
         # Score the frame and get the labels and coordinates from the current frame
-        labels, cord = self.input_instance.predict_with_model(current_frame)
+        labels, cord = self.input_handler.predict_with_model(current_frame)
         prediction = labels, cord
 
         # Plot bounding box and label to the frame
-        frame, detected, detectedCount = self.input_instance.plot_frame(prediction, current_frame, rawFrame)
+        frame, detected, detectedCount = self.input_handler.plot_frame(prediction, current_frame, rawFrame)
 
 
         # Convert the frame to RGB
@@ -212,11 +212,11 @@ class Process(threading.Thread):
         
     def __del__(self):
         """ Finalizer to stop the process """
-        self.input_instance.release()
+        self.input_handler.release()
             
     def release_resources(self):
         """ Function to release the resources """
-        self.input_instance.release()
+        self.input_handler.release()
         
     def stop(self):
         """ Function to set the stop Flag """
