@@ -25,7 +25,7 @@ class Input_handler:
         
         self.model = self.load_model()                              # Load the model defined in the load_model function
         self.classes = self.model.names                             # Load the classes defined in the model
-        self.device = 'cpu' if torch.cuda.is_available() else 'cpu' # Set the device for the model to load on to be the cuda device, otherwise the cpu
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu' # Set the device for the model to load on to be the cuda device, otherwise the cpu
         
 
 
