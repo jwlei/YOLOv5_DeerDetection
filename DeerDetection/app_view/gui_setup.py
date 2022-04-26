@@ -64,7 +64,7 @@ class Gui_Setup(tk.Frame):
         self.save_status = tk.Label(self, fg="black")
         self.save_status.grid(row = 3, 
                               column = 0, columnspan = 1, 
-                              padx=5, pady=10, 
+                              padx=(10, 5), pady=10, 
                               sticky="NESW") # Position
 
         # Change video source
@@ -75,7 +75,7 @@ class Gui_Setup(tk.Frame):
                             sticky="NESW") # Position
 
         # Change model source
-        self.sourceBtn = tk.Button(self, text="Choose training model", command=self.getNewModelSource)
+        self.sourceBtn = tk.Button(self, text="Choose model source", command=self.getNewModelSource)
         self.sourceBtn.grid(row = 3, 
                             column = 2, columnspan = 1,  
                             padx=5, pady=10, 
@@ -85,7 +85,7 @@ class Gui_Setup(tk.Frame):
         self.exitBtn = tk.Button(self, text="Exit program", command=self.on_exit)
         self.exitBtn.grid(row = 3, 
                           column = 3, columnspan = 1,  
-                          padx=5, pady=10, 
+                          padx=(5, 10), pady=10, 
                           sticky="NESW") # Position 
        
 

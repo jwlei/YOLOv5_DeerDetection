@@ -51,6 +51,8 @@ class Input_handler:
 
         # Process and set the videoSource
         self.video_capture = self.processInputPath(videoSource)
+       
+        
         
 
     def load_model(self):
@@ -120,12 +122,12 @@ class Input_handler:
 
             # Grab the prediction to plot
             row = coordinates[i]
-
-            # Grab the confidence value from the tuple
             confidenceValue = row[4]
+            # Grab the confidence value from the tuple
+            
 
             # If confidence interval is greater than confidenceThreshold do:
-            if row[4] >= self.detectionThreshold:
+            if confidenceValue >= self.detectionThreshold:
                 detection_flag = True
                 detectionCount = labelLength
                 
@@ -141,7 +143,7 @@ class Input_handler:
                               background_color, 2)
 
                 # Plot label
-                w, h = 190, 40
+                w, h = 105, 20
                 cv2.rectangle(frame,
                               (x1, y1), (x1 + w, y1 - h),
                               background_color,
@@ -149,8 +151,8 @@ class Input_handler:
 
                 cv2.putText(frame, 
                             self.label_toString(labels[i]).upper()+' '+str("%.2f" % confidenceValue.item()), 
-                            (x1, y1-10), 
-                            cv2.FONT_HERSHEY_SIMPLEX, 1, text_color, 2)
+                            (x1, y1-5), 
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.55, text_color, 1)
             
 
         return frame, detection_flag, detectionCount
@@ -200,6 +202,11 @@ class Input_handler:
                 self.savedImageCounter += 1
                 self.startTime = time.time()
 
+    def resize_frame(self, frame, output_dim):
+        """ Function to resize the frame """ 
+        resized_frame = cv2.resize(frame, output_dim)
+
+        return resized_frame
 
     def release(self):
         """ Function to manually release the resource """

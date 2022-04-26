@@ -48,11 +48,8 @@ class Setup:
                                    buttons = ['Local', 'URL'])
 
             if ans == 'Local':
-                pymsgbox.confirm('Choose model data (.pt)', 
-                                 buttons = ['OK'])
-
                 model = filedialog.askopenfilename(initialdir="resources/models/",
-                                                   title="Select model", 
+                                                   title="Select model (.pt)", 
                                                    filetypes=(("PT Files", ".pt"), ("All files",".*")))
                 return model
 
@@ -113,6 +110,7 @@ class Setup:
         
 
     def setDetectionThreshold():
+        # TODO: Fix assertion
         threshold = None
         ans = pymsgbox.prompt('Input detection confidence threshold (0.0-1.0)')
         
@@ -120,7 +118,7 @@ class Setup:
             threshold = float(ans)
         except Exception:
             pymsgbox.alert('The number must be a valid number [0.0-1.0]', 'Error')
-            Setup.setDetectionThreshold
+            Setup.setDetectionThreshold()
             
         if isinstance(threshold, float):
             return threshold
@@ -157,7 +155,21 @@ class Setup:
         print('[SETUP] '+filename+' download complete and saved to '+path)
 
         return path_filename
+
+    def setResolution(): 
+        ans_width = pymsgbox.prompt('Enter desired screen WIDTH')
+        ans_height = pymsgbox.prompt('Enter desired screen HEIGHT')
         
+        try:
+            width = int(ans_width)
+            height = int(ans_height)
+        except Exception:
+            pymsgbox.alert('The resolution consist of two valid numbers')
+            Setup.setResolution()
+            
+        output_dim = width, height
+        if isinstance(width, int) and isinstance(height, int):
+            return output_dim
         
                 
                 

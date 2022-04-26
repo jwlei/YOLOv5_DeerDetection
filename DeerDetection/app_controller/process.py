@@ -22,7 +22,7 @@ noInput = False
 
 class Process(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
-    def __init__(self, gui, callback_queue, fps, videoSource, modelSource, forceReload_flag, savingDetection_flag, captureFrequency, detectionThreshold):
+    def __init__(self, gui, callback_queue, fps, videoSource, modelSource, forceReload_flag, savingDetection_flag, captureFrequency, detectionThreshold, output_dim):
         """ Initialize the thread """
 
         # Call the super class constructor
@@ -43,6 +43,7 @@ class Process(threading.Thread):
         self.captureDetection = savingDetection_flag
         self.captureFrequency = captureFrequency
         self.detectionThreshold = detectionThreshold
+        self.output_dim = output_dim
 
         self.input_handler = Input_handler(self.videoSource, 
                                             self.modelSource, 
@@ -168,19 +169,23 @@ class Process(threading.Thread):
         detectedCount = 0
         currentTime = None
         
+        # TODO: User defined size
+        # Resize the frame before processing
+        frame = self.input_handler.resize_frame(current_frame, self.output_dim)
+        
         # Score the frame and get the labels and coordinates from the current frame
-        labels, cord = self.input_handler.predict_with_model(current_frame)
+        labels, cord = self.input_handler.predict_with_model(frame)
         prediction = labels, cord
 
         # Plot bounding box and label to the frame
-        frame, detected_flag, detectedCount = self.input_handler.plot_frame(prediction, current_frame, rawFrame)
+        frame, detected_flag, detectedCount = self.input_handler.plot_frame(prediction, frame, rawFrame)
 
 
         # Convert the frame to RGB
         frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
 
         # Resize the frame to dimensions width, height
-        frame = cv2.resize(frame, (640, 480))
+        #frame = cv2.resize(frame, (640, 480))
 
         # Convert the image from array to PIL in order to show it using tkinter
         output_image = Image.fromarray(frame)

@@ -12,6 +12,10 @@ def generate_config():
         config_file.add_section('Automatic')
         config_file.set('Automatic', '; Default settings when choosing [Automatic setup]:')
 
+        config_file.set('Automatic', '; Resolution in px to process video at:')
+        config_file.set('Automatic', 'width', '640')
+        config_file.set('Automatic', 'height', '480')
+
         config_file.set('Automatic', '\n; Launch directly with config values and skip all prompts:')
         config_file.set('Automatic', '; Legal values: True, False')
         config_file.set('Automatic', 'SkipSetup', 'False')
@@ -45,7 +49,7 @@ def generate_config():
         config_file.set('Automatic', '; E.g. if the threshold is set to 0.7, predictions with a confidence value')
         config_file.set('Automatic', '; greater than 0.7 will trigger the detected status.')
         config_file.set('Automatic', '; Legal values: 0.0-1.0')
-        config_file.set('Automatic', 'detectionThreshold', '0.7')
+        config_file.set('Automatic', 'detectionThreshold', '0.6')
 
         #config_file.add_section('Save directory for images:')
         #config_file.set('Save directory for images', 'saveDir', 'path/to')
@@ -59,8 +63,8 @@ def generate_config():
 
     else:
         print('[CONFIG] Configuration found.\n')
-        print('[CONFIG] If you wish to generate a fresh default configuration')
-        print('[CONFIG] please delete your config.ini file.\n')
+        print('[CONFIG] If you wish to generate a fresh default configuration:')
+        print('[CONFIG] Delete your config.ini file.\n')
 
         
             
