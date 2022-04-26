@@ -48,13 +48,18 @@ https://www.youtube.com/watch?v=EI6DTBgXu90
 https://www.youtube.com/watch?v=gyy2BlY726Q
 
 model test download url
+
 https://dl.dropboxusercontent.com/s/jitj2721dah1ng8/trainedModel_v1.pt
 
-https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt
 default model url
 
+https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt
+
+
 example youtube stream
+
 https://www.youtube.com/watch?v=fpWVAZRb0R0
 
 Logo source:
+
 https://www.vecteezy.com/vector-art/585990-head-deer-animals-logo-black-silhouete-icons 23/04
