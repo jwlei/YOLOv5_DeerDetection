@@ -43,8 +43,7 @@ class Main:
                                     self.sourceTitle,
                                     windowTitle,
                                     Process.getNewVideoSource, 
-                                    Process.getNewModelSource,
-                                    headless_mode)
+                                    Process.getNewModelSource)
             self.gui.root.protocol("WM_DELETE_WINDOW", self.on_exit)  # Callback for when GUI window get's closed.
         else:
             self.gui = None

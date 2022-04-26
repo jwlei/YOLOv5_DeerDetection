@@ -7,19 +7,18 @@ from app_view.gui_setup import Gui_Setup
 class Gui_output:
     """ Class for handling the updating of the GUI frame """ 
 
-    def __init__(self, on_exit, sourceTitle, windowTitle, getNewVideoSource, getNewModelSource, headless_mode): 
+    def __init__(self, on_exit, sourceTitle, windowTitle, getNewVideoSource, getNewModelSource): 
         """ Initialization of the video output """ 
 
         #initialize the gui toolkit
         self.root = tk.Tk()
 
-        if not headless_mode:
-            # GUI Setup values
-            self.root.title(windowTitle)
-            # Initialize the Gui by calling the Gui_setup class
-            self.output_view = Gui_Setup(self.root, on_exit, getNewVideoSource, getNewModelSource)
-            self.output_view.pack()
-            self.output_view.update_source_title(sourceTitle)
+        # GUI Setup values
+        self.root.title(windowTitle)
+        # Initialize the Gui by calling the Gui_setup class
+        self.output_view = Gui_Setup(self.root, on_exit, getNewVideoSource, getNewModelSource)
+        self.output_view.pack()
+        self.output_view.update_source_title(sourceTitle)
 
     
     def update_title_from_input_source(self, new_source_title):
