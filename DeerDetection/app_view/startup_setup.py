@@ -20,6 +20,7 @@ class Setup:
 
     def setVideoSource():
         """ Choose local or remote video source """
+        input = None
         ans = pymsgbox.confirm('Please choose your source for video', 
                                'Pick video source', 
                                buttons = ['URL', 'Local Media', 'Camera'])

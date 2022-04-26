@@ -123,6 +123,9 @@ def on_message(client, userdata, message):
                     alert_Timestamp.config(bg="red", text=f'{freshTimeStamp}')
                     lastDetectedTimeStamp = freshTimeStamp
 
+                    log_detections.write(str(msg)) # Write to detections log file
+                    log_detections.write('\n')
+
                 else:
                     alert_status.config(bg="green", text="NO DETECTION")
                     alert_Timestamp.config(bg="green")
@@ -131,8 +134,7 @@ def on_message(client, userdata, message):
                     
                 #print(decodedMessage) # Prints JSON-syntax representation of the message
                 print(msg) # Prints single line representation of the JSON
-                log_detections.write(str(msg)) # Write to detections log file
-                log_detections.write('\n')
+                
             else:
                 
                 break
