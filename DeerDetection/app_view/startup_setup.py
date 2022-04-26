@@ -2,6 +2,7 @@ import pymsgbox
 import os
 import requests
 import shutil
+import configparser
 
 from tkinter import filedialog
 
@@ -19,6 +20,7 @@ class Setup:
 
     def setVideoSource():
         """ Choose local or remote video source """
+        input = None
         ans = pymsgbox.confirm('Please choose your source for video', 
                                'Pick video source', 
                                buttons = ['URL', 'Local Media', 'Camera'])
@@ -47,11 +49,8 @@ class Setup:
                                    buttons = ['Local', 'URL'])
 
             if ans == 'Local':
-                pymsgbox.confirm('Choose model data (.pt)', 
-                                 buttons = ['OK'])
-
                 model = filedialog.askopenfilename(initialdir="resources/models/",
-                                                   title="Select model", 
+                                                   title="Select model (.pt)", 
                                                    filetypes=(("PT Files", ".pt"), ("All files",".*")))
                 return model
 
@@ -61,17 +60,19 @@ class Setup:
                 return model
 
         elif ans == 'Default':
-            return ans
+            config_automatic = configparser.ConfigParser(allow_no_value=True)
+            config_automatic.read('config.ini')
+            defaultModelSource = config_automatic['Automatic']['ModelSource']
+            return defaultModelSource
             
-
 
     def setForceReload():
         """ Choose force reload of pyTorch cache on or off """
         ans = pymsgbox.confirm('Reload the pyTorch cache', 
                                'DeerDetection Setup', 
-                               buttons = ['No', 'Yes'])
+                               buttons = ['Don\'t reload', 'Reload'])
 
-        if ans == 'Yes':
+        if ans == 'Reload':
             reloadBoolean = True
         else:
             reloadBoolean = False
@@ -81,23 +82,46 @@ class Setup:
 
     def setCaptureDetection():
         """ Choose if detections should be captured """ 
-        ans = pymsgbox.confirm('Save detection images?', 
+        ans = pymsgbox.confirm('Save images on detections? Images will be saved at an minimum interval specified by the user.', 
                                'DeerDetection Setup', 
                                buttons = ['Save', 'Don\'t save'])
 
-        if ans == 'Yes':
+        if ans == 'Save':
             captureBoolean = True
         else:
             captureBoolean = False
 
         return captureBoolean
 
+    def setCaptureFrequency():
+        """ Set the frequency in seconds at interval between detections the application should save a new image """
+        interval = None
+
+        ans = pymsgbox.prompt('Minimum interval in seconds between each picture: ')
+        
+        try:
+            interval = int(ans)
+        except Exception:
+            pymsgbox.alert('The number must be a valid number [1, 2, ... 59]', 'Error')
+            Setup.setCaptureFrequency()
+            
+        if isinstance(interval, int):
+            return interval
+        
 
     def setDetectionThreshold():
-        threshold = pymsgbox.prompt('Input detection confidence threshold (0.0-1.0)')
-        # TODO: Assert that float number is correct
-
-        return threshold
+        # TODO: Fix assertion
+        threshold = None
+        ans = pymsgbox.prompt('Input detection confidence threshold (0.0-1.0)')
+        
+        try:
+            threshold = float(ans)
+        except Exception:
+            pymsgbox.alert('The number must be a valid number [0.0-1.0]', 'Error')
+            Setup.setDetectionThreshold()
+            
+        if isinstance(threshold, float):
+            return threshold
 
 
     def downloadModel(modelUrl):
@@ -131,7 +155,51 @@ class Setup:
         print('[SETUP] '+filename+' download complete and saved to '+path)
 
         return path_filename
+
+
+    def setResolution(): 
+        """ Choose the resolution to resize the output image """
+        ans_width = pymsgbox.prompt('Enter desired screen WIDTH')
+        ans_height = pymsgbox.prompt('Enter desired screen HEIGHT')
         
+        try:
+            width = int(ans_width)
+            height = int(ans_height)
+        except Exception:
+            pymsgbox.alert('The resolution consist of two valid numbers, e.g. 640 by 480')
+            Setup.setResolution()
+            
+        output_dim = width, height
+        if isinstance(width, int) and isinstance(height, int):
+            return output_dim
+
+
+    def setHeadless():
+        """ Choose if detections should be captured """ 
+        ans = pymsgbox.confirm('Run in headless mode (without GUI)?', 
+                               'DeerDetection Setup', 
+                               buttons = ['With GUI', 'Headless'])
+
+        if ans == 'Headless':
+            headless_mode = True
+        else:
+            headless_mode = False
+
+        return headless_mode
+
+
+    def setResize():
+        """ Choose if detections should be captured """ 
+        ans = pymsgbox.confirm('Resize the image to user-specified dimensions?', 
+                               'DeerDetection Setup', 
+                               buttons = ['Resize', 'Keep original resolution'])
+
+        if ans == 'Resize':
+            resize_flag = True
+        else:
+            resize_flag = False
+
+        return resize_flag
         
                 
                 

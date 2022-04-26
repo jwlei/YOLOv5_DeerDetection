@@ -369,3 +369,5 @@ FodyWeavers.xsd
 /DeerDetection/media/video_testLong.mp4
 /DeerDetection/docs/log_detections.txt
 /DeerDetection/resources/media/video_testLong.mp4
+/DeerDetection/config.ini
+/DeerDetection/docs/log_application.txt

@@ -10,39 +10,37 @@ from pathlib import Path
 class Input_handler:
     """ Class for supplying and manipulating input data """ 
 
-    def __init__(self, videoSource, modelSource, forceReload, captureDetection, detectionThreshold):
+    def __init__(self, videoSource, modelSource, forceReload_flag, savingDetection_flag, captureFrequency, detectionThreshold):
         """ Initializing the input data stream """ 
 
         # Load flags passed from main
         self.videoSource = videoSource
         self.modelSource = modelSource
-        self.forceReload = forceReload
-        self.captureDetection = captureDetection
+        self.forceReload = forceReload_flag
+        self.captureDetection = savingDetection_flag
+        self.captureFrequency = captureFrequency
         self.detectionThreshold = detectionThreshold
         
 
-        # Load the model defined in the load_model function
-        self.model = self.load_model()
-        # Load the classes defined in the model
-        self.classes = self.model.names
-        # Set the device for the model to load on to be the cuda device, otherwise the cpu
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
+        
+        self.model = self.load_model()                              # Load the model defined in the load_model function
+        self.classes = self.model.names                             # Load the classes defined in the model
+        self.device = 'cpu' if torch.cuda.is_available() else 'cpu' # Set the device for the model to load on to be the cuda device, otherwise the cpu
+        
+
 
         # Print the Device used for logging purposes
         print('[SETUP] Device Used: ',self.device)
 
         # Set default values
-        # Boolean for successfully returned frame
-        self.ret = False
-        # Actual frame to be processed and output on the tkinter canvas
-        self.frame = None
-        # Set initial value for detection
-        self.detection = False
+        
+        self.ret = False                # Boolean for successfully returned frame
+        self.frame = None               # Actual frame to be processed and output
+        self.detected_flag = False      # Set initial value for detection
 
-        # Set initial value imageSaving
-        self.startTime = time.time()
-        self.imgCounter = 0
-        self.savedImageCounter = 0
+        
+        self.startTime = time.time()    # Start time for interval deciding when to save a new picture
+        self.savedImageCounter = 0      # Incremental counter which is appended to saved images' filename
         # TODO: Fix path?
         self.path = Path.cwd() / 'resources/SavedDetections'
         print('[SETUP] Saved RAW images will be saved to: ', self.path)
@@ -51,157 +49,125 @@ class Input_handler:
         # Process and set the videoSource
         self.video_capture = self.processInputPath(videoSource)
         
+       
+        
+        
 
     def load_model(self):
         """ Function to load the YOLOv5 model from the pyTorch GitHub when not implemented locally """ 
-        try:
-            model = torch.hub.load('ultralytics/yolov5', 
-                                   'custom', 
-                                   path=self.modelSource, 
-                                   force_reload=self.forceReload)
-        except Exception:
-            model = torch.hub.load('ultralytics/yolov5', 
-                                   'custom', 
-                                   path=self.modelSource, 
-                                   force_reload=True)
+        model = torch.hub.load('ultralytics/yolov5', 
+                                'custom', 
+                                path=self.modelSource, 
+                                force_reload=self.forceReload)
+ 
         return model
     
 
     def predict_with_model(self, frame):
         """ Function to score a frame with the model """ 
 
-        # Send the model to the device
-        self.model.to(self.device)
+        self.model.to(self.device)                                                      # Send the model to the device
 
-        # Assign the frame
-        frame = [frame]
-
-        # Score the frame on the model
-        prediction = self.model(frame)
+        frame = [frame]                                                                 # Assign the frame
+        prediction = self.model(frame)                                                  # Score the frame on the model
      
-        # Grab the labels and coordinates from the results
-        labels, coordinates = prediction.xyxyn[0][:, -1], prediction.xyxyn[0][:, :-1]
         
+        labels, coordinates = prediction.xyxyn[0][:, -1], prediction.xyxyn[0][:, :-1]   # Grab the labels and coordinates from the results
         return labels, coordinates
 
 
     def label_toString(self, x):
         """ Function to return the label of in which to assign to a score """ 
-
         return self.classes[int(x)]
 
 
     def plot_frame(self, prediction, frame, rawFrame):
         """ Function to plot boxes, labels and confidence values around detections on the frame """ 
-
-        global detection
-
+        global detection_flag
         global detectionCount
-        detection = False
+        detection_flag = False
         detectionCount = 0
 
-        # Color of the box
-        background_color = (0, 0, 255)
-        # Color of the text
-        text_color = (255, 255, 255)
+        background_color = (0, 0, 255)                                                  # Color of the box
+        text_color = (255, 255, 255)                                                    # Color of the 
+        
+        labels, coordinates = prediction                                                # Grab the labels and coordinates from the results 
+        labelLength = len(labels)                                                       # Grab the length of the labels
+        x_shape, y_shape = frame.shape[1], frame.shape[0]                               # Pass the shape of the box to be plot
 
-        # Grab the labels and coordinates from the results 
-        labels, coordinates = prediction
-
-        # Grab the length of the labels
-        labelLength = len(labels)
-
-        # Pass the shape of the box to be plot
-        x_shape, y_shape = frame.shape[1], frame.shape[0]
-
-        # For each label detected, plot the bounding box, label and confidence value
-        for i in range(labelLength):
-
-            # Grab the prediction to plot
-            row = coordinates[i]
-
-            # Grab the confidence value from the tuple
-            confidenceValue = row[4]
-
-            # If confidence interval is greater than confidenceThreshold do:
-            if row[4] >= float(self.detectionThreshold):
-                detection = True
+        for i in range(labelLength):                                                    # For each label detected, plot the bounding box, label and confidence value
+            row = coordinates[i]                                                        # Grab the prediction to plot
+            confidenceValue = row[4]                                                    # Grab the confidence value from the tuple
+            
+            if confidenceValue >= self.detectionThreshold:                              # If confidence interval is greater than confidenceThreshold do:
+                detection_flag = True
                 detectionCount = labelLength
                 
-                # If enabled, save picture on detection
-                self.saveScreen(rawFrame)
+                self.save_raw_image(rawFrame)                                           # If enabled, save picture on detection
 
-
-                # Get the coordinates of the box to be plot
-                x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape)
+                x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape) # Get the coordinates of the box to be plot
                 
-                # Plot bounding box
-                cv2.rectangle(frame, 
-                              (x1, y1), (x2, y2), 
-                              background_color, 2)
+                
+                cv2.rectangle(frame,(x1, y1), (x2, y2), background_color, 2)            # Plot bounding box
+  
+                w, h = 105, 20
+                cv2.rectangle(frame, (x1, y1), (x1 + w, y1 - h),background_color,-1)    # Plot background box for label
+                              
 
-                # Plot label
-                w, h = 190, 40
-                cv2.rectangle(frame,
-                              (x1, y1), (x1 + w, y1 - h),
-                              background_color,
-                              -1)
-
-                cv2.putText(frame, 
+                cv2.putText(frame,                                                      # Plot the label text
                             self.label_toString(labels[i]).upper()+' '+str("%.2f" % confidenceValue.item()), 
-                            (x1, y1-10), 
-                            cv2.FONT_HERSHEY_SIMPLEX, 1, text_color, 2)
+                            (x1, y1-5), 
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.55, text_color, 1)
 
-            else:
-                detection = False
-
-        return frame, detection, detectionCount
+        return frame, detection_flag, detectionCount
 
 
         
     def read_current_frame(self):
         """ Function to get a single frame, copy it for raw photo collection, and it's return boolean value """
-        # Get boolean return and frame from the video feed
-        # Try to copy the frame
-        ret, frame = self.video_capture.read()
+        ret, frame = self.video_capture.read()                                          # Get boolean return and frame from the video feed
         try:
-            rawFrame = frame.copy()
+            rawFrame = frame.copy()                                                     # Try to copy the frame
         except Exception:
             rawFrame = frame
-
+        
         return ret, frame, rawFrame
 
 
     def processInputPath(self, videoSource):
-        """ Function to process URL of video, if it's youtube process through PAFY """
-        if "youtube" in videoSource or "youtu.be" in videoSource:
-            print('[SETUP] URL supplied is a YouTube-link, processing ... ')
+        """ Function to process the video input and assign as a cv2 video object """
+        if "youtube" in videoSource or "youtu.be" in videoSource:                       # If the video source path contains fragments of youtube video URL's, handle them as such
+            print('[SETUP] URL supplied is a YouTube-link, processing ... ')            # Since cv2 won't capture video from a YouTube URL as-is.
             ytLink = pafy.new(videoSource).streams[-1]
             assert ytLink is not None
             processedSource = cv2.VideoCapture(ytLink.url) 
         else:
-            processedSource = cv2.VideoCapture(videoSource)
+            processedSource = cv2.VideoCapture(videoSource)                             # Otherwise assign it
         
         return processedSource
 
 
-    def saveScreen(self, rawFrame, imgLabel=None):
+    def save_raw_image(self, rawFrame, imgLabel=None):
         """ Function to save an image from the frame """
         global savedImageCounter
         global startTime
-
+        capture_interval = 60-self.captureFrequency                                     # User defined interval at which is the minimum time between pictures
+        
         if not imgLabel:
             current_time = time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime())
-            imgLabel = f'detection-{current_time}_{self.savedImageCounter}.jpg'
-            self.imgCounter += 1
-            secondIterator = (60.0 - (time.time() - self.startTime) % 60.0)
+            imgLabel = f'detection-{current_time}_{self.savedImageCounter}.jpg'         # Name the saved file by by date and image counter to avoid duplicates
+            secondIterator = (60.0 - (time.time() - self.startTime) % 60.0)             
 
-            # Print image if detection every 60 minus X seconds
-            if secondIterator <= 54: # Current every 4 seconds EDIT THIS VALUE
-                cv2.imwrite(os.path.join(self.path, imgLabel), rawFrame)
-                self.savedImageCounter += 1
-                self.startTime = time.time()
+            if secondIterator <= capture_interval:                                      # Print image if detection and int(interval) seconds has passed
+                cv2.imwrite(os.path.join(self.path, imgLabel), rawFrame)                # Save the image to disk
+                self.savedImageCounter += 1                                             # Increment the counter
+                self.startTime = time.time()                                            # Reset the start time for a new interval
 
+    def resize_frame(self, frame, output_dim):
+        """ Function to resize the frame """ 
+        resized_frame = cv2.resize(frame, output_dim)
+
+        return resized_frame
 
     def release(self):
         """ Function to manually release the resource """

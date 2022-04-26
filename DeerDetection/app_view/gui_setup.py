@@ -12,19 +12,19 @@ class Gui_Setup(tk.Frame):
         """ Initialization of the GUI_Setup class, which calls the setup_gui function to create the GUI """
 
         # Frame constructor from the super class
-        tk.Frame.__init__(self, root)
+        tk.Frame.__init__(self, root)                    
 
-        # Load passed from main
+        # Initialize references
         self.on_exit = on_exit
         self.getNewVideoSource = getNewVideoSource
         self.getNewModelSource = getNewModelSource
         
-        # layout reference
+        # GUI layout references
         self.root = root
         titleLogo = tk.PhotoImage(file='resources/media/image_logo-text-76px.png')
         self.logo = titleLogo
         
-        # init UI
+        # Start the GUI
         self.setup_gui()
 
         
@@ -40,8 +40,8 @@ class Gui_Setup(tk.Frame):
                             column = 0, columnspan = 1, 
                             sticky="NESW")
         # Title source label
-        self.titleLabel = tk.Label(self, font = helvetica, wraplength = 300)
-        self.titleLabel.grid(row = 0, 
+        self.source_title_label = tk.Label(self, font = helvetica, wraplength = 300)
+        self.source_title_label.grid(row = 0, 
                              column = 1, columnspan = 3, 
                              padx=50, 
                              sticky="SE")
@@ -64,7 +64,7 @@ class Gui_Setup(tk.Frame):
         self.save_status = tk.Label(self, fg="black")
         self.save_status.grid(row = 3, 
                               column = 0, columnspan = 1, 
-                              padx=5, pady=10, 
+                              padx=(10, 5), pady=10, 
                               sticky="NESW") # Position
 
         # Change video source
@@ -75,7 +75,7 @@ class Gui_Setup(tk.Frame):
                             sticky="NESW") # Position
 
         # Change model source
-        self.sourceBtn = tk.Button(self, text="Choose training model", command=self.getNewModelSource)
+        self.sourceBtn = tk.Button(self, text="Choose model source", command=self.getNewModelSource)
         self.sourceBtn.grid(row = 3, 
                             column = 2, columnspan = 1,  
                             padx=5, pady=10, 
@@ -85,15 +85,15 @@ class Gui_Setup(tk.Frame):
         self.exitBtn = tk.Button(self, text="Exit program", command=self.on_exit)
         self.exitBtn.grid(row = 3, 
                           column = 3, columnspan = 1,  
-                          padx=5, pady=10, 
+                          padx=(5, 10), pady=10, 
                           sticky="NESW") # Position 
        
 
 
     # -------------------------------------------------- Logic --------------------------------------------------
-    def detectionIndicator(self, detection):
+    def update_detectionIndicator(self, detection_flag):
         """ Function for deciding the detection warning status """ 
-        if detection:
+        if detection_flag:
             self.alert_status.config(text = "DETECTED", 
                                      bg="red")
         else:
@@ -101,9 +101,9 @@ class Gui_Setup(tk.Frame):
                                      bg="green")
 
 
-    def savingIndicator(self, saveDetections):
+    def update_savingIndicator(self, savingDetections_flag):
         """ Function for deciding the detection warning status """ 
-        if saveDetections:
+        if savingDetections_flag:
             self.save_status.config(text="SAVING ON DETECTION", 
                                     bg="red")
         else:
@@ -111,15 +111,15 @@ class Gui_Setup(tk.Frame):
                                     bg="green")
 
 
-    def update_source_title(self, title):
+    def update_source_title(self, source_title):
         """ Function to update the GUI title label with a new title """ 
 
-        self.titleLabel.configure(text='Input source: '+ title)
-        self.title = title # Garbage reference
+        self.source_title_label.configure(text='Input source: '+ source_title)
+        self.source_title = source_title # Garbage reference
 
 
-    def update_gui_image(self, image):
+    def update_gui_image(self, output_image):
         """ Function to update the GUI image label with a new image """ 
 
-        self.video_output.configure(image=image)
-        self.image = image # Garbage reference
+        self.video_output.configure(image=output_image)
+        self.image = output_image # Garbage reference
