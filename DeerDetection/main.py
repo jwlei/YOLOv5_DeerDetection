@@ -6,12 +6,13 @@ import math
 import configparser
 
 
-from sys import executable
+from sys import executable, stderr
 from subprocess import Popen, CREATE_NEW_CONSOLE
 
 from app_controller.gui_output import Gui_output
 from app_view.startup_setup import Setup
 from app_controller.process import Process
+# from utility.logger_utility import Logger
 import utility.config
 
 
@@ -24,8 +25,8 @@ class Main:
 
     def __init__(self, windowTitle, videoSource, modelSource, forceReload_flag, saveDetection_flag, detectionThreshold, captureFrequency, output_dim):
         """ Initialization of the main class """ 
-        self.sourceTitle = videoSource
         
+        # Logger.loggr.info("HI")
 
         # Initialize a LastInn-FirstOut queue which will fetch and execute callbacks
         # Maxsize = 1 to ensure that the freshest frame is always the one processed and shown by the GUI
@@ -37,6 +38,8 @@ class Main:
         self.current_frame = None
         # New video source reference
         self.newVideoSource = None
+        # Reference for the title of a source
+        self.sourceTitle = videoSource
 
         # Get and set FPS for the video_source
         self.fps = self.getFps()
