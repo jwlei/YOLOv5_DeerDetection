@@ -56,6 +56,7 @@ topic = "DEER_DETECTION"
 client = mqtt.Client("Subscriber")
 client.connect(mqttBroker)
 
+# Global variables
 currentTimeStamp = None
 currentDetectionCount = None
 lastDetectedTimeStamp = None
@@ -66,7 +67,7 @@ lastDetectedTimeStamp = None
 def validateJson(msg):
     """ Function to validate incoming messages against a predefined schema """
     # Validation schema
-    detectionSchema = {
+    validationSchema = {
             "type": "object",
             "properties": {
                 "time": {"type": "string"},
@@ -77,7 +78,7 @@ def validateJson(msg):
     }
 
     try:
-        validate(instance=msg, schema=detectionSchema) 
+        validate(instance=msg, schema=validationSchema) 
     except jsonschema.exceptions.ValidationError as err:
         return False
     return True
@@ -91,21 +92,17 @@ def on_message(client, userdata, message):
     jsonToDecode = None
     isValid = False
 
-    log_detections = open(file_log_detections, "a") # "a" add to file, "w" overwrite
-
-    # Decode the message from an MQTT object to a string
-    decodedMessage = message.payload.decode("utf-8")
+    log_detections = open(file_log_detections, "a")                             # "a" add to file, "w" overwrite
+    decodedMessage = message.payload.decode("utf-8")                            # Decode the message from an MQTT object to a string
    
-    # Try to check if the json data can be loaded and validated
-    try: 
+    try:                                                                        # Try to check if the json data can be loaded and validated
         msg = json.loads(decodedMessage)
         isValid = validateJson(msg) 
     except:
         pass
 
-    # If the data is valid, get unique timestamp to avoid spam
-    if isValid:
-
+    
+    if isValid:                                                                 # If the data is valid, get unique timestamp to avoid spam from the publisher
         freshTimeStamp = None
         freshDetectionCount = None
 
@@ -113,7 +110,7 @@ def on_message(client, userdata, message):
             freshTimeStamp = msg["time"]
             freshDetectionCount = msg["detectedCount"]
 
-            # Only log/print if there is a difference in detection and a second has passed
+                                                                                # Only log/print if there is a difference in detection and a second has passed
             if (currentTimeStamp != freshTimeStamp) or (currentDetectionCount != freshDetectionCount) and freshDetectionCount != 0:
                 currentTimeStamp = freshTimeStamp
                 currentDetectionCount = freshDetectionCount
@@ -123,7 +120,7 @@ def on_message(client, userdata, message):
                     alert_Timestamp.config(bg="red", text=f'{freshTimeStamp}')
                     lastDetectedTimeStamp = freshTimeStamp
 
-                    log_detections.write(str(msg)) # Write to detections log file
+                    log_detections.write(str(msg))                              # Write to detections log file
                     log_detections.write('\n')
 
                 else:
@@ -132,8 +129,8 @@ def on_message(client, userdata, message):
                     if lastDetectedTimeStamp is not None:
                         alert_Timestamp.config(bg="green", text = f'Last detection occured at {lastDetectedTimeStamp}')
                     
-                #print(decodedMessage) # Prints JSON-syntax representation of the message
-                print(msg) # Prints single line representation of the JSON
+                #print(decodedMessage)                                          # Prints JSON-syntax representation of the message
+                print(msg)                                                      # Prints single line representation of the JSON
                 
             else:
                 

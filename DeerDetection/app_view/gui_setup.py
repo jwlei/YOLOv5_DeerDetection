@@ -12,19 +12,19 @@ class Gui_Setup(tk.Frame):
         """ Initialization of the GUI_Setup class, which calls the setup_gui function to create the GUI """
 
         # Frame constructor from the super class
-        tk.Frame.__init__(self, root)
+        tk.Frame.__init__(self, root)                    
 
-        # Load passed from main
+        # Initialize references
         self.on_exit = on_exit
         self.getNewVideoSource = getNewVideoSource
         self.getNewModelSource = getNewModelSource
         
-        # layout reference
+        # GUI layout references
         self.root = root
         titleLogo = tk.PhotoImage(file='resources/media/image_logo-text-76px.png')
         self.logo = titleLogo
         
-        # init UI
+        # Start the GUI
         self.setup_gui()
 
         
