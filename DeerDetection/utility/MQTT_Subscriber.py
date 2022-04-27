@@ -67,20 +67,37 @@ lastDetectedTimeStamp = None
 def validateJson(msg):
     """ Function to validate incoming messages against a predefined schema """
     # Validation schema
-    validationSchema = {
+    validationSchema_noMsg = {
             "type": "object",
             "properties": {
                 "time": {"type": "string"},
                 "location": {"type": "string"},
                 "detected": {"type": "boolean"},
                 "detectedCount": {"type": "number"},
+                "msg": {"type": "string"}
+            },
+    }
+
+    validationSchema_Msg = {
+            "type": "object",
+            "properties": {
+                "msg": {"type": "string"},
+                "time": {"type": "string"},
+                "location": {"type": "string"},
+                "detected": {"type": "boolean"},
+                "detectedCount": {"type": "number"},
+                "msg": {"type": "string"}
             },
     }
 
     try:
-        validate(instance=msg, schema=validationSchema) 
+        validate(instance=msg, schema=validationSchema_noMsg)
+        
     except jsonschema.exceptions.ValidationError as err:
-        return False
+        try:
+            validate(instance=msg, schema=validationSchema_Msg)
+        except jsonschema.exceptions.ValidationError as err:
+            return False
     return True
 
 
@@ -91,7 +108,6 @@ def on_message(client, userdata, message):
     global lastDetectedTimeStamp
     jsonToDecode = None
     isValid = False
-
     log_detections = open(file_log_detections, "a")                             # "a" add to file, "w" overwrite
     decodedMessage = message.payload.decode("utf-8")                            # Decode the message from an MQTT object to a string
    
@@ -99,6 +115,7 @@ def on_message(client, userdata, message):
         msg = json.loads(decodedMessage)
         isValid = validateJson(msg) 
     except:
+        print('[MQTT Subscriber] Recieved message does not match JSON schema or is empty')
         pass
 
     
@@ -122,6 +139,12 @@ def on_message(client, userdata, message):
 
                     log_detections.write(str(msg))                              # Write to detections log file
                     log_detections.write('\n')
+        
+                elif "msg" in msg:
+                    no_input = msg["msg"]
+                    timestamp = msg["time"]
+                    print(f'[MQTT Subscriber] {no_input} at {timestamp}')  
+                    
 
                 else:
                     alert_status.config(bg="green", text="NO DETECTION")
@@ -130,11 +153,11 @@ def on_message(client, userdata, message):
                         alert_Timestamp.config(bg="green", text = f'Last detection occured at {lastDetectedTimeStamp}')
                     
                 #print(decodedMessage)                                          # Prints JSON-syntax representation of the message
-                print(msg)                                                      # Prints single line representation of the JSON
-                
-            else:
-                
+                print(f'[MQTT Subscriber] {msg}')                               # Prints single line representation of the JSON
+             
+            else:    
                 break
+
         log_detections.close()
                 
 

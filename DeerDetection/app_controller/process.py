@@ -129,6 +129,14 @@ class Process(threading.Thread):
                 if not self.headless_mode:
                     self.gui.update_output_image(ImageTk.PhotoImage(Image.open('resources/media/image_no-input.jpg')))
                     self.gui.update_title_from_input_source('No input')
+                    msg = 'NO INPUT FROM VIDEO SOURCE'
+                    self.jsonMessage = json.dumps({'msg' : msg,
+                                       'time' : self.currentTime, 
+                                       'location' : self.currentLocation,  
+                                       'detected' : self.detected_flag, 
+                                       'detectedCount' : self.detectedCount,   
+                                       }, indent = 4)
+                    
             else:
                 noInput = False
             
@@ -205,8 +213,10 @@ class Process(threading.Thread):
         self.jsonMessage = json.dumps({'time' : self.currentTime, 
                                        'location' : self.currentLocation,  
                                        'detected' : self.detected_flag, 
-                                       'detectedCount' : self.detectedCount}, 
-                                      indent = 4)
+                                       'detectedCount' : self.detectedCount,
+                                       }, indent = 4)
+
+        
 
         executionTime = (time.time() - start_time)*1000                             # End time for measuring performance
         self.calculateAverageProcessingTime(executionTime)                          # Calculate average frametime and print to console
