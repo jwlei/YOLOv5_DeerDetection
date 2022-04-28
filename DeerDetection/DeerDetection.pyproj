@@ -12,7 +12,8 @@
     <Name>DeerDetection</Name>
     <RootNamespace>DeerDetection</RootNamespace>
     <SuppressEnvironmentCreationPrompt>True</SuppressEnvironmentCreationPrompt>
-    <InterpreterId>Global|PythonCore|3.10</InterpreterId>
+    <InterpreterId>
+    </InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -25,9 +26,6 @@
   <ItemGroup>
     <Compile Include="main.py" />
   </ItemGroup>
-  <ItemGroup>
-    <InterpreterReference Include="Global|PythonCore|3.10" />
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in
        Visual Studio and specify your pre- and post-build commands in
@@ -37,4 +35,4 @@
   </Target>
   <Target Name="AfterBuild">
   </Target>
-</Project> 
+</Project>

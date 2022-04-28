@@ -74,7 +74,8 @@ def validateJson(msg):
                 "location": {"type": "string"},
                 "detected": {"type": "boolean"},
                 "detectedCount": {"type": "number"},
-                "msg": {"type": "string"}
+                "lowestConfidence": {"type": ["number", "null"]},
+                "highestConfidence": {"type": ["number", "null"]}
             },
     }
 
@@ -86,7 +87,8 @@ def validateJson(msg):
                 "location": {"type": "string"},
                 "detected": {"type": "boolean"},
                 "detectedCount": {"type": "number"},
-                "msg": {"type": "string"}
+                "lowestConfidence": {"type": ["number", "null"]},
+                "highestConfidence": {"type": ["number", "null"]}
             },
     }
 
@@ -97,7 +99,10 @@ def validateJson(msg):
         try:
             validate(instance=msg, schema=validationSchema_Msg)
         except jsonschema.exceptions.ValidationError as err:
-            return False
+            try:
+                alidate(instance=msg, schema=validationSchema_Msg_noDetect)
+            except jsonschema.exceptions.ValidationError as err:
+                return False
     return True
 
 

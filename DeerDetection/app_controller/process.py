@@ -62,7 +62,8 @@ class Process(threading.Thread):
         self.currentTime = None
         self.detected_flag = None
         self.detectedCount = 0
-
+        self.lowestConfidence = None
+        self.highestConfidence = None
         self.jsonMessage = None
         
 
@@ -134,7 +135,9 @@ class Process(threading.Thread):
                                        'time' : self.currentTime, 
                                        'location' : self.currentLocation,  
                                        'detected' : self.detected_flag, 
-                                       'detectedCount' : self.detectedCount,   
+                                       'detectedCount' : self.detectedCount, 
+                                       'lowestConfidence' : self.lowestConfidence,
+                                       'highestConfidence' : self.highestConfidence
                                        }, indent = 4)
                     
             else:
@@ -189,7 +192,7 @@ class Process(threading.Thread):
         prediction = labels, cord
 
         # Plot bounding box and label to the frame
-        frame, detected_flag, detectedCount = self.input_handler.plot_frame(prediction, current_frame, rawFrame)
+        frame, detected_flag, detectedCount, lowestConfidence, highestConfidence  = self.input_handler.plot_frame(prediction, current_frame, rawFrame)
 
         # Process the frame for output and update the GUI
         if not self.headless_mode:
@@ -208,12 +211,15 @@ class Process(threading.Thread):
         self.currentTime = time.strftime('%Y-%m-%d %H:%M:%S', currTimePreFormat)    # Current Time
         self.set_detected(detected_flag)                                            # Set detection status for MQTT
         self.set_detectedCount(detectedCount)                                       # Set counter for how many animals detected
+        self.set_confidenceValue(lowestConfidence, highestConfidence)
 
         # Creating a json message to send with MQTT
         self.jsonMessage = json.dumps({'time' : self.currentTime, 
                                        'location' : self.currentLocation,  
                                        'detected' : self.detected_flag, 
                                        'detectedCount' : self.detectedCount,
+                                       'lowestConfidence' : self.lowestConfidence,
+                                       'highestConfidence' : self.highestConfidence
                                        }, indent = 4)
 
         
@@ -242,9 +248,23 @@ class Process(threading.Thread):
         """ Function to set detectedCount """ 
         self.detectedCount = detectedCount
 
+    def set_confidenceValue(self, lowestConfidence, highestConfidence):
+        """ Function to set confidence value for message """ 
+        try:
+            self.lowestConfidence = float("{:.2f}".format(lowestConfidence))
+        except Exception:
+            pass
+        
+        try:
+            self.highestConfidence = float("{:.2f}".format(highestConfidence))
+        except Exception:
+            pass
+        
+
     def get_detection(self):
         """ Function to get detected """ 
         return self.detected_flag
+
 
     def getNewVideoSource():
         """ Function to get a new video source while running """ 

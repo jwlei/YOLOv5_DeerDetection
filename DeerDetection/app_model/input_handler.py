@@ -87,6 +87,8 @@ class Input_handler:
         global detectionCount
         detection_flag = False
         detectionCount = 0
+        highestConfidence = None
+        lowestConfidence = None
 
         background_color = (0, 0, 255)                                                  # Color of the box
         text_color = (255, 255, 255)                                                    # Color of the 
@@ -102,6 +104,14 @@ class Input_handler:
             if confidenceValue >= self.detectionThreshold:                              # If confidence interval is greater than confidenceThreshold do:
                 detection_flag = True
                 detectionCount = labelLength
+
+                if lowestConfidence is None or confidenceValue <= lowestConfidence:     # Get lowest confidence value from the image
+                    lowestConfidence = confidenceValue
+
+                if highestConfidence is None or confidenceValue >= highestConfidence:   # Get highest confidence value from the image
+                    highestConfidence = confidenceValue
+                
+                
                 
                 self.save_raw_image(rawFrame)                                           # If enabled, save picture on detection
 
@@ -110,16 +120,16 @@ class Input_handler:
                 
                 cv2.rectangle(frame,(x1, y1), (x2, y2), background_color, 2)            # Plot bounding box
   
-                w, h = 105, 20
+                w, h = 85, 15
                 cv2.rectangle(frame, (x1, y1), (x1 + w, y1 - h),background_color,-1)    # Plot background box for label
                               
 
                 cv2.putText(frame,                                                      # Plot the label text
                             self.label_toString(labels[i]).upper()+' '+str("%.2f" % confidenceValue.item()), 
-                            (x1, y1-5), 
-                            cv2.FONT_HERSHEY_SIMPLEX, 0.55, text_color, 1)
+                            (x1, y1-3), 
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.45, text_color, 1)
 
-        return frame, detection_flag, detectionCount
+        return frame, detection_flag, detectionCount, lowestConfidence, highestConfidence
 
 
         
