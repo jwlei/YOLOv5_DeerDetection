@@ -3,9 +3,7 @@ import threading
 import cv2
 import math
 import time
-import paho.mqtt.client as mqtt
 import geocoder
-import json
 import time
 
 from PIL import Image, ImageTk
@@ -13,6 +11,7 @@ from PIL import Image, ImageTk
 from app_controller.gui_output import Gui_output
 from app_model.input_handler import Input_handler
 from app_view.startup_setup import Setup
+from utility.MQTT_Publisher import Mqtt_publisher
 
 
 # Global variables
@@ -31,11 +30,7 @@ class Process(threading.Thread):
         # Call the super class constructor
         threading.Thread.__init__(self)
 
-        # Initialize an MQTT publisher client
-        self.mqttBroker = "mqtt.eclipseprojects.io"
-        self.client = mqtt.Client("DEER_DETECTOR")
-        self.client.connect(self.mqttBroker)
-        print('[MQTT Publisher] Client started')
+       
 
         # Initialize references to variables
         self.gui = gui
@@ -69,6 +64,8 @@ class Process(threading.Thread):
 
         print('[SETUP] FPS set to: ', fps)
         print(f'[SETUP] DELAY set to {self.fps}ms')
+
+        self.mqtt_publisher = Mqtt_publisher()
 
         # Create an instance of the input data
         self.input_handler = Input_handler(self.videoSource, 
@@ -131,18 +128,16 @@ class Process(threading.Thread):
                     self.gui.update_output_image(ImageTk.PhotoImage(Image.open('resources/media/image_no-input.jpg')))
                     self.gui.update_title_from_input_source('No input')
                     msg = 'NO INPUT FROM VIDEO SOURCE'
-                    self.jsonMessage = json.dumps({'msg' : msg,
-                                       'time' : self.currentTime, 
-                                       'location' : self.currentLocation,  
-                                       'detected' : self.detected_flag, 
-                                       'detectedCount' : self.detectedCount, 
-                                       'lowestConfidence' : self.lowestConfidence,
-                                       'highestConfidence' : self.highestConfidence
-                                       }, indent = 4)
-                    
+                    self.mqtt_publisher.publishMsg(msg, 
+                                                   self.currentTime, 
+                                                   self.currentLocation, 
+                                                   self.detected_flag, 
+                                                   self.detectedCount, 
+                                                   self.lowestConfidence, 
+                                                   self.highestConfidence)  
             else:
                 noInput = False
-            
+
 
             if not noInput and not self.headless_mode:
             # If the callback_queue is not full, put the current frame into the queue for execution of the thread
@@ -159,11 +154,15 @@ class Process(threading.Thread):
                 self.score_label_send_to_output(self.current_frame,
                                                 self.rawFrame,
                                                 self.gui)
-
-
-            # Publish the JSON list through MQTT
-            self.client.publish("DEER_DETECTION", self.jsonMessage)
             
+            # Publish MQTT Message
+            self.mqtt_publisher.publishDefault(self.currentTime, 
+                                self.currentLocation, 
+                                self.detected_flag, 
+                                self.detectedCount, 
+                                self.lowestConfidence, 
+                                self.highestConfidence)
+
             # Wait for delay until next iteration
             cv2.waitKey(self.fps) 
 
@@ -180,8 +179,6 @@ class Process(threading.Thread):
         # For each iteration, reset values
         detected_flag = None
         detectedCount = 0
-        currentTime = None
-        
         start_time = time.time() # Start time for measuring performance
 
         if self.resize_flag:
@@ -194,9 +191,15 @@ class Process(threading.Thread):
         # Plot bounding box and label to the frame
         frame, detected_flag, detectedCount, lowestConfidence, highestConfidence  = self.input_handler.plot_frame(prediction, current_frame, rawFrame)
 
+                                                                              
+        # Elements to be sendt in a msg with MQTT Client                            # Location is gotten in the initialization
+        self.currentTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) # Timestamp attributed to when the image was recieved
+        self.set_detected(detected_flag)                                            # Set detection status for MQTT
+        self.set_detectedCount(detectedCount)                                       # Set counter for how many animals detected
+        self.set_confidenceValue(lowestConfidence, highestConfidence)
+
         # Process the frame for output and update the GUI
         if not self.headless_mode:
-            
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)                          # Convert the frame to RGB  
             output_image = Image.fromarray(frame)                                   # Convert the image from array to PIL in order to show it using tkinter
             output_image = ImageTk.PhotoImage(output_image)                         # Convert the image to a Tkinter compatible Image 
@@ -205,26 +208,7 @@ class Process(threading.Thread):
             gui.update_alarm_status(detected_flag)                                  # Update the current alarm status
 
 
-        
-        # JSON MQTT Message                                                                           
-        currTimePreFormat = time.localtime()                                        # Location is gotten in the initialization
-        self.currentTime = time.strftime('%Y-%m-%d %H:%M:%S', currTimePreFormat)    # Current Time
-        self.set_detected(detected_flag)                                            # Set detection status for MQTT
-        self.set_detectedCount(detectedCount)                                       # Set counter for how many animals detected
-        self.set_confidenceValue(lowestConfidence, highestConfidence)
-
-        # Creating a json message to send with MQTT
-        self.jsonMessage = json.dumps({'time' : self.currentTime, 
-                                       'location' : self.currentLocation,  
-                                       'detected' : self.detected_flag, 
-                                       'detectedCount' : self.detectedCount,
-                                       'lowestConfidence' : self.lowestConfidence,
-                                       'highestConfidence' : self.highestConfidence
-                                       }, indent = 4)
-
-        
-
-        executionTime = (time.time() - start_time)*1000                             # End time for measuring performance
+        executionTime = (time.time() - start_time)*1000                             # End time for measuring performance in milliseconds
         self.calculateAverageProcessingTime(executionTime)                          # Calculate average frametime and print to console
 
         
@@ -239,6 +223,7 @@ class Process(threading.Thread):
     def stop(self):
         """ Function to set the stop Flag """
         self.waitingToStop = True
+
 
     def set_detected(self, detection):
         """ Function to set detected """
@@ -265,7 +250,6 @@ class Process(threading.Thread):
         """ Function to get detected """ 
         return self.detected_flag
 
-
     def getNewVideoSource():
         """ Function to get a new video source while running """ 
         global newVideoSource
@@ -280,6 +264,7 @@ class Process(threading.Thread):
         """ Function to get a new title from the video source while running """
         global newVideoSource
         self.gui.update_title_from_input_source(newVideoSource)
+
 
     def calculateAverageProcessingTime(self, executionTime):
         """ Function to measure execution time per frame, for optimization and testing purposes """

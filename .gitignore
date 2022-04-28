@@ -376,3 +376,5 @@ FodyWeavers.xsd
 /DeerDetection/resources/media/video_blind_test2.mp4
 /DeerDetection/resources/models/yolov5s_run1_200epoch.pt
 /DeerDetection/resources/models/defaultModel_OLD.pt
+/DeerDetection/resources/models/yolov5m_run1_200epoch.pt
+/DeerDetection/resources/models/yolov5s_run1_50epoch_200pic.pt
