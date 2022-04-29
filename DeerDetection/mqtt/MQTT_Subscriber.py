@@ -1,7 +1,9 @@
-import paho.mqtt.client as mqtt
 import json
+import paho.mqtt.client as mqtt
+
 import jsonschema
 from jsonschema import validate
+
 newSource = None
 
 

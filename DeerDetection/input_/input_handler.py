@@ -120,7 +120,7 @@ class Input_handler:
                 
                 cv2.rectangle(frame,(x1, y1), (x2, y2), background_color, 2)            # Plot bounding box
   
-                w, h = 115, 15
+                w, h = 110, 15
                 cv2.rectangle(frame, (x1, y1), (x1 + w, y1 - h),background_color,-1)    # Plot background box for label
                               
 
