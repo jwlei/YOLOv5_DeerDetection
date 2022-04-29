@@ -10,14 +10,14 @@ from pathlib import Path
 class Input_handler:
     """ Class for supplying and manipulating input data """ 
 
-    def __init__(self, videoSource, modelSource, forceReload_flag, savingDetection_flag, captureFrequency, detectionThreshold):
+    def __init__(self, videoSource, modelSource, forceReload_flag, saveDetections_flag, captureFrequency, detectionThreshold):
         """ Initializing the input data stream """ 
 
         # Load flags passed from main
         self.videoSource = videoSource
         self.modelSource = modelSource
         self.forceReload = forceReload_flag
-        self.captureDetection = savingDetection_flag
+        self.saveDetections_flag = saveDetections_flag
         self.captureFrequency = captureFrequency
         self.detectionThreshold = detectionThreshold
         
@@ -47,7 +47,7 @@ class Input_handler:
         
 
         # Process and set the videoSource
-        self.video_capture = self.processInputPath(videoSource)
+        self.processed_videoSource = self.processInputPath(videoSource)
         
        
         
@@ -135,7 +135,7 @@ class Input_handler:
         
     def read_current_frame(self):
         """ Function to get a single frame, copy it for raw photo collection, and it's return boolean value """
-        ret, frame = self.video_capture.read()                                          # Get boolean return and frame from the video feed
+        ret, frame = self.processed_videoSource.read()                                          # Get boolean return and frame from the video feed
         try:
             rawFrame = frame.copy()                                                     # Try to copy the frame
         except Exception:
@@ -181,9 +181,9 @@ class Input_handler:
 
     def release(self):
         """ Function to manually release the resource """
-        self.video_capture.release()
+        self.processed_videoSource.release()
 
     def __del__(self):
         """ Function to release the resource """
-        self.video_capture.release()
+        self.processed_videoSource.release()
         

@@ -1,4 +1,4 @@
-from os import startfile
+
 import threading
 import cv2
 import math
@@ -59,7 +59,6 @@ class Process(threading.Thread):
         self.detectedCount = 0
         self.lowestConfidence = None
         self.highestConfidence = None
-        self.jsonMessage = None
         
 
         print('[SETUP] FPS set to: ', fps)
@@ -193,7 +192,7 @@ class Process(threading.Thread):
 
                                                                               
         # Elements to be sendt in a msg with MQTT Client                            # Location is gotten in the initialization
-        self.currentTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime()) # Timestamp attributed to when the image was recieved
+        self.currentTime = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime())     # Timestamp attributed to when the image was recieved
         self.set_detected(detected_flag)                                            # Set detection status for MQTT
         self.set_detectedCount(detectedCount)                                       # Set counter for how many animals detected
         self.set_confidenceValue(lowestConfidence, highestConfidence)
