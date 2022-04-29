@@ -8,11 +8,11 @@ import configparser
 from sys import executable, stderr
 from subprocess import Popen, CREATE_NEW_CONSOLE
 
-from app_controller.gui_output import Gui_output
-from app_view.startup_setup import Setup
-from app_controller.process import Process
+from gui.gui_output import Gui_output
+from setup.startup_setup import Setup
+from processing.process import Process
 
-import utility.config
+import config.config
 
 
 
@@ -145,7 +145,7 @@ class Main:
 
 # ------------------------------------------ Launch configuration ------------------------------------------ #
 
-checkConf = utility.config
+checkConf = config.config
 checkConf.generate_config()
 
 
@@ -163,7 +163,7 @@ defaultModelSource = config_automatic['Automatic']['ModelSource']
 model_exists = os.path.exists(defaultModelSource)
 
 if mqtt_subscriber_started:
-    mqtt_subscriber = Popen([executable, 'utility/MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
+    mqtt_subscriber = Popen([executable, 'external_mqtt/ext_MQTT_Subscriber.py'], subprocess.CREATE_NEW_CONSOLE)
 
 
 
