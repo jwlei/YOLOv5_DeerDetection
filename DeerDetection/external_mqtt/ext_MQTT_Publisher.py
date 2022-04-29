@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import json
 import time
+import sys
 
 class Mqtt_publisher:
     """ Class which contains functionality of an MQTT Message publisher """ 
@@ -22,6 +23,10 @@ class Mqtt_publisher:
 
         self.client.publish("DEER_DETECTION_REFRESH", msg)
 
-new_source = 'https://dl.dropboxusercontent.com/s/5p2onyp5m7apxrj/best.pt'
+if __name__ == "__main__":
+    new_source = str(sys.argv[1])
+
+# to run python ext_MQTT_Publisher.py https://dl.dropboxusercontent.com/s/5p2onyp5m7apxrj/best.pt
+#new_source = 'https://dl.dropboxusercontent.com/s/5p2onyp5m7apxrj/best.pt'
 pub = Mqtt_publisher()
 pub.publishNewSource(new_source)
