@@ -27,8 +27,8 @@ alert_Timestamp.pack(fill="both", expand=True)
 
 
 # ------------------------------ Logging ------------------------------ #
-file_log_detections = "logs/log_detections.txt"
-file_log_mqtt = "logs/log_mqtt.log"
+file_log_detections = "external_mqtt_logs/log_detections.txt"
+file_log_mqtt = "external_mqtt_logs/log_mqtt.log"
 
 # Logging basic config for MQTT 
 logging.basicConfig(filename = file_log_mqtt, # Log to fresh file
