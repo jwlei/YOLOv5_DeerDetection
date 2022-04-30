@@ -361,29 +361,29 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/DeerDetection/test.mp4
-/DeerDetection/test2.mp4
-/DeerDetection/log.txt
+/Realtime-dwls/test.mp4
+/Realtime-dwls/test2.mp4
+/Realtime-dwls/log.txt
 *.jpg
 
-/DeerDetection/media/video_testLong.mp4
-/DeerDetection/logs/log_detections.txt
-/DeerDetection/resources/media/video_testLong.mp4
-/DeerDetection/config.ini
-/DeerDetection/logs/log_application.txt
-/DeerDetection/env
-/DeerDetection/resources/media/video_blind_test1.mp4
-!/DeerDetection/resources/media/image_no-input.jpg
-/DeerDetection/resources/media/video_blind_test2.mp4
-/DeerDetection/resources/models/yolov5s_run1_200epoch.pt
-/DeerDetection/resources/models/defaultModel_OLD.pt
-/DeerDetection/resources/models/yolov5m_run1_200epoch.pt
-/DeerDetection/resources/models/yolov5s_run1_50epoch_200pic.pt
+/Realtime-dwls/media/video_testLong.mp4
+/Realtime-dwls/logs/log_detections.txt
+/Realtime-dwls/resources/media/video_testLong.mp4
+/Realtime-dwls/config.ini
+/Realtime-dwls/logs/log_application.txt
+/Realtime-dwls/env
+/Realtime-dwls/resources/media/video_blind_test1.mp4
+!/Realtime-dwls/resources/media/image_no-input.jpg
+/Realtime-dwls/resources/media/video_blind_test2.mp4
+/Realtime-dwls/resources/models/yolov5s_run1_200epoch.pt
+/Realtime-dwls/resources/models/defaultModel_OLD.pt
+/Realtime-dwls/resources/models/yolov5m_run1_200epoch.pt
+/Realtime-dwls/resources/models/yolov5s_run1_50epoch_200pic.pt
 *.pt
-/DeerDetection/env_dd
-/DeerDetection/resources/media/1.mp4
+/Realtime-dwls/env_dd
+/Realtime-dwls/resources/media/1.mp4
 *.sln
 /.idea/
 *.pyproj
 
-/DeerDetection/external_mqtt_logs/log_detections.txt
+/Realtime-dwls/external_mqtt_logs/log_detections.txt
