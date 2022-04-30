@@ -158,7 +158,7 @@ def on_message(client, userdata, message):
                         alert_Timestamp.config(bg="green", text = f'Last detection occured at {lastDetectedTimeStamp}')
                     
                 #print(decodedMessage)                                          # Prints JSON-syntax representation of the message
-                print(f'[MQTT Subscriber] {msg}')                               # Prints single line representation of the JSON
+                print(f'[MQTT EXTERNAL SUBSCRIBER] {msg}')                               # Prints single line representation of the JSON
              
             else:    
                 break
