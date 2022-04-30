@@ -52,7 +52,7 @@ log_detections.close()
 
 # ------------------------------ MQTT Subscriber client ------------------------------ #
 mqttBroker = "mqtt.eclipseprojects.io"
-topic = "OBJECT_DETECTION"
+topic = "DWLS_DETECTION"
 client = mqtt.Client("EXTERNAL SUBSCRIBER")
 client.connect(mqttBroker)
 
