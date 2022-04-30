@@ -17,10 +17,10 @@ class Mqtt_subscriber:
         self.client.connect(self.mqttBroker)
         print(f'[MQTT INTERNAL SUBSCRIBER] Initializing.. ')
 
-    def validateJson(msg):
+    def validateJson(self, msg):
         """ Function to validate incoming messages against a predefined schema """
         # Validation schema
-        validationSchema_Msg = {
+        validationSchema = {
             "type": "object",
             "properties": {
                 "newSource": {"type": "string"}
@@ -40,15 +40,13 @@ class Mqtt_subscriber:
 
         isValid = False
         decodedMessage = message.payload.decode("utf-8")                            # Decode the message from an MQTT object to a string
-        print(decodedMessage)
-        print(isValid)
+        
         try:                                                                        # Try to check if the json data can be loaded and validated
             msg = json.loads(decodedMessage)
-            isValid = validateJson(msg)
+            isValid = self.validateJson(msg)
         except:
             print('[MQTT Subscriber] Recieved msg not valid JSON schema')
             pass
-        isValid = True
 
         if isValid and msg["newSource"] is not None:                                                                 # If the data is valid, get unique timestamp to avoid spam from the publisher
             newSource = msg["newSource"]

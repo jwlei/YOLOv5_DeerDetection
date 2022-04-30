@@ -9,7 +9,7 @@ class Mqtt_publisher:
         self.mqttBroker = "mqtt.eclipseprojects.io"
         self.client = mqtt.Client("DEER_DETECTOR")
         self.client.connect(self.mqttBroker)
-        print('[MQTT Publisher] Client started')
+        print('[MQTT INTERNAL PUBLISHER] Client started')
 
     def publishDefault(self, currentTime, currentLocation, detected_flag, detectedCount, lowestConfidence, highestConfidence):
         """ Publish a default message containing no specific string Message """

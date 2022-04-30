@@ -11,18 +11,18 @@ class Mqtt_publisher:
         self.mqttBroker = "mqtt.eclipseprojects.io"
         self.client = mqtt.Client("DEER_DETECTION_REFRESH")
         self.client.connect(self.mqttBroker)
-        print('[MQTT Publisher EXTERNAL] Client initialized')
+        print('[MQTT EXTERNAL PUBLISHER] Client initialized')
 
 
 
 
     def publishNewSource(self, new_source):
         """ Publish a default message containing no specific string Message """
-        msg = json.dumps({'newSource' : new_source,
+        msg = json.dumps({'newSource' : new_source
                         }, indent = 4)
 
         self.client.publish("DEER_DETECTION_REFRESH", msg)
-        print(f'[MQTT Publisher EXTERNAL] has sendt {msg} to all subscribers')
+        print(f'[MQTT EXTERNAL PUBLISHER] has sendt {msg} to all subscribers')
 
 if __name__ == "__main__":
     new_source = str(sys.argv[1])

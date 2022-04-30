@@ -40,8 +40,8 @@ console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 logger = logging.getLogger('').addHandler(console)
 
-logging.warning('[MQTT Subscriber] Initializing')
-logging.warning(f'[MQTT Subscriber] MQTT Subscriber log can be found at {file_log_mqtt}')
+logging.warning('[MQTT EXTERNAL SUBSCRIBER] Initializing')
+logging.warning(f'[MQTT EXTERNAL SUBSCRIBER] MQTT Subscriber log can be found at {file_log_mqtt}')
 
 # Just getting a fresh file to write detections in
 # TODO: New log file on each run (?)
@@ -53,7 +53,7 @@ log_detections.close()
 # ------------------------------ MQTT Subscriber client ------------------------------ #
 mqttBroker = "mqtt.eclipseprojects.io"
 topic = "DEER_DETECTION"
-client = mqtt.Client("Subscriber")
+client = mqtt.Client("EXTERNAL SUBSCRIBER")
 client.connect(mqttBroker)
 
 # Global variables
@@ -120,7 +120,7 @@ def on_message(client, userdata, message):
         msg = json.loads(decodedMessage)
         isValid = validateJson(msg) 
     except:
-        print('[MQTT Subscriber] Recieved message does not match JSON schema or is empty')
+        print('[MQTT EXTERNAL SUBSCRIBER] Recieved message does not match JSON schema or is empty')
         pass
 
     
@@ -148,7 +148,7 @@ def on_message(client, userdata, message):
                 elif "msg" in msg:
                     no_input = msg["msg"]
                     timestamp = msg["time"]
-                    print(f'[MQTT Subscriber] {no_input} at {timestamp}')  
+                    print(f'[MQTT EXTERNAL SUBSCRIBER] {no_input} at {timestamp}')  
                     
 
                 else:
@@ -169,14 +169,14 @@ def on_message(client, userdata, message):
 # ------------------------------ Run the client ------------------------------ #
 
 client.loop_start() 
-logging.warning('[MQTT Subscriber] Client loop started')
+logging.warning('[MQTT EXTERNAL SUBSCRIBER] Client loop started')
 client.subscribe(topic)
-logging.warning(f'[MQTT Subscriber] Subscribed to: {topic}')
+logging.warning(f'[MQTT EXTERNAL SUBSCRIBER] Subscribed to: {topic}')
 
 client.on_message = on_message
 
 alarmWindow.mainloop()
-logging.warning(f'[MQTT Subscriber] Setup complete, detections are logged to {file_log_detections}')
+logging.warning(f'[MQTT EXTERNAL SUBSCRIBER] Setup complete, detections are logged to {file_log_detections}')
 
 #Timeout
 time.sleep(100000)
