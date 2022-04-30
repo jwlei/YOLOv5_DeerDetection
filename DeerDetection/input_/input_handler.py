@@ -173,7 +173,7 @@ class Input_handler:
         
         if not imgLabel:
             current_time = time.strftime("%Y-%m-%d_%H-%M-%S", time.gmtime())
-            imgLabel = f'detection-{current_time}_{self.savedImageCounter}.jpg'         # Name the saved file by by date and image counter to avoid duplicates
+            imgLabel = f'detection-{current_time}_{self.savedImageCounter}.png' .jpg    # Name the saved file by by date and image counter to avoid duplicates
             secondIterator = (60.0 - (time.time() - self.startTime) % 60.0)             
 
             if secondIterator <= capture_interval:                                      # Print image if detection and int(interval) seconds has passed
