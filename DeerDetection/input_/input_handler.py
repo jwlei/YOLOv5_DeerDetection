@@ -135,7 +135,7 @@ class Input_handler:
         
     def read_current_frame(self):
         """ Function to get a single frame, copy it for raw photo collection, and it's return boolean value """
-        ret, frame = self.processed_videoSource.read()                                          # Get boolean return and frame from the video feed
+        ret, frame = self.processed_videoSource.read()                                  # Get boolean return and frame from the video feed
         try:
             rawFrame = frame.copy()                                                     # Try to copy the frame
         except Exception:
@@ -146,15 +146,23 @@ class Input_handler:
 
     def processInputPath(self, videoSource):
         """ Function to process the video input and assign as a cv2 video object """
-        if "youtube" in videoSource or "youtu.be" in videoSource:                       # If the video source path contains fragments of youtube video URL's, handle them as such
-            print('[SETUP] URL supplied is a YouTube-link, processing ... ')            # Since cv2 won't capture video from a YouTube URL as-is.
-            ytLink = pafy.new(videoSource).streams[-1]
-            assert ytLink is not None
-            processedSource = cv2.VideoCapture(ytLink.url) 
-        else:
-            processedSource = cv2.VideoCapture(videoSource)                             # Otherwise assign it
+        try: 
+            processedSource = cv2.VideoCapture(int(videoSource))                        # Try to check if input is a camera
+            print('[SETUP] Input source is identified as a local camera ... ')
+            return processedSource
+        except Exception:
+            if "youtube" in videoSource or "youtu.be" in videoSource:                   # If the video source path contains fragments of youtube video URL's, handle them as such
+                print('[SETUP] URL supplied is a YouTube-link, processing ... ')        # Since cv2 won't capture video from a YouTube URL as-is.
+                ytLink = pafy.new(videoSource).streams[-1]
+                assert ytLink is not None
+                processedSource = cv2.VideoCapture(ytLink.url)
+                return processedSource
+            else:
+                processedSource = cv2.VideoCapture(videoSource)                         # Otherwise assign it
+                return processedSource
+
         
-        return processedSource
+       
 
 
     def save_raw_image(self, rawFrame, imgLabel=None):

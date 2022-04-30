@@ -233,7 +233,8 @@ if not skipSetup:
             modelSource = defaultModelSource
         forceReload = Setup.setForceReload()
         captureDetection = Setup.setCaptureDetection()
-        captureFrequency = Setup.setCaptureFrequency()
+        if captureDetection:
+            captureFrequency = Setup.setCaptureFrequency()
         detectionThreshold = Setup.setDetectionThreshold()
         resize_flag = Setup.setResize()
         if resize_flag:
@@ -271,7 +272,7 @@ if not skipSetup:
         # Force reload false
         captureDetection = True
         captureFrequency = Setup.setCaptureFrequency()
-        detectionThreshold = Setup.setDetectionThreshold() #detectionThreshold = '0.3'
+        detectionThreshold = Setup.setDetectionThreshold() #detectionThreshold = '0.3' 
         headless_mode = Setup.setHeadless()
 
         print('[SETUP] Launching with:')

@@ -379,3 +379,5 @@ FodyWeavers.xsd
 /DeerDetection/resources/models/yolov5m_run1_200epoch.pt
 /DeerDetection/resources/models/yolov5s_run1_50epoch_200pic.pt
 *.pt
+/DeerDetection/env_dd
+/DeerDetection/resources/media/1.mp4

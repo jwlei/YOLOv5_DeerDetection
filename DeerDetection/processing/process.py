@@ -37,9 +37,9 @@ class Process(threading.Thread):
         # Initialize references to variables
         self.gui = gui
         self.callback_queue = callback_queue
-        self.fps = int(700/math.floor(fps)) # Set delay a bit faster than frame time since we're processing the frames
-                                            # Convert float FPS number to INT for cv2 waitkey
-                                            # Floor vs roof, decided to use floor so we dont process more frames than we have
+        self.fps = int(700/math.floor(fps))         # Set delay a bit faster than frame time since we're processing the frames
+        print(f'[SETUP] DELAY set to {self.fps}ms') # Convert float FPS number to INT for cv2 waitkey
+                                                    # Floor vs roof, decided to use floor so we dont process more frames than we have
         self.videoSource = videoSource
         self.modelSource = modelSource
         self.forceReload = forceReload_flag
@@ -63,8 +63,7 @@ class Process(threading.Thread):
         self.highestConfidence = None
         
 
-        print('[SETUP] FPS set to: ', fps)
-        print(f'[SETUP] DELAY set to {self.fps}ms')
+        
 
         self.mqtt_publisher = Mqtt_publisher()
         self.mqtt_subscriber = Mqtt_subscriber()

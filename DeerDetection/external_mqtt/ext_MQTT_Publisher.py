@@ -11,7 +11,7 @@ class Mqtt_publisher:
         self.mqttBroker = "mqtt.eclipseprojects.io"
         self.client = mqtt.Client("DEER_DETECTION_REFRESH")
         self.client.connect(self.mqttBroker)
-        print('[MQTT Publisher EXTERNAL] Client started')
+        print('[MQTT Publisher EXTERNAL] Client initialized')
 
 
 
@@ -22,6 +22,7 @@ class Mqtt_publisher:
                         }, indent = 4)
 
         self.client.publish("DEER_DETECTION_REFRESH", msg)
+        print(f'[MQTT Publisher EXTERNAL] has sendt {msg} to all subscribers')
 
 if __name__ == "__main__":
     new_source = str(sys.argv[1])
