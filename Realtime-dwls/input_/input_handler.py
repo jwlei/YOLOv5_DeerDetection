@@ -103,16 +103,16 @@ class Input_handler:
         for i in range(labelLength):                                                    # For each label detected, plot the bounding box, label and confidence value
             row = coordinates[i]                                                        # Grab the prediction to plot
             confidenceValue = row[4]                                                    # Grab the confidence value from the tuple
-            
+
+            if lowestConfidence is None or confidenceValue <= lowestConfidence:         # Get lowest confidence value from the image
+                lowestConfidence = confidenceValue
+
+            if highestConfidence is None or confidenceValue >= highestConfidence:       # Get highest confidence value from the image
+                highestConfidence = confidenceValue
+
             if confidenceValue >= self.detectionThreshold:                              # If confidence interval is greater than confidenceThreshold do:
                 detection_flag = True
                 detectionCount = labelLength
-
-                if lowestConfidence is None or confidenceValue <= lowestConfidence:     # Get lowest confidence value from the image
-                    lowestConfidence = confidenceValue
-
-                if highestConfidence is None or confidenceValue >= highestConfidence:   # Get highest confidence value from the image
-                    highestConfidence = confidenceValue
 
                 if self.captureDetection:
                     self.save_raw_image(rawFrame)                                           # If enabled, save picture on detection
