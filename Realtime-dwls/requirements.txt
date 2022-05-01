@@ -16,6 +16,9 @@ tqdm >=4.41.0
 matplotlib >= 3.2.2
 seaborn >= 0.11.0
 
+# Also
+# pip install torch torchvision --extra-index-url https://download.pytorch.org/whl/cu113
+
 
 
 
