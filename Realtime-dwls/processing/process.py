@@ -25,7 +25,6 @@ times = []
 class Process(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
 
-
     def __init__(self, gui, callback_queue, fps, videoSource, modelSource, forceReload_flag, captureDetection, captureFrequency, detectionThreshold, output_dim, headless_mode, resize_flag):
         """ Initialize the thread """
 

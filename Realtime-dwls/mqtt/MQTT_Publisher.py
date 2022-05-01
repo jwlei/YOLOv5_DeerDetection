@@ -23,9 +23,9 @@ class Mqtt_publisher:
 
         self.client.publish("DWLS_DETECTION", msg)
 
-    def publishMsg(self, msg, currentTime, currentLocation, detected_flag, detectedCount, lowestConfidence, highestConfidence):
+    def publishMsg(self, message, currentTime, currentLocation, detected_flag, detectedCount, lowestConfidence, highestConfidence):
         """ Publish a message containing a string message at the start """
-        msg = json.dumps({'msg' : msg,
+        msg = json.dumps({'msg' : message,
                         'time' : currentTime, 
                         'location' : currentLocation,  
                         'detected' : detected_flag, 

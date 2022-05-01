@@ -2,7 +2,6 @@ import queue
 import subprocess
 import os
 import cv2
-import math
 import configparser
 
 from sys import executable, stderr

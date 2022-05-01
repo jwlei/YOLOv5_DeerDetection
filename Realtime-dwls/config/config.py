@@ -2,7 +2,7 @@ import configparser
 import os
 
 def generate_config():
-
+    """ A function to generate the pre-defined configuration """ 
     config_path = 'config.ini'
 
     if not os.path.exists(config_path):
