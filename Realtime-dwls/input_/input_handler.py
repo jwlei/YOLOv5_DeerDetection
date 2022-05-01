@@ -11,7 +11,15 @@ class Input_handler:
     """ Class for supplying and manipulating input data """ 
 
     def __init__(self, videoSource, modelSource, forceReload_flag, captureDetection, captureFrequency, detectionThreshold):
-        """ Initializing the input data stream """ 
+        """
+        Initializing the input data stream
+        :param videoSource: URL/Path to videoSource
+        :param modelSource: URL/Path to modelSource
+        :param forceReload_flag: Boolean if program will force reload PyTorch cache
+        :param captureDetection: Boolean if program will save detections as an image.
+        :param captureFrequency: Integer interval between saved pictures.
+        :param detectionThreshold: Float threshold to decide what counts as a detection.
+        """
 
         # Load flags passed from main
         self.videoSource = videoSource
@@ -21,56 +29,44 @@ class Input_handler:
         self.captureFrequency = captureFrequency
         self.detectionThreshold = detectionThreshold
         
-
-        
         self.model = self.load_model()                              # Load the model defined in the load_model function
         self.classes = self.model.names                             # Load the classes defined in the model
-        self.device = 'cuda' if torch.cuda.is_available() else 'cpu' # Set the device for the model to load on to be the cuda device, otherwise the cpu
-        
-
-
-        # Print the Device used for logging purposes
-        print('[SETUP] Device Used: ',self.device)
+        self.device = 'cuda' if torch.cuda.is_available() else 'cpu'# Set the device for the model to load on to be the cuda device, otherwise the cpu
+        print('[SETUP] Device Used: ',self.device)                  # Print the Device used for logging purposes
 
         # Set default values
-        
         self.ret = False                # Boolean for successfully returned frame
         self.frame = None               # Actual frame to be processed and output
         self.detected_flag = False      # Set initial value for detection
 
-        
         self.startTime = time.time()    # Start time for interval deciding when to save a new picture
         self.savedImageCounter = 0      # Incremental counter which is appended to saved images' filename
-        # TODO: Fix path?
         self.path = Path.cwd() / 'resources/SavedDetections'
         print('[SETUP] Saved RAW images will be saved to: ', self.path)
-        
 
         # Process and set the videoSource
         self.processed_videoSource = self.processInputPath(videoSource)
-        
-       
-        
-        
+
 
     def load_model(self):
         """ Function to load the YOLOv5 model from the pyTorch GitHub when not implemented locally """ 
-        model = torch.hub.load('ultralytics/yolov5', 
-                                'custom', 
-                                path=self.modelSource, 
+        model = torch.hub.load('ultralytics/yolov5',
+                                'custom',
+                                path=self.modelSource,
                                 force_reload=self.forceReload)
- 
         return model
     
 
     def predict_with_model(self, frame):
-        """ Function to score a frame with the model """ 
-
+        """
+        Function to score a frame with the model
+        :param frame:
+        :return: labels, coordinates
+        """
         self.model.to(self.device)                                                      # Send the model to the device
 
         frame = [frame]                                                                 # Assign the frame
         prediction = self.model(frame)                                                  # Score the frame on the model
-     
         
         labels, coordinates = prediction.xyxyn[0][:, -1], prediction.xyxyn[0][:, :-1]   # Grab the labels and coordinates from the results
         return labels, coordinates
@@ -82,7 +78,14 @@ class Input_handler:
 
 
     def plot_frame(self, prediction, frame, rawFrame):
-        """ Function to plot boxes, labels and confidence values around detections on the frame """ 
+        """
+        Function to plot boxes, labels and confidence values around detections on the frame
+        :param prediction: labels and coordinates
+        :param frame: current image as an array
+        :param rawFrame: a copy of the current image as an array
+        :return: frame, detection_flag, detectionCount, lowestConfidence, highestConfidence
+        """
+
         global detection_flag
         global detectionCount
         detection_flag = False
@@ -133,7 +136,10 @@ class Input_handler:
 
         
     def read_current_frame(self):
-        """ Function to get a single frame, copy it for raw photo collection, and it's return boolean value """
+        """
+        Function get a single frame from the video source
+        :return: ret, frame, rawFrame
+        """
         ret, frame = self.processed_videoSource.read()                                  # Get boolean return and frame from the video feed
         try:
             rawFrame = frame.copy()                                                     # Try to copy the frame
@@ -144,7 +150,10 @@ class Input_handler:
 
 
     def processInputPath(self, videoSource):
-        """ Function to process the video input and assign as a cv2 video object """
+        """ Function to process the string path/url video input and assign as a cv2 video object
+        :return: processedSource
+        """
+
         try: 
             processedSource = cv2.VideoCapture(int(videoSource))                        # Try to check if input is a camera
             print('[SETUP] Input source is identified as a local camera ... ')
@@ -165,7 +174,9 @@ class Input_handler:
 
 
     def save_raw_image(self, rawFrame, imgLabel=None):
-        """ Function to save an image from the frame """
+        """ Function to save an image from the frame
+        :param rawFrame: A raw copy without plots of the current frame
+        """
         global savedImageCounter
         global startTime
         capture_interval = 60-self.captureFrequency                                     # User defined interval at which is the minimum time between pictures
@@ -181,9 +192,12 @@ class Input_handler:
                 self.startTime = time.time()                                            # Reset the start time for a new interval
 
     def resize_frame(self, frame, output_dim):
-        """ Function to resize the frame """ 
+        """ Function to resize the frame
+        :param frame : Current frame
+        :param output_dim : Dimensions specified for resized frame
+        :return: resized_frame
+        """
         resized_frame = cv2.resize(frame, output_dim)
-
         return resized_frame
 
     def release(self):

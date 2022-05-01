@@ -52,7 +52,6 @@ class MQTT_Subscriber:
         logging.warning(f'[MQTT EXTERNAL SUBSCRIBER] MQTT Subscriber log can be found at {self.file_log_mqtt}')
 
         # Just getting a fresh file to write detections in
-        # TODO: New log file on each run (?)
         self.log_detections = open(self.file_log_detections, "w") # "a" if we rather want to append
         self.log_detections.write('')
         self.log_detections.close()
@@ -65,7 +64,10 @@ class MQTT_Subscriber:
         self.client.connect(self.mqttBroker)
 
     def validateJson(self, msg):
-        """ Function to validate incoming messages against a predefined schema """
+        """ Function to validate incoming messages against a predefined schema
+        :param str msg: A string message in a JSON format
+        :return: bool
+        """
         # Validation schemas
         validationSchema_Msg = {
             "type": "object",
@@ -105,7 +107,9 @@ class MQTT_Subscriber:
 
 
     def on_message(self, client, userdata, message):
-        """ On message recieved do: """
+        """ On message received, print the message and change the GUI Detection status
+        :param str message: An encoded message received from a MQTT Publisher
+        """
         global currentTimeStamp
         global currentDetectionCount
         global lastDetectedTimeStamp
@@ -163,7 +167,7 @@ class MQTT_Subscriber:
 
 
     def launch(self):
-        """ Function to launch the External MQTT Subscriber client"""
+        """ Function to launch the External MQTT Subscriber client """
         self.client.loop_start()
         logging.warning('[MQTT EXTERNAL SUBSCRIBER] Client loop started')
         self.client.subscribe(self.topic)

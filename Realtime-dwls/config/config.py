@@ -2,7 +2,7 @@ import configparser
 import os
 
 def generate_config():
-    """ A function to generate the pre-defined configuration """ 
+    """ A function to generate the pre-defined configuration file. config.ini """
     config_path = 'config.ini'
 
     if not os.path.exists(config_path):
@@ -60,10 +60,6 @@ def generate_config():
         config_file.set('Automatic', '\n; If the application run in headless mode, without GUI')
         config_file.set('Automatic', '; Legal values: True, False')
         config_file.set('Automatic', 'headless', 'False')
-
-        #config_file.add_section('Save directory for images:')
-        #config_file.set('Save directory for images', 'saveDir', 'path/to')
-   
 
         with open(r"config.ini", 'w') as configfileObj:
             config_file.write(configfileObj)

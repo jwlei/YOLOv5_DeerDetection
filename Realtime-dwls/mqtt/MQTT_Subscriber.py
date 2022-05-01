@@ -18,8 +18,9 @@ class Mqtt_subscriber:
         print(f'[MQTT INTERNAL SUBSCRIBER] Initializing.. ')
 
     def validateJson(self, msg):
-        """ Function to validate incoming messages against a predefined schema """
-        # Validation schema
+        """ Function to validate incoming messages against a predefined schema
+        :param str msg: A string message in JSON format """
+
         validationSchema = {
             "type": "object",
             "properties": {
@@ -35,7 +36,9 @@ class Mqtt_subscriber:
 
 
     def on_message(self, client, userdata, message):
-        """ On message recieved do: """
+        """ On message received set the URL in the message to the newSource variable
+        :param str message: URL to a new model
+        """
         global newSource
 
         isValid = False
@@ -68,13 +71,13 @@ class Mqtt_subscriber:
         return newSource
 
     def reset_mqtt_source(self):
-        """ Reset the variable """
+        """ Reset the newSource variable """
         global newSource
         newSource = None
 
 # ------------------------------ Run the client ------------------------------ #
     def launch(self):
-        """ Start the client loop """
+        """ Start the client loop for the internal MQTT Subscriber """
         self.client.loop_start()
         self.client.subscribe(self.topic)
         print(f'[MQTT INTERNAL SUBSCRIBER] launched and subscribing to {self.topic}')

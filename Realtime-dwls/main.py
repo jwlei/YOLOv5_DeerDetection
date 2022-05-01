@@ -22,7 +22,19 @@ class Main:
     """ The main application class which is ran when starting the application """ 
 
     def __init__(self, windowTitle, videoSource, modelSource, forceReload_flag, captureDetection, detectionThreshold, captureFrequency, output_dim, headless_mode, resize_flag):
-        """ Initialization of the main class """ 
+        """
+        Initialization of the main class
+        :param str windowTitle: Title of the window which is set in the setup
+        :param str videoSource: String representation of videoSource URL or Path
+        :param str modelSource: String representation of modelSource URL or Path
+        :param bool forceReload_flag: Boolean flag if the application should reload the PyTorch cache
+        :param bool captureDetection: Boolean flag if images of detections should be saved
+        :param float detectionThreshold: Decides confidence threshold at which is considered a detection
+        :param int captureFrequency: Minimum interval in seconds between saving each picture
+        :param output_dim:
+        :param bool headless_mode: Boolean flag if application is running in headless mode
+        :param bool resize_flag: Boolean flag if video output should be resized
+        """
 
         # Initialization of references and default values
         self.callback_queue = queue.LifoQueue(maxsize = 1)  # Initialize a LastInn-FirstOut queue which will fetch and execute callbacks
@@ -60,9 +72,6 @@ class Main:
                                       output_dim,
                                       headless_mode,
                                       resize_flag)
-        
-       
-        
 
         # Start the processing thread and callback loop
         if not headless_mode:
@@ -81,7 +90,6 @@ class Main:
 
     def callback_get_input(self):
         """ Callback function which listens for a new frame and executes """
-        # Try to get a callback from the process thread
         try:
             self.callback_get_input
                  
@@ -124,8 +132,9 @@ class Main:
 
     def getFps(self):
         """ Function to get FPS from video source to send down the pipeline
-            Default to 30 fps if no data is available
-        """ 
+         Default to 30 fps if no data is available
+         :returns: fps: FPS from input source or set by the system if not available
+         """
         vid = cv2.VideoCapture(videoSource)
         fps = vid.get(cv2.CAP_PROP_FPS)
 
@@ -133,8 +142,7 @@ class Main:
             print('[SETUP] FPS set to: ', fps)
             return fps
         else:
-            fps = 30 
-
+            fps = 30
             print('[SETUP] FPS could not be read from video source, set to default: ', fps)
             return fps
 

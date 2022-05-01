@@ -26,8 +26,21 @@ class Process(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
 
     def __init__(self, gui, callback_queue, fps, videoSource, modelSource, forceReload_flag, captureDetection, captureFrequency, detectionThreshold, output_dim, headless_mode, resize_flag):
-        """ Initialize the thread """
-
+        """
+        Initialize the thread
+        :param gui: Instance of GUI
+        :param callback_queue: Callback Queue
+        :param int fps: FPS of input source
+        :param str videoSource: String representation of videoSource URL or Path
+        :param str modelSource: String representation of modelSource URL or Path
+        :param bool forceReload_flag: Boolean flag if the application should reload the PyTorch cache
+        :param bool captureDetection: Boolean flag if images of detections should be saved
+        :param int captureFrequency: Minimum interval in seconds between saving each picture
+        :param float detectionThreshold: Decides confidence threshold at which is considered a detection
+        :param tuple output_dim: Tuple containing (Width, height)
+        :param bool headless_mode: Boolean flag if application is running in headless mode
+        :param bool resize_flag: Boolean flag if video output should be resized
+        """
         # Call the super class constructor
         threading.Thread.__init__(self)
 
@@ -49,8 +62,9 @@ class Process(threading.Thread):
 
         # Default values
         self.rawFrame = None
-        self.waitingToStop = False # Flag for if the process should stop
-        self.runningStatus = False # Flag for current status of thread
+        self.waitingToStop = False                  # Flag for if the process should stop
+        self.runningStatus = False                  # Flag for current status of thread
+
         ipLocation = geocoder.ip('me')
         self.currentLocation = str(ipLocation.latlng) # Location based on the current IP-Adress
         self.currentTime = None
@@ -80,15 +94,14 @@ class Process(threading.Thread):
 
     
     def run(self):
-        """ The thread's run method """
+        """ The thread's run method which checks for new input sources,
+        sends a frame to be scored, plotted and sent to GUI/MQTT Publisher"""
         global newVideoSource
         global newModelSource
         global noInput
         newModel_fromRemote = None
         
         while (True):
-            # While the thread is running
-            # Check if the thread should quit or not
             if (self.waitingToStop):
                 self.runningStatus = True
                 break
@@ -103,9 +116,9 @@ class Process(threading.Thread):
             if newVideoSource is not None:
                 self.videoSource = newVideoSource
                 self.gui.update_title_from_input_source(self.videoSource)
-                self.input_handler = Input_handler(self.videoSource, 
-                                                    self.modelSource, 
-                                                    self.forceReload, 
+                self.input_handler = Input_handler(self.videoSource,
+                                                    self.modelSource,
+                                                    self.forceReload,
                                                     self.captureDetection,
                                                     self.captureFrequency,
                                                     self.detectionThreshold)
@@ -115,8 +128,8 @@ class Process(threading.Thread):
             
             if newModelSource is not None:
                 self.modelSource = newModelSource
-                self.input_handler = Input_handler(self.videoSource, 
-                                                    self.modelSource, 
+                self.input_handler = Input_handler(self.videoSource,
+                                                    self.modelSource,
                                                     self.forceReload,
                                                     self.captureDetection,
                                                     self.captureFrequency,
@@ -136,19 +149,19 @@ class Process(threading.Thread):
                     self.gui.update_output_image(ImageTk.PhotoImage(Image.open('resources/media/image_no-input.jpg')))
                     self.gui.update_title_from_input_source('No input')
                     msg = 'NO INPUT FROM VIDEO SOURCE'
-                    self.mqtt_publisher.publishMsg(msg, 
-                                                   self.currentTime, 
-                                                   self.currentLocation, 
-                                                   self.detected_flag, 
-                                                   self.detectedCount, 
-                                                   self.lowestConfidence, 
-                                                   self.highestConfidence)  
+                    self.mqtt_publisher.publishMsg(msg,
+                                                   self.currentTime,
+                                                   self.currentLocation,
+                                                   self.detected_flag,
+                                                   self.detectedCount,
+                                                   self.lowestConfidence,
+                                                   self.highestConfidence)
             else:
                 noInput = False
 
 
             if not noInput and not self.headless_mode:
-            # If the callback_queue is not full, put the current frame into the queue for execution of the thread
+                # If the callback_queue is not full, put the current frame into the queue for execution of the thread
                 if self.callback_queue.full() == False:
                     self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.rawFrame, self.gui)))
 
@@ -158,27 +171,29 @@ class Process(threading.Thread):
                     self.callback_queue.put((lambda: self.score_label_send_to_output(self.current_frame, self.rawFrame, self.gui)))
 
             # If running in headless mode, skip the callback and directly score and label the frame
-            elif not noInput and self.headless_mode:                                     
+            elif not noInput and self.headless_mode:
                 self.score_label_send_to_output(self.current_frame,
                                                 self.rawFrame,
                                                 self.gui)
             
             # Publish MQTT Message
-            self.mqtt_publisher.publishDefault(self.currentTime, 
-                                self.currentLocation, 
-                                self.detected_flag, 
-                                self.detectedCount, 
-                                self.lowestConfidence, 
+            self.mqtt_publisher.publishDefault(self.currentTime,
+                                self.currentLocation,
+                                self.detected_flag,
+                                self.detectedCount,
+                                self.lowestConfidence,
                                 self.highestConfidence)
 
             # Wait for delay until next iteration
-            cv2.waitKey(self.fps) 
+            cv2.waitKey(self.fps)
 
     
     def score_label_send_to_output(self, current_frame, rawFrame, gui):
-        """ 
-        Function where the current frame is processed
-        This function is used as callback and executed by the thread 
+        """ Function where the current frame is processed by functions of the input_handler and sent to GUI and/or MQTT Publisher
+        This function is used as callback and executed by the thread
+        :param current_frame: The current frame of the video
+        :param rawFrame: A raw frame which will be saved without plots
+        :param gui: The GUI instance
         """
         global detected_flag
         global detectedCount
@@ -197,7 +212,7 @@ class Process(threading.Thread):
         prediction = labels, cord
 
         # Plot bounding box and label to the frame
-        frame, detected_flag, detectedCount, lowestConfidence, highestConfidence  = self.input_handler.plot_frame(prediction, current_frame, rawFrame)
+        frame, detected_flag, detectedCount, lowestConfidence, highestConfidence = self.input_handler.plot_frame(prediction, current_frame, rawFrame)
 
                                                                               
         # Elements to be sendt in a msg with MQTT Client                            # Location is gotten in the initialization
@@ -208,7 +223,7 @@ class Process(threading.Thread):
 
         # Process the frame for output and update the GUI
         if not self.headless_mode:
-            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)                          # Convert the frame to RGB  
+            frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)                          # Convert the frame to RGB
             output_image = Image.fromarray(frame)                                   # Convert the image from array to PIL in order to show it using tkinter
             output_image = ImageTk.PhotoImage(output_image)                         # Convert the image to a Tkinter compatible Image 
 
@@ -234,18 +249,21 @@ class Process(threading.Thread):
 
 
     def set_detected(self, detection):
-        """ Function to set detected """
+        """ Function to set detected :param bool detection: """
         self.detected_flag = detection
 
     def set_detectedCount(self, detectedCount):
-        """ Function to set detectedCount """ 
+        """ Function to set detectedCount :param int detectedCount: """
         self.detectedCount = detectedCount
 
     def set_confidenceValue(self, lowestConfidence, highestConfidence):
-        """ Function to set confidence value for message """ 
+        """ Function to set confidence value for message
+        :param float lowestConfidence: Lowest confidence value of the frame
+        :param float highestConfidence: Highest confidence value of the frame
+        """
         try:
             self.lowestConfidence = float("{:.2f}".format(lowestConfidence))
-        except Exception as e:
+        except Exception:
             pass
         
         try:
@@ -255,12 +273,12 @@ class Process(threading.Thread):
         
 
     def get_detection(self):
-        """ Function to get detected """ 
+        """ Function to get detected_flag """
         return self.detected_flag
 
     @staticmethod
     def getNewVideoSource():
-        """ Function to get a new video source while running """ 
+        """ Function to get a new video source while running """
         global newVideoSource
         newVideoSource = Setup.setVideoSource()
 
@@ -277,7 +295,8 @@ class Process(threading.Thread):
 
 
     def calculateAverageProcessingTime(self, executionTime):
-        """ Function to measure execution time per frame, for optimization and testing purposes """
+        """ Function to measure execution time per frame, for optimization and testing purposes
+        :param int executionTime: Time for a frame to be processed """
         global times
 
         times.append(executionTime)
