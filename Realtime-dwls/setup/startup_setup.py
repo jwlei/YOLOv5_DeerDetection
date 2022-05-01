@@ -11,6 +11,7 @@ from tkinter import filedialog
 
 class Setup:
 
+    @staticmethod
     def setManualOrAutomatic():
         """ Decide automatic or manual setup """ 
         ans = pymsgbox.confirm('Please choose Automatic or Manual setup', 
@@ -18,7 +19,7 @@ class Setup:
                                buttons = ['Automatic', 'Manual', 'Gather images'])
         return ans
 
-
+    @staticmethod
     def setVideoSource():
         """ Choose local or remote video source """
         input = None
@@ -37,7 +38,7 @@ class Setup:
 
         return input
 
-  
+    @staticmethod
     def setModelSource():
         """ Choose model source """
         ans = pymsgbox.confirm('Use default or user-defined model?', 
@@ -65,8 +66,8 @@ class Setup:
             config_automatic.read('config.ini')
             defaultModelSource = config_automatic['Automatic']['ModelSource']
             return defaultModelSource
-            
 
+    @staticmethod
     def setForceReload():
         """ Choose force reload of pyTorch cache on or off """
         ans = pymsgbox.confirm('Reload the pyTorch cache', 
@@ -81,6 +82,7 @@ class Setup:
         return reloadBoolean
 
 
+    @staticmethod
     def setCaptureDetection():
         """ Choose if detections should be captured """ 
         ans = pymsgbox.confirm('Save images on detections? Images will be saved at an minimum interval specified by the user.', 
@@ -94,6 +96,7 @@ class Setup:
 
         return captureBoolean
 
+    @staticmethod
     def setCaptureFrequency():
         """ Set the frequency in seconds at interval between detections the application should save a new image """
         interval = None
@@ -108,8 +111,9 @@ class Setup:
             
         if isinstance(interval, int):
             return interval
-        
 
+
+    @staticmethod
     def setDetectionThreshold():
         # TODO: Fix assertion
         threshold = None
@@ -123,7 +127,6 @@ class Setup:
             
         if isinstance(threshold, float):
             return threshold
-
 
     def downloadModel(modelUrl):
         """ Save supplied Model URL to disk """ 
@@ -157,7 +160,7 @@ class Setup:
 
         return path_filename
 
-
+    @staticmethod
     def setResolution(): 
         """ Choose the resolution to resize the output image """
         ans_width = pymsgbox.prompt('Enter desired screen WIDTH')
@@ -174,7 +177,7 @@ class Setup:
         if isinstance(width, int) and isinstance(height, int):
             return output_dim
 
-
+    @staticmethod
     def setHeadless():
         """ Choose if detections should be captured """ 
         ans = pymsgbox.confirm('Run in headless mode (without GUI)?', 
@@ -188,7 +191,7 @@ class Setup:
 
         return headless_mode
 
-
+    @staticmethod
     def setResize():
         """ Choose if detections should be captured """ 
         ans = pymsgbox.confirm('Resize the image to user-specified dimensions?', 

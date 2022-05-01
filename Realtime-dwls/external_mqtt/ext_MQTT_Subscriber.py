@@ -111,7 +111,6 @@ def on_message(client, userdata, message):
         print('[MQTT EXTERNAL SUBSCRIBER] Recieved message does not match JSON schema or is empty')
         pass
 
-    
     if isValid:                                                                 # If the data is valid, get unique timestamp to avoid spam from the publisher
         freshTimeStamp = None
         freshDetectionCount = None

@@ -25,9 +25,19 @@ class Mqtt_publisher:
         print(f'[MQTT EXTERNAL PUBLISHER] has sendt {msg} to all subscribers')
 
 if __name__ == "__main__":
-    new_source = str(sys.argv[1])
+    try:
+        new_source = str(sys.argv[1])
+    except Exception:
+        new_source = 'EMPTY'
+
+
 
 # to run python ext_MQTT_Publisher.py https://dl.dropboxusercontent.com/s/5p2onyp5m7apxrj/best.pt
 #new_source = 'https://dl.dropboxusercontent.com/s/5p2onyp5m7apxrj/best.pt'
 pub = Mqtt_publisher()
-pub.publishNewSource(new_source)
+if new_source == 'EMPTY':
+    print('[ERROR] URL must be supplied with the command')
+    print('[ERROR] E.g. python ext_mqtt_publisher.py https://your.url/modelFile.pt')
+else:
+    pub.publishNewSource(new_source)
+

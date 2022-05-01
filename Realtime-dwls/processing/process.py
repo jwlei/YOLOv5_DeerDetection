@@ -32,8 +32,6 @@ class Process(threading.Thread):
         # Call the super class constructor
         threading.Thread.__init__(self)
 
-       
-
         # Initialize references to variables
         self.gui = gui
         self.callback_queue = callback_queue
@@ -248,7 +246,7 @@ class Process(threading.Thread):
         """ Function to set confidence value for message """ 
         try:
             self.lowestConfidence = float("{:.2f}".format(lowestConfidence))
-        except Exception:
+        except Exception as e:
             pass
         
         try:
@@ -261,11 +259,13 @@ class Process(threading.Thread):
         """ Function to get detected """ 
         return self.detected_flag
 
+    @staticmethod
     def getNewVideoSource():
         """ Function to get a new video source while running """ 
         global newVideoSource
         newVideoSource = Setup.setVideoSource()
 
+    @staticmethod
     def getNewModelSource():
         """ Function to get a new model source while running """
         global newModelSource

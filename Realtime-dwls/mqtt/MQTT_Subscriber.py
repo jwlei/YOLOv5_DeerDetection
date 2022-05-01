@@ -56,7 +56,7 @@ class Mqtt_subscriber:
             print('--------------------------------------------------------')
         else:
             print('--------------------------------------------------------')
-            print(f'[MQTT INTERNAL SUBSCRIBER] ATTEMPTED PUSH OF NEW SOURCE')
+            print(f'[MQTT INTERNAL SUBSCRIBER] ATTEMPTED PULL OF NEW SOURCE')
             print(f'[MQTT INTERNAL SUBSCRIBER] BUT MESSAGE WAS INVALID')
             print('--------------------------------------------------------')
             pass
