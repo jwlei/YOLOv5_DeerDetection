@@ -22,7 +22,7 @@ import config.config
 class Main:
     """ The main application class which is ran when starting the application """ 
 
-    def __init__(self, windowTitle, videoSource, modelSource, forceReload_flag, saveDetection_flag, detectionThreshold, captureFrequency, output_dim, headless_mode, resize_flag):
+    def __init__(self, windowTitle, videoSource, modelSource, forceReload_flag, captureDetection, detectionThreshold, captureFrequency, output_dim, headless_mode, resize_flag):
         """ Initialization of the main class """ 
 
         # Initialization of references and default values
@@ -54,8 +54,8 @@ class Main:
                                       self.fps,
                                       videoSource, 
                                       modelSource, 
-                                      forceReload_flag,  
-                                      saveDetection_flag,
+                                      forceReload_flag,
+                                      captureDetection,
                                       captureFrequency,
                                       detectionThreshold,
                                       output_dim,

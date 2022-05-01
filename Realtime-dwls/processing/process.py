@@ -26,7 +26,7 @@ class Process(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
 
 
-    def __init__(self, gui, callback_queue, fps, videoSource, modelSource, forceReload_flag, savingDetection_flag, captureFrequency, detectionThreshold, output_dim, headless_mode, resize_flag):
+    def __init__(self, gui, callback_queue, fps, videoSource, modelSource, forceReload_flag, captureDetection, captureFrequency, detectionThreshold, output_dim, headless_mode, resize_flag):
         """ Initialize the thread """
 
         # Call the super class constructor
@@ -43,7 +43,7 @@ class Process(threading.Thread):
         self.videoSource = videoSource
         self.modelSource = modelSource
         self.forceReload = forceReload_flag
-        self.captureDetection = savingDetection_flag
+        self.captureDetection = captureDetection
         self.captureFrequency = captureFrequency
         self.detectionThreshold = detectionThreshold
         self.output_dim = output_dim
@@ -79,7 +79,7 @@ class Process(threading.Thread):
 
         if not self.headless_mode:
             # Set initial save detecion flag
-            self.gui.update_savingDetection_status(savingDetection_flag)
+            self.gui.update_savingDetection_status(captureDetection)
 
     
     def run(self):

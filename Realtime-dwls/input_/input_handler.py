@@ -11,14 +11,14 @@ from pathlib import Path
 class Input_handler:
     """ Class for supplying and manipulating input data """ 
 
-    def __init__(self, videoSource, modelSource, forceReload_flag, saveDetections_flag, captureFrequency, detectionThreshold):
+    def __init__(self, videoSource, modelSource, forceReload_flag, captureDetection, captureFrequency, detectionThreshold):
         """ Initializing the input data stream """ 
 
         # Load flags passed from main
         self.videoSource = videoSource
         self.modelSource = modelSource
         self.forceReload = forceReload_flag
-        self.saveDetections_flag = saveDetections_flag
+        self.captureDetection = captureDetection
         self.captureFrequency = captureFrequency
         self.detectionThreshold = detectionThreshold
         
@@ -111,10 +111,9 @@ class Input_handler:
 
                 if highestConfidence is None or confidenceValue >= highestConfidence:   # Get highest confidence value from the image
                     highestConfidence = confidenceValue
-                
-                
-                
-                self.save_raw_image(rawFrame)                                           # If enabled, save picture on detection
+
+                if self.captureDetection:
+                    self.save_raw_image(rawFrame)                                           # If enabled, save picture on detection
 
                 x1, y1, x2, y2 = int(row[0]*x_shape), int(row[1]*y_shape), int(row[2]*x_shape), int(row[3]*y_shape) # Get the coordinates of the box to be plot
                 
