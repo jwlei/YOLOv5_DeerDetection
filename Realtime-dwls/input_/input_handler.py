@@ -3,7 +3,6 @@ import cv2
 import pafy # pip install youtube-dl==2020.12.2
 import torch
 import time
-import numpy as np
 
 
 from pathlib import Path

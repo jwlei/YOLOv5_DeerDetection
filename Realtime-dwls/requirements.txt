@@ -13,9 +13,6 @@ geocoder == 1.38.1
 # D:\Skole\VisualStudio_Workspace\DeerDetection\DeerDetection\mqtt\MQTT_Subscriber.py: 4,5
 jsonschema == 4.4.0
 
-# D:\Skole\VisualStudio_Workspace\DeerDetection\DeerDetection\input_\input_handler.py: 5
-numpy == 1.22.3
-
 # D:\Skole\VisualStudio_Workspace\DeerDetection\DeerDetection\input_\input_handler.py: 1
 # D:\Skole\VisualStudio_Workspace\DeerDetection\DeerDetection\main.py: 4
 # D:\Skole\VisualStudio_Workspace\DeerDetection\DeerDetection\processing\process.py: 3
