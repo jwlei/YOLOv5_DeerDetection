@@ -21,7 +21,7 @@ class Mqtt_publisher:
         msg = json.dumps({'newSource' : new_source
                         }, indent = 4)
 
-        self.client.publish("DWLS_REFRESH", msg)
+        self.client.publish("DWLS_REFRESH_MODEL", msg)
         print(f'[MQTT EXTERNAL PUBLISHER] has sendt {msg} to all subscribers')
 
 if __name__ == "__main__":

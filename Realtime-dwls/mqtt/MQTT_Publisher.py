@@ -7,7 +7,7 @@ class Mqtt_publisher:
     def __init__(self):
         """ Initialize the client with settings like: """
         self.mqttBroker = "mqtt.eclipseprojects.io"
-        self.client = mqtt.Client("OBJECT_DETECTOR")
+        self.client = mqtt.Client("INTERNAL_PUBLISHER")
         self.client.connect(self.mqttBroker)
         print('[MQTT INTERNAL PUBLISHER] Client started')
 

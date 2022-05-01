@@ -11,8 +11,8 @@ from jsonschema import validate
 """ MQTT Subscriber class """ 
 # ------------------------------ GUI ------------------------------ #
 alarmWindow = tk.Tk()
-alarmWindow.title("MQTT Subscriber: I'm getting a remote warning")
-alarmWindow.geometry("450x250")
+alarmWindow.title("EXTERNAL MQTT Subscriber: I'm getting a remote warning")
+alarmWindow.geometry("500x250")
 
 helvetica = tkFont.Font(family="Helvetica", size=16)
 alert_status = tk.Label(text='Waiting for input', 
@@ -53,7 +53,7 @@ log_detections.close()
 # ------------------------------ MQTT Subscriber client ------------------------------ #
 mqttBroker = "mqtt.eclipseprojects.io"
 topic = "DWLS_DETECTION"
-client = mqtt.Client("EXTERNAL SUBSCRIBER")
+client = mqtt.Client("EXTERNAL_SUBSCRIBER")
 client.connect(mqttBroker)
 
 # Global variables
@@ -88,7 +88,7 @@ def validateJson(msg):
             validate(instance=msg, schema=validationSchema_Msg)
         except jsonschema.exceptions.ValidationError as err:
             try:
-                alidate(instance=msg, schema=validationSchema_Msg_noDetect)
+                validate(instance=msg, schema=validationSchema_Msg_noDetect)
             except jsonschema.exceptions.ValidationError as err:
                 return False
     return True
