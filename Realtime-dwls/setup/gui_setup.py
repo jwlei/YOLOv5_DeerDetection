@@ -11,6 +11,7 @@ class Gui_Setup(tk.Frame):
     def __init__(self, root, on_exit, getNewVideoSource, getNewModelSource):
         """
         Initialization of the GUI_Setup class, which calls the setup_gui function to create the GUI
+
         :param root: Root instance of parent
         :param function on_exit: on_exit function for button command
         :param tunction getNewVideoSource: function for button to initiate getting a new source
@@ -98,6 +99,7 @@ class Gui_Setup(tk.Frame):
     # -------------------------------------------------- Logic --------------------------------------------------
     def update_detectionIndicator(self, detection_flag):
         """ Function for deciding the detection warning status
+
         :param bool detection_flag: Indicator for detection """
         if detection_flag:
             self.alert_status.config(text = "DETECTED", 
@@ -109,6 +111,7 @@ class Gui_Setup(tk.Frame):
 
     def update_savingIndicator(self, savingDetections_flag):
         """ Function for deciding the detection warning status
+
         :param bool savingDetections_flag: Indicates if images of detections are saved
         """
         if savingDetections_flag:
@@ -121,6 +124,7 @@ class Gui_Setup(tk.Frame):
 
     def update_source_title(self, source_title):
         """ Function to update the GUI title label with a new title
+
         :param str source_title: Title of the input video source """
 
         self.source_title_label.configure(text='Input source: '+ source_title)
@@ -129,6 +133,7 @@ class Gui_Setup(tk.Frame):
 
     def update_gui_image(self, output_image):
         """ Function to update the GUI image label with a new image
+
         :param output_image: The processed photo image that should be displayed on the GUI """
 
         self.video_output.configure(image=output_image)

@@ -19,6 +19,7 @@ class Mqtt_subscriber:
 
     def validateJson(self, msg):
         """ Function to validate incoming messages against a predefined schema
+
         :param str msg: A string message in JSON format """
 
         validationSchema = {
@@ -37,6 +38,7 @@ class Mqtt_subscriber:
 
     def on_message(self, client, userdata, message):
         """ On message received set the URL in the message to the newSource variable
+
         :param str message: URL to a new model
         """
         global newSource

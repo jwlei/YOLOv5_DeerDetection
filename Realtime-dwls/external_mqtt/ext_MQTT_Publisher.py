@@ -15,8 +15,9 @@ class Mqtt_publisher:
 
 
 
-    def publishNewSource(self, new_source):
+    def publishNewSource(self, new_source) -> None:
         """ Publish a default message containing no specific string Message
+
          :param str new_source: Incoming URL for source
         """
         msg = json.dumps({'newSource' : new_source

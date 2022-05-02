@@ -65,6 +65,7 @@ class MQTT_Subscriber:
 
     def validateJson(self, msg):
         """ Function to validate incoming messages against a predefined schema
+
         :param str msg: A string message in a JSON format
         :return: bool
         """
@@ -108,6 +109,7 @@ class MQTT_Subscriber:
 
     def on_message(self, client, userdata, message):
         """ On message received, print the message and change the GUI Detection status
+
         :param str message: An encoded message received from a MQTT Publisher
         """
         global currentTimeStamp

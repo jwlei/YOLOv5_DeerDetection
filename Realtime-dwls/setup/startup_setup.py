@@ -14,6 +14,7 @@ class Setup:
     @staticmethod
     def setManualOrAutomatic():
         """ Decide automatic or manual setup
+
         :returns: str """
         ans = pymsgbox.confirm('Please choose Automatic or Manual setup', 
                                'DWLS Setup',
@@ -23,6 +24,7 @@ class Setup:
     @staticmethod
     def setVideoSource():
         """ Choose local or remote video source
+
         :returns: str """
         input = None
         ans = pymsgbox.confirm('Please choose your source for video', 
@@ -43,6 +45,7 @@ class Setup:
     @staticmethod
     def setModelSource():
         """ Choose model source
+
         :returns: str """
         ans = pymsgbox.confirm('Use default or user-defined model?', 
                                'Selecting model', 
@@ -73,6 +76,7 @@ class Setup:
     @staticmethod
     def setForceReload():
         """ Choose force reload of pyTorch cache on or off
+
         :returns: bool """
         ans = pymsgbox.confirm('Reload the pyTorch cache', 
                                'DWLS Setup',
@@ -89,6 +93,7 @@ class Setup:
     @staticmethod
     def setCaptureDetection():
         """ Choose if detections should be captured
+
         :returns: bool """
         ans = pymsgbox.confirm('Save images on detections? Images will be saved at an minimum interval specified by the user.', 
                                'DWLS Setup',
@@ -104,6 +109,7 @@ class Setup:
     @staticmethod
     def setCaptureFrequency():
         """ Set the frequency in seconds at interval between detections the application should save a new image
+
         :returns: int """
         interval = None
 
@@ -122,6 +128,7 @@ class Setup:
     @staticmethod
     def setDetectionThreshold():
         """ Function to set the threshold at which is considered a detection
+
         :returns: float """
         threshold = None
         ans = pymsgbox.prompt('Input detection confidence threshold (0.0-1.0)')
@@ -137,6 +144,7 @@ class Setup:
 
     def downloadModel(modelUrl):
         """ Save supplied Model URL to disk
+
         :returns: str """
         path = 'resources/models/'
         filenameFromUrl = modelUrl.rpartition('/')[-1]
@@ -171,6 +179,7 @@ class Setup:
     @staticmethod
     def setResolution(): 
         """ Choose the resolution to resize the output image
+
         :returns: tuple(int, int) """
         ans_width = pymsgbox.prompt('Enter desired screen WIDTH')
         ans_height = pymsgbox.prompt('Enter desired screen HEIGHT')
@@ -189,6 +198,7 @@ class Setup:
     @staticmethod
     def setHeadless():
         """ Choose if detections should be captured
+
          :returns: bool """
         ans = pymsgbox.confirm('Run in headless mode (without GUI)?', 
                                'DWLS Setup',
@@ -204,6 +214,7 @@ class Setup:
     @staticmethod
     def setResize():
         """ Choose if detections should be captured
+
          :returns: bool """
         ans = pymsgbox.confirm('Resize the image to user-specified dimensions?', 
                                'DWLS Setup',
@@ -219,6 +230,7 @@ class Setup:
 
     def download_newDefaultmodel(modelUrl):
         """ Save supplied Model URL as defaultModel to disk, move the old as RETIRED
+
         :returns: str """
         path = 'resources/models/'
         defaultModelPath = 'resources/models/defaultModel.pt'

@@ -24,6 +24,7 @@ class Main:
     def __init__(self, windowTitle, videoSource, modelSource, forceReload_flag, captureDetection, detectionThreshold, captureFrequency, output_dim, headless_mode, resize_flag):
         """
         Initialization of the main class
+
         :param str windowTitle: Title of the window which is set in the setup
         :param str videoSource: String representation of videoSource URL or Path
         :param str modelSource: String representation of modelSource URL or Path
@@ -133,6 +134,8 @@ class Main:
     def getFps(self):
         """ Function to get FPS from video source to send down the pipeline
          Default to 30 fps if no data is available
+
+
          :returns: fps: FPS from input source or set by the system if not available
          """
         vid = cv2.VideoCapture(videoSource)

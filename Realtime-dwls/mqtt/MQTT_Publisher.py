@@ -14,6 +14,7 @@ class Mqtt_publisher:
     def publishDefault(self, currentTime, currentLocation, detected_flag, detectedCount, lowestConfidence, highestConfidence):
         """
         Publish a default message containing no specific string Message
+
         :param str currentTime: Current time
         :param tuple currentLocation: Current location from IP
         :param bool detected_flag: Indicator of detection
@@ -34,6 +35,7 @@ class Mqtt_publisher:
     def publishMsg(self, message, currentTime, currentLocation, detected_flag, detectedCount, lowestConfidence, highestConfidence):
         """
         Publish a message containing a string message at the start
+
         :param str message: A string message
         :param str currentTime: Current time
         :param tuple currentLocation: Current location from IP

@@ -13,6 +13,7 @@ class Input_handler:
     def __init__(self, videoSource, modelSource, forceReload_flag, captureDetection, captureFrequency, detectionThreshold):
         """
         Initializing the input data stream
+
         :param videoSource: URL/Path to videoSource
         :param modelSource: URL/Path to modelSource
         :param forceReload_flag: Boolean if program will force reload PyTorch cache
@@ -60,6 +61,7 @@ class Input_handler:
     def predict_with_model(self, frame):
         """
         Function to score a frame with the model
+
         :param frame:
         :return: labels, coordinates
         """
@@ -80,6 +82,7 @@ class Input_handler:
     def plot_frame(self, prediction, frame, rawFrame):
         """
         Function to plot boxes, labels and confidence values around detections on the frame
+
         :param prediction: labels and coordinates
         :param frame: current image as an array
         :param rawFrame: a copy of the current image as an array
@@ -138,6 +141,7 @@ class Input_handler:
     def read_current_frame(self):
         """
         Function get a single frame from the video source
+
         :return: ret, frame, rawFrame
         """
         ret, frame = self.processed_videoSource.read()                                  # Get boolean return and frame from the video feed
@@ -151,6 +155,7 @@ class Input_handler:
 
     def processInputPath(self, videoSource):
         """ Function to process the string path/url video input and assign as a cv2 video object
+
         :return: processedSource
         """
 
@@ -175,6 +180,7 @@ class Input_handler:
 
     def save_raw_image(self, rawFrame, imgLabel=None):
         """ Function to save an image from the frame
+
         :param rawFrame: A raw copy without plots of the current frame
         """
         global savedImageCounter
@@ -193,6 +199,7 @@ class Input_handler:
 
     def resize_frame(self, frame, output_dim):
         """ Function to resize the frame
+
         :param frame : Current frame
         :param output_dim : Dimensions specified for resized frame
         :return: resized_frame

@@ -28,6 +28,7 @@ class Process(threading.Thread):
     def __init__(self, gui, callback_queue, fps, videoSource, modelSource, forceReload_flag, captureDetection, captureFrequency, detectionThreshold, output_dim, headless_mode, resize_flag):
         """
         Initialize the thread
+
         :param gui: Instance of GUI
         :param callback_queue: Callback Queue
         :param int fps: FPS of input source
@@ -191,6 +192,7 @@ class Process(threading.Thread):
     def score_label_send_to_output(self, current_frame, rawFrame, gui):
         """ Function where the current frame is processed by functions of the input_handler and sent to GUI and/or MQTT Publisher
         This function is used as callback and executed by the thread
+
         :param current_frame: The current frame of the video
         :param rawFrame: A raw frame which will be saved without plots
         :param gui: The GUI instance
@@ -249,15 +251,20 @@ class Process(threading.Thread):
 
 
     def set_detected(self, detection):
-        """ Function to set detected :param bool detection: """
+        """ Function to set detected
+
+        :param bool detection: """
         self.detected_flag = detection
 
     def set_detectedCount(self, detectedCount):
-        """ Function to set detectedCount :param int detectedCount: """
+        """ Function to set detectedCount
+
+        :param int detectedCount: """
         self.detectedCount = detectedCount
 
     def set_confidenceValue(self, lowestConfidence, highestConfidence):
         """ Function to set confidence value for message
+
         :param float lowestConfidence: Lowest confidence value of the frame
         :param float highestConfidence: Highest confidence value of the frame
         """
@@ -296,6 +303,7 @@ class Process(threading.Thread):
 
     def calculateAverageProcessingTime(self, executionTime):
         """ Function to measure execution time per frame, for optimization and testing purposes
+
         :param int executionTime: Time for a frame to be processed """
         global times
 
