@@ -1,0 +1,50 @@
+:py:mod:`ext_MQTT_Publisher`
+============================
+
+.. py:module:: ext_MQTT_Publisher
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ext_MQTT_Publisher.Mqtt_publisher
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ext_MQTT_Publisher.new_source
+   ext_MQTT_Publisher.pub
+
+
+.. py:class:: Mqtt_publisher
+
+   Class which contains functionality of an MQTT Message publisher 
+
+   .. py:method:: publishNewSource(self, new_source) -> None
+
+      Publish a default message containing no specific string Message
+
+      :param str new_source: Incoming URL for source
+
+
+
+.. py:data:: new_source
+   
+
+   
+
+.. py:data:: pub
+   
+
+   
+

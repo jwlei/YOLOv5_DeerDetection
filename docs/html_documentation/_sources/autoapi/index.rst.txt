@@ -1,0 +1,21 @@
+API Reference
+=============
+
+This page contains auto-generated API reference documentation [#f1]_.
+
+.. toctree::
+   :titlesonly:
+
+   /autoapi/main/index
+   /autoapi/config/index
+   /autoapi/ext_MQTT_Publisher/index
+   /autoapi/ext_MQTT_Subscriber/index
+   /autoapi/gui_output/index
+   /autoapi/input_handler/index
+   /autoapi/MQTT_Publisher/index
+   /autoapi/MQTT_Subscriber/index
+   /autoapi/process/index
+   /autoapi/gui_setup/index
+   /autoapi/startup_setup/index
+
+.. [#f1] Created with `sphinx-autoapi <https://github.com/readthedocs/sphinx-autoapi>`_

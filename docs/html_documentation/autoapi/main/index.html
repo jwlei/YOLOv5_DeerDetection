@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>main &#8212; Realtime-DWLS 5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-main">
+<span id="main"></span><h1><a class="reference internal" href="#module-main" title="main"><code class="xref py py-mod docutils literal notranslate"><span class="pre">main</span></code></a><a class="headerlink" href="#module-main" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#main.Main" title="main.Main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Main</span></code></a></p></td>
+<td><p>The main application class which is ran when starting the application</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#main.checkConf" title="main.checkConf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">checkConf</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#main.config_automatic" title="main.config_automatic"><code class="xref py py-obj docutils literal notranslate"><span class="pre">config_automatic</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#main.skipSetup" title="main.skipSetup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">skipSetup</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#main.mqtt_subscriber_started" title="main.mqtt_subscriber_started"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mqtt_subscriber_started</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#main.defaultRemoteModelUrl" title="main.defaultRemoteModelUrl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">defaultRemoteModelUrl</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#main.defaultModelSource" title="main.defaultModelSource"><code class="xref py py-obj docutils literal notranslate"><span class="pre">defaultModelSource</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#main.model_exists" title="main.model_exists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">model_exists</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#main.mqtt_subscriber" title="main.mqtt_subscriber"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mqtt_subscriber</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#main.videoSource" title="main.videoSource"><code class="xref py py-obj docutils literal notranslate"><span class="pre">videoSource</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#main.pick" title="main.pick"><code class="xref py py-obj docutils literal notranslate"><span class="pre">pick</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="main.Main">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">Main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">windowTitle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">videoSource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modelSource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forceReload_flag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">captureDetection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectionThreshold</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">captureFrequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dim</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">headless_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resize_flag</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.Main" title="Permalink to this definition">¶</a></dt>
+<dd><p>The main application class which is ran when starting the application</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="main.Main.launch_gui">
+<span class="sig-name descname"><span class="pre">launch_gui</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.Main.launch_gui" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to launch the GUI</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="main.Main.launch_process_thread">
+<span class="sig-name descname"><span class="pre">launch_process_thread</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.Main.launch_process_thread" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to start the process thread</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="main.Main.callback_get_input">
+<span class="sig-name descname"><span class="pre">callback_get_input</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.Main.callback_get_input" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback function which listens for a new frame and executes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="main.Main.on_exit">
+<span class="sig-name descname"><span class="pre">on_exit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.Main.on_exit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for closing the process when closing the GUI</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="main.Main.__del__">
+<span class="sig-name descname"><span class="pre">__del__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.Main.__del__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Finalizer to stop the thread</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="main.Main.getFps">
+<span class="sig-name descname"><span class="pre">getFps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#main.Main.getFps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to get FPS from video source to send down the pipeline
+Default to 30 fps if no data is available</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>fps: FPS from input source or set by the system if not available</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="main.checkConf">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">checkConf</span></span><a class="headerlink" href="#main.checkConf" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="main.config_automatic">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">config_automatic</span></span><a class="headerlink" href="#main.config_automatic" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="main.skipSetup">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">skipSetup</span></span><a class="headerlink" href="#main.skipSetup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="main.mqtt_subscriber_started">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">mqtt_subscriber_started</span></span><a class="headerlink" href="#main.mqtt_subscriber_started" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="main.defaultRemoteModelUrl">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">defaultRemoteModelUrl</span></span><a class="headerlink" href="#main.defaultRemoteModelUrl" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="main.defaultModelSource">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">defaultModelSource</span></span><a class="headerlink" href="#main.defaultModelSource" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="main.model_exists">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">model_exists</span></span><a class="headerlink" href="#main.model_exists" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="main.mqtt_subscriber">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">mqtt_subscriber</span></span><a class="headerlink" href="#main.mqtt_subscriber" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="main.videoSource">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">videoSource</span></span><a class="headerlink" href="#main.videoSource" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="main.pick">
+<span class="sig-prename descclassname"><span class="pre">main.</span></span><span class="sig-name descname"><span class="pre">pick</span></span><a class="headerlink" href="#main.pick" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Realtime-DWLS</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Joachim Leiros.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/autoapi/main/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

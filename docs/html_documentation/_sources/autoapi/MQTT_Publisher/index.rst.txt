@@ -1,0 +1,49 @@
+:py:mod:`MQTT_Publisher`
+========================
+
+.. py:module:: MQTT_Publisher
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   MQTT_Publisher.Mqtt_publisher
+
+
+
+
+.. py:class:: Mqtt_publisher
+
+   Class which contains functionality of an MQTT Message publisher 
+
+   .. py:method:: publishDefault(self, currentTime, currentLocation, detected_flag, detectedCount, lowestConfidence, highestConfidence)
+
+      Publish a default message containing no specific string Message
+
+      :param str currentTime: Current time
+      :param tuple currentLocation: Current location from IP
+      :param bool detected_flag: Indicator of detection
+      :param int detectedCount: Count of detections in frame
+      :param float lowestConfidence: Lowest confidence value of predictions
+      :param float highestConfidence: Highest confidence value of predictions
+
+
+   .. py:method:: publishMsg(self, message, currentTime, currentLocation, detected_flag, detectedCount, lowestConfidence, highestConfidence)
+
+      Publish a message containing a string message at the start
+
+      :param str message: A string message
+      :param str currentTime: Current time
+      :param tuple currentLocation: Current location from IP
+      :param bool detected_flag: Indicator of detection
+      :param int detectedCount: Count of detections in frame
+      :param float lowestConfidence: Lowest confidence value of predictions
+      :param float highestConfidence: Highest confidence value of predictions
+
+
+

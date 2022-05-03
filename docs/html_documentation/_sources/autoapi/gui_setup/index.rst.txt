@@ -1,0 +1,59 @@
+:py:mod:`gui_setup`
+===================
+
+.. py:module:: gui_setup
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   gui_setup.Gui_Setup
+
+
+
+
+.. py:class:: Gui_Setup(root, on_exit, getNewVideoSource, getNewModelSource)
+
+   Bases: :py:obj:`tkinter.Frame`
+
+   Class to set up the initial GUI 
+
+   .. py:method:: setup_gui(self)
+
+      Function for creating the GUI, defines buttons to create 
+
+
+   .. py:method:: update_detectionIndicator(self, detection_flag)
+
+      Function for deciding the detection warning status
+
+      :param bool detection_flag: Indicator for detection 
+
+
+   .. py:method:: update_savingIndicator(self, savingDetections_flag)
+
+      Function for deciding the detection warning status
+
+      :param bool savingDetections_flag: Indicates if images of detections are saved
+
+
+   .. py:method:: update_source_title(self, source_title)
+
+      Function to update the GUI title label with a new title
+
+      :param str source_title: Title of the input video source 
+
+
+   .. py:method:: update_gui_image(self, output_image)
+
+      Function to update the GUI image label with a new image
+
+      :param output_image: The processed photo image that should be displayed on the GUI 
+
+
+

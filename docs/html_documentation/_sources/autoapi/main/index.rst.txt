@@ -1,0 +1,125 @@
+:py:mod:`main`
+==============
+
+.. py:module:: main
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   main.Main
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   main.checkConf
+   main.config_automatic
+   main.skipSetup
+   main.mqtt_subscriber_started
+   main.defaultRemoteModelUrl
+   main.defaultModelSource
+   main.model_exists
+   main.mqtt_subscriber
+   main.videoSource
+   main.pick
+
+
+.. py:class:: Main(windowTitle, videoSource, modelSource, forceReload_flag, captureDetection, detectionThreshold, captureFrequency, output_dim, headless_mode, resize_flag)
+
+   The main application class which is ran when starting the application 
+
+   .. py:method:: launch_gui(self)
+
+      Function to launch the GUI 
+
+
+   .. py:method:: launch_process_thread(self)
+
+      Function to start the process thread 
+
+
+   .. py:method:: callback_get_input(self)
+
+      Callback function which listens for a new frame and executes 
+
+
+   .. py:method:: on_exit(self)
+
+      Function for closing the process when closing the GUI 
+
+
+   .. py:method:: __del__(self)
+
+      Finalizer to stop the thread 
+
+
+   .. py:method:: getFps(self)
+
+      Function to get FPS from video source to send down the pipeline
+      Default to 30 fps if no data is available
+
+
+      :returns: fps: FPS from input source or set by the system if not available
+
+
+
+.. py:data:: checkConf
+   
+
+   
+
+.. py:data:: config_automatic
+   
+
+   
+
+.. py:data:: skipSetup
+   
+
+   
+
+.. py:data:: mqtt_subscriber_started
+   
+
+   
+
+.. py:data:: defaultRemoteModelUrl
+   
+
+   
+
+.. py:data:: defaultModelSource
+   
+
+   
+
+.. py:data:: model_exists
+   
+
+   
+
+.. py:data:: mqtt_subscriber
+   
+
+   
+
+.. py:data:: videoSource
+   
+
+   
+
+.. py:data:: pick
+   
+
+   
+

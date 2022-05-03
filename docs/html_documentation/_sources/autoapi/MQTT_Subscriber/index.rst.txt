@@ -1,0 +1,66 @@
+:py:mod:`MQTT_Subscriber`
+=========================
+
+.. py:module:: MQTT_Subscriber
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   MQTT_Subscriber.Mqtt_subscriber
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   MQTT_Subscriber.newSource
+
+
+.. py:data:: newSource
+   
+
+   
+
+.. py:class:: Mqtt_subscriber
+
+   MQTT Subscriber class 
+
+   .. py:method:: validateJson(self, msg)
+
+      Function to validate incoming messages against a predefined schema
+
+      :param str msg: A string message in JSON format 
+
+
+   .. py:method:: on_message(self, client, userdata, message)
+
+      On message received set the URL in the message to the newSource variable
+
+      :param str message: URL to a new model
+
+
+   .. py:method:: get_mqtt_source(self)
+
+      Return the newSource recieved from a message 
+
+
+   .. py:method:: reset_mqtt_source(self)
+
+      Reset the newSource variable 
+
+
+   .. py:method:: launch(self)
+
+      Start the client loop for the internal MQTT Subscriber 
+
+
+

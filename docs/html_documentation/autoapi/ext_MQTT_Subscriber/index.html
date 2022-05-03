@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>ext_MQTT_Subscriber &#8212; Realtime-DWLS 5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-ext_MQTT_Subscriber">
+<span id="ext-mqtt-subscriber"></span><h1><a class="reference internal" href="#module-ext_MQTT_Subscriber" title="ext_MQTT_Subscriber"><code class="xref py py-mod docutils literal notranslate"><span class="pre">ext_MQTT_Subscriber</span></code></a><a class="headerlink" href="#module-ext_MQTT_Subscriber" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ext_MQTT_Subscriber.MQTT_Subscriber" title="ext_MQTT_Subscriber.MQTT_Subscriber"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MQTT_Subscriber</span></code></a></p></td>
+<td><p>MQTT Subscriber client class</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="attributes">
+<h3>Attributes<a class="headerlink" href="#attributes" title="Permalink to this headline">¶</a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ext_MQTT_Subscriber.currentTimeStamp" title="ext_MQTT_Subscriber.currentTimeStamp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">currentTimeStamp</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ext_MQTT_Subscriber.currentDetectionCount" title="ext_MQTT_Subscriber.currentDetectionCount"><code class="xref py py-obj docutils literal notranslate"><span class="pre">currentDetectionCount</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#ext_MQTT_Subscriber.lastDetectedTimeStamp" title="ext_MQTT_Subscriber.lastDetectedTimeStamp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">lastDetectedTimeStamp</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#ext_MQTT_Subscriber.mqtt_client" title="ext_MQTT_Subscriber.mqtt_client"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mqtt_client</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py data">
+<dt class="sig sig-object py" id="ext_MQTT_Subscriber.currentTimeStamp">
+<span class="sig-prename descclassname"><span class="pre">ext_MQTT_Subscriber.</span></span><span class="sig-name descname"><span class="pre">currentTimeStamp</span></span><a class="headerlink" href="#ext_MQTT_Subscriber.currentTimeStamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ext_MQTT_Subscriber.currentDetectionCount">
+<span class="sig-prename descclassname"><span class="pre">ext_MQTT_Subscriber.</span></span><span class="sig-name descname"><span class="pre">currentDetectionCount</span></span><a class="headerlink" href="#ext_MQTT_Subscriber.currentDetectionCount" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ext_MQTT_Subscriber.lastDetectedTimeStamp">
+<span class="sig-prename descclassname"><span class="pre">ext_MQTT_Subscriber.</span></span><span class="sig-name descname"><span class="pre">lastDetectedTimeStamp</span></span><a class="headerlink" href="#ext_MQTT_Subscriber.lastDetectedTimeStamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="ext_MQTT_Subscriber.MQTT_Subscriber">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">ext_MQTT_Subscriber.</span></span><span class="sig-name descname"><span class="pre">MQTT_Subscriber</span></span><a class="headerlink" href="#ext_MQTT_Subscriber.MQTT_Subscriber" title="Permalink to this definition">¶</a></dt>
+<dd><p>MQTT Subscriber client class</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="ext_MQTT_Subscriber.MQTT_Subscriber.validateJson">
+<span class="sig-name descname"><span class="pre">validateJson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">msg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ext_MQTT_Subscriber.MQTT_Subscriber.validateJson" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to validate incoming messages against a predefined schema</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>msg</strong> (<em>str</em>) – A string message in a JSON format</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ext_MQTT_Subscriber.MQTT_Subscriber.on_message">
+<span class="sig-name descname"><span class="pre">on_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">client</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">userdata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ext_MQTT_Subscriber.MQTT_Subscriber.on_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>On message received, print the message and change the GUI Detection status</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>message</strong> (<em>str</em>) – An encoded message received from a MQTT Publisher</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="ext_MQTT_Subscriber.MQTT_Subscriber.launch">
+<span class="sig-name descname"><span class="pre">launch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#ext_MQTT_Subscriber.MQTT_Subscriber.launch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to launch the External MQTT Subscriber client</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="ext_MQTT_Subscriber.mqtt_client">
+<span class="sig-prename descclassname"><span class="pre">ext_MQTT_Subscriber.</span></span><span class="sig-name descname"><span class="pre">mqtt_client</span></span><a class="headerlink" href="#ext_MQTT_Subscriber.mqtt_client" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Realtime-DWLS</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Joachim Leiros.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/autoapi/ext_MQTT_Subscriber/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

@@ -1,0 +1,139 @@
+:py:mod:`process`
+=================
+
+.. py:module:: process
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   process.Process
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   process.newVideoSource
+   process.newModelSource
+   process.noInput
+   process.times
+
+
+.. py:data:: newVideoSource
+   
+
+   
+
+.. py:data:: newModelSource
+   
+
+   
+
+.. py:data:: noInput
+   :annotation: = False
+
+   
+
+.. py:data:: times
+   :annotation: = []
+
+   
+
+.. py:class:: Process(gui, callback_queue, fps, videoSource, modelSource, forceReload_flag, captureDetection, captureFrequency, detectionThreshold, output_dim, headless_mode, resize_flag)
+
+   Bases: :py:obj:`threading.Thread`
+
+   Class where thread is running to get a frame from the input data and call processing functions on the frame 
+
+   .. py:method:: run(self)
+
+      The thread's run method which checks for new input sources,
+      sends a frame to be scored, plotted and sent to GUI/MQTT Publisher
+
+
+   .. py:method:: score_label_send_to_output(self, current_frame, rawFrame, gui)
+
+      Function where the current frame is processed by functions of the input_handler and sent to GUI and/or MQTT Publisher
+      This function is used as callback and executed by the thread
+
+      :param current_frame: The current frame of the video
+      :param rawFrame: A raw frame which will be saved without plots
+      :param gui: The GUI instance
+
+
+   .. py:method:: __del__(self)
+
+      Finalizer to stop the process 
+
+
+   .. py:method:: release_resources(self)
+
+      Function to release the resources 
+
+
+   .. py:method:: stop(self)
+
+      Function to set the stop Flag 
+
+
+   .. py:method:: set_detected(self, detection)
+
+      Function to set detected
+
+      :param bool detection: 
+
+
+   .. py:method:: set_detectedCount(self, detectedCount)
+
+      Function to set detectedCount
+
+      :param int detectedCount: 
+
+
+   .. py:method:: set_confidenceValue(self, lowestConfidence, highestConfidence)
+
+      Function to set confidence value for message
+
+      :param float lowestConfidence: Lowest confidence value of the frame
+      :param float highestConfidence: Highest confidence value of the frame
+
+
+   .. py:method:: get_detection(self)
+
+      Function to get detected_flag 
+
+
+   .. py:method:: getNewVideoSource()
+      :staticmethod:
+
+      Function to get a new video source while running 
+
+
+   .. py:method:: getNewModelSource()
+      :staticmethod:
+
+      Function to get a new model source while running 
+
+
+   .. py:method:: getNewTitle(self)
+
+      Function to get a new title from the video source while running 
+
+
+   .. py:method:: calculateAverageProcessingTime(self, executionTime)
+
+      Function to measure execution time per frame, for optimization and testing purposes
+
+      :param int executionTime: Time for a frame to be processed 
+
+
+

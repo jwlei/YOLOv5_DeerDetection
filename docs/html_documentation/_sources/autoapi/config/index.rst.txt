@@ -1,0 +1,24 @@
+:py:mod:`config`
+================
+
+.. py:module:: config
+
+
+Module Contents
+---------------
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   config.generate_config
+
+
+
+.. py:function:: generate_config()
+
+   A function to generate the pre-defined configuration file. config.ini 
+
+

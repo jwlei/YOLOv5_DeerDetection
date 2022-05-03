@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>startup_setup &#8212; Realtime-DWLS 5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-startup_setup">
+<span id="startup-setup"></span><h1><a class="reference internal" href="#module-startup_setup" title="startup_setup"><code class="xref py py-mod docutils literal notranslate"><span class="pre">startup_setup</span></code></a><a class="headerlink" href="#module-startup_setup" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#startup_setup.Setup" title="startup_setup.Setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Setup</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="startup_setup.Setup">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">startup_setup.</span></span><span class="sig-name descname"><span class="pre">Setup</span></span><a class="headerlink" href="#startup_setup.Setup" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt class="sig sig-object py" id="startup_setup.Setup.setManualOrAutomatic">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setManualOrAutomatic</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#startup_setup.Setup.setManualOrAutomatic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Decide automatic or manual setup</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="startup_setup.Setup.setVideoSource">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setVideoSource</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#startup_setup.Setup.setVideoSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose local or remote video source</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="startup_setup.Setup.setModelSource">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setModelSource</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#startup_setup.Setup.setModelSource" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose model source</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="startup_setup.Setup.setForceReload">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setForceReload</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#startup_setup.Setup.setForceReload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose force reload of pyTorch cache on or off</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="startup_setup.Setup.setCaptureDetection">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setCaptureDetection</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#startup_setup.Setup.setCaptureDetection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose if detections should be captured</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="startup_setup.Setup.setCaptureFrequency">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setCaptureFrequency</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#startup_setup.Setup.setCaptureFrequency" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the frequency in seconds at interval between detections the application should save a new image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="startup_setup.Setup.setDetectionThreshold">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setDetectionThreshold</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#startup_setup.Setup.setDetectionThreshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to set the threshold at which is considered a detection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="startup_setup.Setup.downloadModel">
+<span class="sig-name descname"><span class="pre">downloadModel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modelUrl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#startup_setup.Setup.downloadModel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save supplied Model URL to disk</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="startup_setup.Setup.setResolution">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setResolution</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#startup_setup.Setup.setResolution" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose the resolution to resize the output image</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>tuple(int, int)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="startup_setup.Setup.setHeadless">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setHeadless</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#startup_setup.Setup.setHeadless" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose if detections should be captured</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="startup_setup.Setup.setResize">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setResize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#startup_setup.Setup.setResize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Choose if detections should be captured</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="startup_setup.Setup.download_newDefaultmodel">
+<span class="sig-name descname"><span class="pre">download_newDefaultmodel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modelUrl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#startup_setup.Setup.download_newDefaultmodel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save supplied Model URL as defaultModel to disk, move the old as RETIRED</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Realtime-DWLS</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Joachim Leiros.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/autoapi/startup_setup/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

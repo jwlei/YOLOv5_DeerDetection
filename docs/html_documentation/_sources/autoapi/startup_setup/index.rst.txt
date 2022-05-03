@@ -1,0 +1,116 @@
+:py:mod:`startup_setup`
+=======================
+
+.. py:module:: startup_setup
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   startup_setup.Setup
+
+
+
+
+.. py:class:: Setup
+
+   .. py:method:: setManualOrAutomatic()
+      :staticmethod:
+
+      Decide automatic or manual setup
+
+      :returns: str 
+
+
+   .. py:method:: setVideoSource()
+      :staticmethod:
+
+      Choose local or remote video source
+
+      :returns: str 
+
+
+   .. py:method:: setModelSource()
+      :staticmethod:
+
+      Choose model source
+
+      :returns: str 
+
+
+   .. py:method:: setForceReload()
+      :staticmethod:
+
+      Choose force reload of pyTorch cache on or off
+
+      :returns: bool 
+
+
+   .. py:method:: setCaptureDetection()
+      :staticmethod:
+
+      Choose if detections should be captured
+
+      :returns: bool 
+
+
+   .. py:method:: setCaptureFrequency()
+      :staticmethod:
+
+      Set the frequency in seconds at interval between detections the application should save a new image
+
+      :returns: int 
+
+
+   .. py:method:: setDetectionThreshold()
+      :staticmethod:
+
+      Function to set the threshold at which is considered a detection
+
+      :returns: float 
+
+
+   .. py:method:: downloadModel(modelUrl)
+
+      Save supplied Model URL to disk
+
+      :returns: str 
+
+
+   .. py:method:: setResolution()
+      :staticmethod:
+
+      Choose the resolution to resize the output image
+
+      :returns: tuple(int, int) 
+
+
+   .. py:method:: setHeadless()
+      :staticmethod:
+
+      Choose if detections should be captured
+
+      :returns: bool 
+
+
+   .. py:method:: setResize()
+      :staticmethod:
+
+      Choose if detections should be captured
+
+      :returns: bool 
+
+
+   .. py:method:: download_newDefaultmodel(modelUrl)
+
+      Save supplied Model URL as defaultModel to disk, move the old as RETIRED
+
+      :returns: str 
+
+
+

@@ -1,0 +1,57 @@
+:py:mod:`gui_output`
+====================
+
+.. py:module:: gui_output
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   gui_output.Gui_output
+
+
+
+
+.. py:class:: Gui_output(on_exit, sourceTitle, windowTitle, getNewVideoSource, getNewModelSource)
+
+   Class for handling the updating of the GUI frame 
+
+   .. py:method:: update_title_from_input_source(self, new_source_title)
+
+      Use the output_view image to update the image in the frame
+
+      :param str new_source_title: New title from selected source
+
+
+   .. py:method:: update_output_image(self, output_image)
+
+      Use the output_view image to update the image in the frame
+
+      :param output_image: PIL.Image
+
+
+   .. py:method:: update_alarm_status(self, detection_flag)
+
+      Use the output_view detection check value to update the alarm status of the GUI
+
+      :param bool detection_flag: Indicates detection
+
+
+   .. py:method:: update_savingDetection_status(self, captureDetection)
+
+      Use the output_view detection check value to update the saving indicator of the GUI
+
+      :param bool captureDetection: Indicates if images of detections are saved
+
+
+   .. py:method:: launch(self)
+
+      Launch the GUI and listen for callback events 
+
+
+

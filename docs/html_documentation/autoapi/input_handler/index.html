@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>input_handler &#8212; Realtime-DWLS 5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-input_handler">
+<span id="input-handler"></span><h1><a class="reference internal" href="#module-input_handler" title="input_handler"><code class="xref py py-mod docutils literal notranslate"><span class="pre">input_handler</span></code></a><a class="headerlink" href="#module-input_handler" title="Permalink to this headline">¶</a></h1>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Permalink to this headline">¶</a></h2>
+<section id="classes">
+<h3>Classes<a class="headerlink" href="#classes" title="Permalink to this headline">¶</a></h3>
+<table class="autosummary longtable docutils align-default">
+<colgroup>
+<col style="width: 10%" />
+<col style="width: 90%" />
+</colgroup>
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#input_handler.Input_handler" title="input_handler.Input_handler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Input_handler</span></code></a></p></td>
+<td><p>Class for supplying and manipulating input data</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="input_handler.Input_handler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">input_handler.</span></span><span class="sig-name descname"><span class="pre">Input_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">videoSource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modelSource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forceReload_flag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">captureDetection</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">captureFrequency</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detectionThreshold</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#input_handler.Input_handler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class for supplying and manipulating input data</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="input_handler.Input_handler.load_model">
+<span class="sig-name descname"><span class="pre">load_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#input_handler.Input_handler.load_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to load the YOLOv5 model from the pyTorch GitHub when not implemented locally</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="input_handler.Input_handler.predict_with_model">
+<span class="sig-name descname"><span class="pre">predict_with_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#input_handler.Input_handler.predict_with_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to score a frame with the model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>frame</strong> – </p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>labels, coordinates</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="input_handler.Input_handler.label_toString">
+<span class="sig-name descname"><span class="pre">label_toString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#input_handler.Input_handler.label_toString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to return the label of in which to assign to a score</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="input_handler.Input_handler.plot_frame">
+<span class="sig-name descname"><span class="pre">plot_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prediction</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rawFrame</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#input_handler.Input_handler.plot_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to plot boxes, labels and confidence values around detections on the frame</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>prediction</strong> – labels and coordinates</p></li>
+<li><p><strong>frame</strong> – current image as an array</p></li>
+<li><p><strong>rawFrame</strong> – a copy of the current image as an array</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>frame, detection_flag, detectionCount, lowestConfidence, highestConfidence</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="input_handler.Input_handler.read_current_frame">
+<span class="sig-name descname"><span class="pre">read_current_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#input_handler.Input_handler.read_current_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function get a single frame from the video source</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>ret, frame, rawFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="input_handler.Input_handler.processInputPath">
+<span class="sig-name descname"><span class="pre">processInputPath</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">videoSource</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#input_handler.Input_handler.processInputPath" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to process the string path/url video input and assign as a cv2 video object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>processedSource</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="input_handler.Input_handler.save_raw_image">
+<span class="sig-name descname"><span class="pre">save_raw_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rawFrame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imgLabel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#input_handler.Input_handler.save_raw_image" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to save an image from the frame</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rawFrame</strong> – A raw copy without plots of the current frame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="input_handler.Input_handler.resize_frame">
+<span class="sig-name descname"><span class="pre">resize_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dim</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#input_handler.Input_handler.resize_frame" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to resize the frame</p>
+<p>:param frame : Current frame
+:param output_dim : Dimensions specified for resized frame
+:return: resized_frame</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="input_handler.Input_handler.release">
+<span class="sig-name descname"><span class="pre">release</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#input_handler.Input_handler.release" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to manually release the resource</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="input_handler.Input_handler.__del__">
+<span class="sig-name descname"><span class="pre">__del__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#input_handler.Input_handler.__del__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to release the resource</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">Realtime-DWLS</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../index.html">API Reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2022, Joachim Leiros.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.5.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../../_sources/autoapi/input_handler/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

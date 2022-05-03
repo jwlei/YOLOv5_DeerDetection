@@ -1,0 +1,75 @@
+:py:mod:`ext_MQTT_Subscriber`
+=============================
+
+.. py:module:: ext_MQTT_Subscriber
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   ext_MQTT_Subscriber.MQTT_Subscriber
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   ext_MQTT_Subscriber.currentTimeStamp
+   ext_MQTT_Subscriber.currentDetectionCount
+   ext_MQTT_Subscriber.lastDetectedTimeStamp
+   ext_MQTT_Subscriber.mqtt_client
+
+
+.. py:data:: currentTimeStamp
+   
+
+   
+
+.. py:data:: currentDetectionCount
+   
+
+   
+
+.. py:data:: lastDetectedTimeStamp
+   
+
+   
+
+.. py:class:: MQTT_Subscriber
+
+   MQTT Subscriber client class 
+
+   .. py:method:: validateJson(self, msg)
+
+      Function to validate incoming messages against a predefined schema
+
+      :param str msg: A string message in a JSON format
+      :return: bool
+
+
+   .. py:method:: on_message(self, client, userdata, message)
+
+      On message received, print the message and change the GUI Detection status
+
+      :param str message: An encoded message received from a MQTT Publisher
+
+
+   .. py:method:: launch(self)
+
+      Function to launch the External MQTT Subscriber client 
+
+
+
+.. py:data:: mqtt_client
+   
+
+   
+

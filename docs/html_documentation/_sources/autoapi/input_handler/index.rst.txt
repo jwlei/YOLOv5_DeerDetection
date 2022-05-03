@@ -1,0 +1,92 @@
+:py:mod:`input_handler`
+=======================
+
+.. py:module:: input_handler
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   input_handler.Input_handler
+
+
+
+
+.. py:class:: Input_handler(videoSource, modelSource, forceReload_flag, captureDetection, captureFrequency, detectionThreshold)
+
+   Class for supplying and manipulating input data 
+
+   .. py:method:: load_model(self)
+
+      Function to load the YOLOv5 model from the pyTorch GitHub when not implemented locally 
+
+
+   .. py:method:: predict_with_model(self, frame)
+
+      Function to score a frame with the model
+
+      :param frame:
+      :return: labels, coordinates
+
+
+   .. py:method:: label_toString(self, x)
+
+      Function to return the label of in which to assign to a score 
+
+
+   .. py:method:: plot_frame(self, prediction, frame, rawFrame)
+
+      Function to plot boxes, labels and confidence values around detections on the frame
+
+      :param prediction: labels and coordinates
+      :param frame: current image as an array
+      :param rawFrame: a copy of the current image as an array
+      :return: frame, detection_flag, detectionCount, lowestConfidence, highestConfidence
+
+
+   .. py:method:: read_current_frame(self)
+
+      Function get a single frame from the video source
+
+      :return: ret, frame, rawFrame
+
+
+   .. py:method:: processInputPath(self, videoSource)
+
+      Function to process the string path/url video input and assign as a cv2 video object
+
+      :return: processedSource
+
+
+   .. py:method:: save_raw_image(self, rawFrame, imgLabel=None)
+
+      Function to save an image from the frame
+
+      :param rawFrame: A raw copy without plots of the current frame
+
+
+   .. py:method:: resize_frame(self, frame, output_dim)
+
+      Function to resize the frame
+
+      :param frame : Current frame
+      :param output_dim : Dimensions specified for resized frame
+      :return: resized_frame
+
+
+   .. py:method:: release(self)
+
+      Function to manually release the resource 
+
+
+   .. py:method:: __del__(self)
+
+      Function to release the resource 
+
+
+
