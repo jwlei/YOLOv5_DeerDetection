@@ -8,12 +8,16 @@ and perform detections in realtime.
 This project was developed as a result of my bachelor thesis where the goal was to  
 develop a  program to detect and warn against game in vicinity of public roads.
 
-The application uses a PyTorch and a custom trained YOLOv5s model to accuratly detect  
+The application uses a PyTorch and a custom trained YOLOv5s model to accurately detect  
 game based on video input. Video data for GUI is processed with cv2.
 
 A simple MQTT messaging client is used to send information about warnings to remote  
 units, which makes the application able to run in two configurations where you can  
-process the input locally or remotly.
+process the input locally or remotely.
+
+This application can also be used as a tool to gather new training data for future  
+iterations of your machine learning model. Images are saved in .png to avoid  
+artifacts from .jpg
 
 
 
@@ -32,6 +36,23 @@ process the input locally or remotly.
 ## Demo
 
 ![Demo](https://github.com/jwlei/real-time-object-detection-YOLOv5-cv2/blob/master/Realtime-dwls/resources/media/demo.gif)
+
+## Features
+
+- Video input from remote URL, Local camera or local media file
+- Can scrape images of detections at user defined interval
+- Local or remote processing and warning independently
+- Can push new YOLOv5 model from remote by supplying a URL in a message
+- Downloads remote model on first startup
+- Customizable configuration
+  - Resize video output
+  - Run with setup or straight from configuration
+  - Set default video/model and remote model source
+  - Save images on detection, with user defined interval
+  - User defined confidence threshold at which detections are made
+  - Run headlessly or with GUI
+
+
 ## Installation
 
 Clone the project
@@ -89,21 +110,6 @@ External MQTT Publisher which can supply an URL for a model for the main applica
 ```
 python external_mqtt/ext_mqtt_publisher.py http://url.to/yourmodel.pt
 ```
-## Features
-
-- Video input from remote URL, Local camera or local media file
-- Local or remote processing and warning independetly
-- Can push new YOLOv5 model from remote by supplying an URL in a message
-- Can run headlessly
-- Can scrape images of detections at user defined interval
-- Downloads remote model on first startup
-- Customizable configuration
-    - Resize video output
-    - Run with setup or straight from configuration
-    - Set default video/model and remote model source
-    - Save images on detection, with user defined interval
-    - User defined confidence threshold at which detections are made
-    - Run headlessly or with GUI
 
 
 ## License
