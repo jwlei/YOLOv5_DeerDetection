@@ -1,65 +1,112 @@
-# YOLOv5_DeerDetection
-An application to detect wildlife in vicinity of roads in real time using video feed and YOLOv5
 
-# TODO
-Fill out the rest
+# Realtime-DWLS
+Detection - Warning - Logging - Scraping
 
+An application utilizing PyTorch with YOLOv5 and cv2 to process video input in real time  
+and perform detections in realtime.
 
-## Misc
+This project was developed as a result of my bachelor thesis where the goal was to  
+develop a  program to detect and warn against game in vicinity of public roads.
 
-Videos used for collecting photos for model
+The application uses a PyTorch and a custom trained YOLOv5s model to accuratly detect  
+game based on video input. Video data for GUI is processed with cv2.
 
-https://www.youtube.com/watch?v=B2jW99WWVF0
-
-https://www.youtube.com/watch?v=C0Ja5QsQ2uQ
-
-https://www.youtube.com/watch?v=4Rnr9OSNYj4
-
-https://www.youtube.com/watch?v=8SDm48ieYP8
-
-https://www.youtube.com/watch?v=BJj4OoqPmkg
-
-https://www.youtube.com/watch?v=zkuQI5Pp9F4
-
-https://www.youtube.com/watch?v=6Jq97RAkZDs
-
-https://www.youtube.com/watch?v=1FJcXLiuA5k
-
-https://www.youtube.com/watch?v=q5apMaG6mIg
-
-https://www.youtube.com/watch?v=6bEPd7HuW1M 
-
-https://www.youtube.com/watch?v=9ApLIRUd4dk 
-
-https://www.youtube.com/watch?v=IXpr_h1rbpQ 
-
-https://www.youtube.com/watch?v=mNpG5tEBTB8 
-
-https://www.youtube.com/watch?v=X69HPQ2R9Vs
-
-https://www.youtube.com/watch?v=PlN54DufHME
-
-https://www.youtube.com/watch?v=zg9HK-bE3k0
-
-https://www.youtube.com/watch?v=dAdyfH6fG54
-
-https://www.youtube.com/watch?v=EI6DTBgXu90
-
-https://www.youtube.com/watch?v=gyy2BlY726Q
-
-model test download url
-
-https://dl.dropboxusercontent.com/s/jitj2721dah1ng8/trainedModel_v1.pt
-
-default model url
-
-https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt
+A simple MQTT messaging client is used to send information about warnings to remote  
+units, which makes the application able to run in two configurations where you can  
+process the input locally or remotly.
 
 
-example youtube stream
 
-https://www.youtube.com/watch?v=fpWVAZRb0R0
 
-Logo source:
+## Authors
 
-https://www.vecteezy.com/vector-art/585990-head-deer-animals-logo-black-silhouete-icons 23/04
+- [@jwlei](https://github.com/jwlei)
+
+## Badges
+
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+[![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)](https://opensource.org/licenses/)
+[![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)](http://www.gnu.org/licenses/agpl-3.0)
+
+
+## Demo
+
+![Demo](https://thumbs.gfycat.com/ImperfectThriftyGoosefish-size_restricted.gif)
+## Installation
+
+Clone the project
+
+```bash
+git clone https://github.com/jwlei/real-time-object-detection-YOLOv5-cv2
+```
+
+Go to the project directory
+
+```bash
+cd my-project/Realtime-DWLS
+```
+
+Optional: Create and activate a virtual environment
+```bash
+python -m venv name_environment
+```
+```bash
+name_environment\Scripts\activate.bat
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Install PyTorch for your version, supplied is for Python 3.10:
+
+* CUDA
+```bash
+pip install torch torchvision --extra-index-url https://download.pytorch.org/whl/cu113
+```
+
+* Non-CUDA
+```bash
+pip install torch torchvision
+```
+
+## Run Locally
+
+Run the main application
+
+```bash
+python main.py
+```
+
+External MQTT Subscriber with a simple warning GUI
+```bash
+python external_mqtt/ext_mqtt_subscriber.py
+```
+
+External MQTT Publisher which can supply an URL for a model for the main application to download
+```
+python external_mqtt/ext_mqtt_publisher.py http://url.to/yourmodel.pt
+```
+## Features
+
+- Video input from remote URL, Local camera or local media file
+- Local or remote processing and warning independetly
+- Can push new YOLOv5 model from remote by supplying an URL in a message
+- Can run headlessly
+- Can scrape images of detections at user defined interval
+- Downloads remote model on first startup
+- Customizable configuration
+    - Resize video output
+    - Run with setup or straight from configuration
+    - Set default video/model and remote model source
+    - Save images on detection, with user defined interval
+    - User defined confidence threshold at which detections are made
+    - Run headlessly or with GUI
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
+
