@@ -31,7 +31,7 @@ process the input locally or remotly.
 
 ## Demo
 
-![Demo](https://thumbs.gfycat.com/ImperfectThriftyGoosefish-size_restricted.gif)
+![Demo](https://github.com/jwlei/real-time-object-detection-YOLOv5-cv2/blob/master/Realtime-dwls/resources/media/demo.gif)
 ## Installation
 
 Clone the project

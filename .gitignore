@@ -387,3 +387,4 @@ FodyWeavers.xsd
 *.pyproj
 
 /Realtime-dwls/external_mqtt_logs/log_detections.txt
+/Realtime-dwls/resources/media/test_reel.mp4
