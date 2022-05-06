@@ -204,7 +204,10 @@ class Input_handler:
         :param output_dim : Dimensions specified for resized frame
         :return: resized_frame
         """
-        resized_frame = cv2.resize(frame, output_dim)
+        try:
+            resized_frame = cv2.resize(frame, output_dim)
+        except Exception:
+            pass
         return resized_frame
 
     def release(self):

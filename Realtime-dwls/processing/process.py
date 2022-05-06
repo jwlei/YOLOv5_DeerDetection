@@ -21,6 +21,7 @@ newVideoSource = None
 newModelSource = None
 noInput = False
 times = []
+StartTimeFps = None
 
 class Process(threading.Thread):
     """ Class where thread is running to get a frame from the input data and call processing functions on the frame """
@@ -100,7 +101,11 @@ class Process(threading.Thread):
         global newVideoSource
         global newModelSource
         global noInput
+        global StartTimeFps
         newModel_fromRemote = None
+
+        if StartTimeFps is None:
+            StartTimeFps = time.time()
         
         while (True):
             if (self.waitingToStop):
@@ -306,10 +311,11 @@ class Process(threading.Thread):
 
         :param int executionTime: Time for a frame to be processed """
         global times
-
+        global StartTimeFps
         times.append(executionTime)
+        has_timelimit_passed = (time.time()-StartTimeFps)*1000 # Time to minute
 
-        if len(times) >= 1000:
+        if len(times) >= 5000 or has_timelimit_passed >= 300000: # 300000 = 5 minutes
             sum_num = 0
             for t in times:
                 sum_num = sum_num + t           
@@ -318,3 +324,4 @@ class Process(threading.Thread):
             print(f'----------- AVERAGE EXECUTION TIME PER FRAME MEASURED OVER {len(times)} FRAMES -----------')
             print(f'{avg}ms')
             times = []
+            StartTimeFps = time.time()
