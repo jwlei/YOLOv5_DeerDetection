@@ -37,7 +37,7 @@ def generate_config():
         config_file.set('Automatic', 'ModelSource', 'resources/models/defaultModel.pt')
 
         config_file.set('Automatic', '\n; If there is no present .pt model on the disc, fetch from remote URL:')
-        config_file.set('Automatic', 'RemoteModelUrl', 'https://dl.dropboxusercontent.com/s/f530z37pdale1v8/defaultModel.pt')
+        config_file.set('Automatic', 'RemoteModelUrl', 'https://dl.dropboxusercontent.com/s/3y47tbcz6e33a40/yolov5M.pt')
 
         config_file.set('Automatic', '\n; Whether the application should save raw images on detection:')
         config_file.set('Automatic', '; Legal values: True, False')

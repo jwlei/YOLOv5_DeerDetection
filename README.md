@@ -64,7 +64,7 @@ git clone https://github.com/jwlei/real-time-object-detection-YOLOv5-cv2
 Go to the project directory
 
 ```bash
-cd my-project/Realtime-DWLS
+cd Realtime-dwls
 ```
 
 Optional: Create and activate a virtual environment
@@ -111,6 +111,24 @@ External MQTT Publisher which can supply an URL for a model for the main applica
 python external_mqtt/ext_mqtt_publisher.py http://url.to/yourmodel.pt
 ```
 
+## Links to trained models
+_The URL supplied can be used to directly download the model to the program  
+
+[YOLOv5-Nano](https://dl.dropboxusercontent.com/s/cbvc681akdp9rc1/yolov5N.pt) 
+(https://dl.dropboxusercontent.com/s/cbvc681akdp9rc1/yolov5N.pt)
+
+
+[YOLOv5-Small](https://dl.dropboxusercontent.com/s/nxobi6gciwsaygb/yolov5S.pt)
+(https://dl.dropboxusercontent.com/s/nxobi6gciwsaygb/yolov5S.pt)
+
+[YOLOv5-Medium](https://dl.dropboxusercontent.com/s/3y47tbcz6e33a40/yolov5M.pt) 
+(https://dl.dropboxusercontent.com/s/3y47tbcz6e33a40/yolov5M.pt)
+
+[YOLOv5-Large](https://dl.dropboxusercontent.com/s/a1t8w7tetq4naov/yolov5L.pt) 
+(https://dl.dropboxusercontent.com/s/a1t8w7tetq4naov/yolov5L.pt)
+
+[YOLOv5-XLarge](https://dl.dropboxusercontent.com/s/d4ouyyqj4ji49a3/yolov5XL.pt)
+(https://dl.dropboxusercontent.com/s/d4ouyyqj4ji49a3/yolov5XL.pt)
 
 ## License
 
