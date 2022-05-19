@@ -112,7 +112,7 @@ python external_mqtt/ext_mqtt_publisher.py http://url.to/yourmodel.pt
 ```
 
 ## Links to trained models
-_The URL supplied can be used to directly download the model to the program  
+_The URL supplied can be used to directly download the model to the program_
 
 [YOLOv5-Nano](https://dl.dropboxusercontent.com/s/cbvc681akdp9rc1/yolov5N.pt) 
 (https://dl.dropboxusercontent.com/s/cbvc681akdp9rc1/yolov5N.pt)
