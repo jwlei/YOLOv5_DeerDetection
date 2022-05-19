@@ -31,7 +31,7 @@ def generate_config():
         config_file.set('Automatic', 'startMQTTsubscriber', 'True')
 
         config_file.set('Automatic', '\n; Default video source to load when choosing [Automatic setup]:')
-        config_file.set('Automatic', 'VideoSource', 'https://www.youtube.com/watch?v=fpWVAZRb0R0')
+        config_file.set('Automatic', 'VideoSource', 'resources/media/demo_reel.mp4')
 
         config_file.set('Automatic', '\n; Default model to load when choosing [Automatic setup]:')
         config_file.set('Automatic', 'ModelSource', 'resources/models/defaultModel.pt')
