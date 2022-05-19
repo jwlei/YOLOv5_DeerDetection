@@ -35,6 +35,9 @@ class MQTT_Subscriber:
 
 
         # Logging
+        if not os.path.exists('external_mqtt_logs'):
+            os.makedirs('external_mqtt_logs')
+
         self.file_log_detections = "external_mqtt_logs/log_detections.txt"
         self.file_log_mqtt = "external_mqtt_logs/log_mqtt.log"
 
