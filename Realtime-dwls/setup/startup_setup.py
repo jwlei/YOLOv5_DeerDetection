@@ -175,7 +175,7 @@ class Setup:
                 shutil.copyfileobj(response.raw, file, )
                     
         print('[SETUP] '+filename+' download complete and saved to '+path+' as '+defaultModel)
-        return path_filename
+        return path_defaultmodel
 
 
     @staticmethod
