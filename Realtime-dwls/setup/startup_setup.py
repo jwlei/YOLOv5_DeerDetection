@@ -146,6 +146,7 @@ class Setup:
         """ Save supplied Model URL to disk
 
         :returns: str """
+        defaultModel = 'defaultModel.pt'
         path = 'resources/models/'
         filenameFromUrl = modelUrl.rpartition('/')[-1]
         path_to_check = os.path.join(path, filenameFromUrl)
@@ -153,26 +154,27 @@ class Setup:
         file_exists = os.path.exists(path_to_check)
 
         # If the file already exists, allow the user to assign a custom name to the downloaded model
-        if file_exists: 
+        if file_exists:
             user_defined_filename = pymsgbox.prompt(f'A model named {filenameFromUrl} already exists, please rename the model.')
             if not '.pt' in user_defined_filename:
                 filename = user_defined_filename+'.pt'
             if '.pt' in user_defined_filename:
-                filename = user_defined_filename   
+                filename = user_defined_filename
         else:
             filename = filenameFromUrl
 
         path_filename = os.path.join(path, filename)
+        path_defaultmodel = os.path.join(path, defaultModel)
 
         # Download the file and save to disk 
         response = requests.get(modelUrl, stream=True)
   
         with requests.get(modelUrl, stream=True) as response:
-            with open(path_filename, 'wb') as file:
+            with open(path_defaultmodel, 'wb') as file:
                 print('[SETUP] Downloading remote model file ... ')
                 shutil.copyfileobj(response.raw, file, )
                     
-        print('[SETUP] '+filename+' download complete and saved to '+path)
+        print('[SETUP] '+filename+' download complete and saved to '+path+' as '+defaultModel)
         return path_filename
 
 
