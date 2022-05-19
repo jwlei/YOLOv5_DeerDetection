@@ -117,7 +117,6 @@ _The URL supplied can be used to directly download the model to the program_
 [YOLOv5-Nano](https://dl.dropboxusercontent.com/s/cbvc681akdp9rc1/yolov5N.pt) 
 (https://dl.dropboxusercontent.com/s/cbvc681akdp9rc1/yolov5N.pt)
 
-
 [YOLOv5-Small](https://dl.dropboxusercontent.com/s/nxobi6gciwsaygb/yolov5S.pt)
 (https://dl.dropboxusercontent.com/s/nxobi6gciwsaygb/yolov5S.pt)
 
