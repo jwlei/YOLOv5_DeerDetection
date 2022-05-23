@@ -40,13 +40,13 @@ artifacts from .jpg
 
 ## YOLOv5 Results
 
-|Modell|        |Precision| Recall | mAP@0.5| mAP@0.5:.95 |
-| :--- |        | :---    | :---   | :---   | :---        |
-|YOLOv5 Nano    | 0.893   | 0.837  | 0.869  | 0.544       |
-|YOLOv5 Small   | 0.897   | 0.865  | 0.898  | 0.564       |
-|YOLOv5 Medium  | 0.963   | 0.910  | 0.945  | 0.691       |
-|YOLOv5 Large   | 0.966   | 0.915  | 0.964  | 0.726       |
-|YOLOv5 X-Large | 0.970   | 0.895  | 0.947  | 0.687       |
+| Modell         | Precision | Recall    | mAP@0.5 | mAP@0.5:.95 |
+| :---           |           | :---      | :---    | :---        | 
+| YOLOv5 Nano    | 0.893     | 0.837     | 0.869   | 0.544       |
+| YOLOv5 Small   | 0.897     | 0.865     | 0.898   | 0.564       |
+| YOLOv5 Medium  | 0.963     | 0.910     | 0.945   | 0.691       |
+| YOLOv5 Large   | 0.966     | 0.915     | 0.964   | 0.726       |
+| YOLOv5 X-Large | 0.970     | 0.895     | 0.947   | 0.687       |
 
 ## Features
 
