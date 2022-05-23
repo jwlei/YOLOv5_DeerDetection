@@ -40,7 +40,8 @@ artifacts from .jpg
 
 ## YOLOv5 Results
 
-Modell          Precision  Recall  mAP@0.5  mAP@0.5:.95  
+|Modell|       |Precision| |Recall| |mAP@0.5|  |mAP@0.5:.95|
+|------|       |---------| |------| |-------|  |-----------|
 YOLOv5 Nano     0.893      0.837   0.869    0.544  
 YOLOv5 Small    0.897      0.865   0.898    0.564  
 YOLOv5 Medium   0.963      0.910   0.945    0.691  
