@@ -8,7 +8,7 @@ This project was developed as a result of my bachelor thesis:
 The goal was to develop a deep learning model and program to detect  
 and warn against game in vicinity of public roads.
 
-An application utilizing PyTorch with YOLOv5 and cv2 to process video input in real time  
+An application utilizing PyTorch with YOLOv5 and cv2 to process video input in    
 and perform detections in realtime.
 
 The application uses a PyTorch and a custom trained YOLOv5s model to accurately detect  
