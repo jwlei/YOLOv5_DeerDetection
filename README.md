@@ -2,12 +2,12 @@
 # Realtime-DWLS
 Detection - Warning - Logging - Scraping
 
+This project was developed as a result of my bachelor thesis:  
+*«Detection and warning of game in vicinity of roads with deep learning»*  
+where the goal was to develop a  program to detect and warn against game in vicinity of public roads.
+
 An application utilizing PyTorch with YOLOv5 and cv2 to process video input in real time  
 and perform detections in realtime.
-
-This project was developed as a result of my bachelor thesis:  
-«Detection and warning of game in vicinity of roads with deep learning»  
-where the goal was to develop a  program to detect and warn against game in vicinity of public roads.
 
 The application uses a PyTorch and a custom trained YOLOv5s model to accurately detect  
 game based on video input. Video data for GUI is processed with cv2.
