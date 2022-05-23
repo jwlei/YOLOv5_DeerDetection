@@ -20,7 +20,9 @@ iterations of your machine learning model. Images are saved in .png to avoid
 artifacts from .jpg
 
 
+## Authors
 
+- [@jwlei](https://github.com/jwlei)
 
 ## Badges
 
